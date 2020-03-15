@@ -63,6 +63,10 @@ public class LoginUser implements java.io.Serializable {
     private long overdueTime;
 
 
+    /**
+     *  角色ID
+     */
+    private String roleId;
 
     /**
      *  生成时间
