@@ -32,7 +32,7 @@ public class RedisTokenManager implements TokenManager {
      * @param redisService
      */
     public RedisTokenManager(RedisTemplate<String,LoginUser> redisService){
-        Assert.notNull(redisService,"初始化RedisJwtTokenManager失败,redisService 不能为null!");
+        Assert.notNull(redisService,"初始化RedisTokenManager失败,redisService 不能为null!");
         this.redisService = redisService;
     }
 
@@ -56,10 +56,9 @@ public class RedisTokenManager implements TokenManager {
 
         user.setCreateTime(System.currentTimeMillis());
         try {
-            redisService.opsForValue().set(user.getToken(),user);
-            redisService.expire(user.getToken(), user.getOverdueTime(), TimeUnit.MILLISECONDS);
+            redisService.opsForValue().set(user.getToken(),user,user.getOverdueTime(), TimeUnit.MILLISECONDS);
         }catch (Exception e){
-
+            log.error("生成登陆签名异常,原因:{}", e);
         }
         return user.getToken();
     }
