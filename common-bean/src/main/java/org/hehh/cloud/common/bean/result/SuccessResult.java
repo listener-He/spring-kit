@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class SuccessResult<T> extends Result<T> {
 
 

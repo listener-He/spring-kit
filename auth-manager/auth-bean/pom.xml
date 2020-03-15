@@ -12,4 +12,11 @@
     <artifactId>auth-bean</artifactId>
 
 
+   <dependencies>
+       <dependency>
+           <groupId>org.hehh.cloud</groupId>
+           <artifactId>common-utils</artifactId>
+           <version>1.0-SNAPSHOT</version>
+       </dependency>
+   </dependencies>
 </project>

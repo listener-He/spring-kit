@@ -33,9 +33,9 @@ public class LoginUser implements java.io.Serializable {
     private String name;
 
     /**
-     *  登陆时账户
+     *  当前登陆唯一ID
      */
-    private String account;
+    private String token;
 
 
     /**
@@ -58,20 +58,15 @@ public class LoginUser implements java.io.Serializable {
 
 
     /**
-     *  过期时间
+     *  过期时间(毫秒)
      */
     private long overdueTime;
 
 
-    /**
-     *  最后更新时间
-     */
-    private long lastUpdateTime;
-
 
     /**
-     *  登陆时间
+     *  生成时间
      */
-    private long loginTime;
+    private Long createTime;
 
 }
