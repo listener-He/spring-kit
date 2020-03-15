@@ -3,32 +3,33 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>spring-parent</artifactId>
+        <artifactId>auth-manager</artifactId>
         <groupId>org.hehh.cloud</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>auth-manager</artifactId>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>auth-bean</module>
-        <module>auth-token</module>
-    </modules>
-
-
-    <properties>
-        <jwt.version>0.9.1</jwt.version>
-    </properties>
-
+    <artifactId>auth-token</artifactId>
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.hehh.cloud</groupId>
-            <artifactId>common-bean</artifactId>
+            <artifactId>auth-bean</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jwt.version}</version>
+        </dependency>
+
     </dependencies>
+
 
 </project>
