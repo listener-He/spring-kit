@@ -1,4 +1,4 @@
-package com.hehh.cloud.common.bean.login;
+package org.hehh.cloud.auth.bean.login;
 
 import lombok.Data;
 

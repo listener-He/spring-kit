@@ -1,4 +1,4 @@
-package com.hehh.cloud.common.bean.result;
+package org.hehh.cloud.common.bean.result;
 
 import lombok.Data;
 
