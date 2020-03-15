@@ -1,9 +1,11 @@
 package org.hehh.cloud.auth.token.impl.jwt;
 
 import cn.hutool.core.util.IdUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.auth.bean.login.LoginUser;
 import org.hehh.cloud.auth.token.TokenManager;
 import org.hehh.cloud.auth.token.TokenOutmodedException;
+import org.springframework.util.Assert;
 
 import java.util.Date;
 
@@ -12,6 +14,7 @@ import java.util.Date;
  * @create: 2020-03-15 20:43
  * @description: jwt生成token
  **/
+@Slf4j
 public class JwtTokenManager implements TokenManager {
 
 
@@ -42,6 +45,7 @@ public class JwtTokenManager implements TokenManager {
      * @param issuer 发行人
      */
     public JwtTokenManager(String secret,String issuer){
+        Assert.hasText(secret,"jwt签名密钥secret不能为空");
         this.jwtGenerate = new JwtGenerate(secret);
         this.issuer = issuer;
     }
@@ -61,6 +65,11 @@ public class JwtTokenManager implements TokenManager {
      */
     @Override
     public String generateSign(LoginUser user) {
+
+        Assert.notNull(user,"用户信息不能为空");
+        Assert.hasText(user.getUserId(),"用户id不能为空");
+        Assert.hasText(user.getToken(),"登陆token不能为空");
+
         return jwtGenerate.createJwtToken(issuer,user);
     }
 
@@ -103,16 +112,26 @@ public class JwtTokenManager implements TokenManager {
      */
     @Override
     public String delay(String token) throws TokenOutmodedException {
-        LoginUser user = jwtGenerate.getUser(token);
+
+        return delay(jwtGenerate.getUser(token));
+    }
+
+
+    /**
+     * 延长有效期
+     *
+     * @param user
+     * @return
+     * @throws TokenOutmodedException
+     */
+    @Override
+    public String delay(LoginUser user) throws TokenOutmodedException {
         if(user == null){
-            throw new TokenOutmodedException(token);
+            throw new TokenOutmodedException(null);
         }
 
         return jwtGenerate.createJwtToken(issuer,user);
     }
-
-
-
 
     /**
      * 获取到期时间
@@ -130,6 +149,15 @@ public class JwtTokenManager implements TokenManager {
     }
 
 
+    /**
+     * 清除令牌
+     *
+     * @param token 令牌
+     */
+    @Override
+    public void remove(String token) {
+        log.warn("jwt无法清除token");
+    }
 
 
 

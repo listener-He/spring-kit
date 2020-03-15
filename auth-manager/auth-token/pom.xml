@@ -23,6 +23,17 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+
+
+        <!-- 此redis不打包编译 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
+
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>

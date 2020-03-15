@@ -45,11 +45,29 @@ public interface TokenManager {
 
 
     /**
+     *  延长有效期
+     * @param user
+     * @return
+     * @throws TokenOutmodedException
+     */
+    String delay(LoginUser user) throws TokenOutmodedException;
+
+
+    /**
      *  获取到期时间
      * @param token 令牌
      * @return 秒
      */
     long getExpired(String token) throws TokenOutmodedException;
+
+
+
+
+    /**
+     *  清除令牌
+     * @param token 令牌
+     */
+    void remove(String token);
 
 
 }
