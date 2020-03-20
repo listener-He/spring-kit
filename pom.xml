@@ -12,6 +12,7 @@
         <module>common-bean</module>
         <module>auth-manager</module>
         <module>common-utils</module>
+        <module>spring-boot-extend-manager</module>
     </modules>
 
 
