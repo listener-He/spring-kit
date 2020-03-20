@@ -14,9 +14,12 @@ public class TokenOutmodedException extends RuntimeException {
     private final String token;
 
     /**
+     *
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
+     *
+     * @param token 异常的token
      */
     public TokenOutmodedException(String token) {
         super();
@@ -30,6 +33,8 @@ public class TokenOutmodedException extends RuntimeException {
      *
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
+     * @param token 异常的token
+     *
      */
     public TokenOutmodedException(String message,String token) {
         super(message);
@@ -48,6 +53,7 @@ public class TokenOutmodedException extends RuntimeException {
      *                {@link #getCause()} method).  (A <tt>null</tt> value is
      *                permitted, and indicates that the cause is nonexistent or
      *                unknown.)
+     * @param token 异常的token
      * @since 1.4
      */
     public TokenOutmodedException(String message, Throwable cause,String token) {
@@ -66,6 +72,7 @@ public class TokenOutmodedException extends RuntimeException {
      *              {@link #getCause()} method).  (A <tt>null</tt> value is
      *              permitted, and indicates that the cause is nonexistent or
      *              unknown.)
+     * @param token 异常的token
      * @since 1.4
      */
     public TokenOutmodedException(Throwable cause,String token) {

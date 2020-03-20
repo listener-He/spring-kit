@@ -120,7 +120,7 @@ public class JwtTokenManager implements TokenManager {
     /**
      * 延长有效期
      *
-     * @param user
+     * @param user 用户信息
      * @return
      * @throws TokenOutmodedException
      */

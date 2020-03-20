@@ -30,11 +30,21 @@ public class JwtGenerate {
      */
     private final SignatureAlgorithm signatureAlgorithm;
 
+    /**
+     *  使用密钥构建jwt生成器
+     *    默认使用 HS256 加密
+     * @param secret 密钥
+     */
     public JwtGenerate(String secret){
         this(secret,SignatureAlgorithm.HS256);
     }
 
 
+    /**
+     *  使用密钥 和 指定加密方式构造器
+     * @param secret 密钥
+     * @param algorithm 加密方式
+     */
     public JwtGenerate(String secret,SignatureAlgorithm algorithm){
         this.SECRET = secret;
         this.signatureAlgorithm = algorithm;
@@ -92,7 +102,7 @@ public class JwtGenerate {
     /**
      * 解析Claims
      *
-     * @param token
+     * @param token 生成的token
      * @return
      */
     public  Claims getClaim(String token) {
@@ -114,7 +124,7 @@ public class JwtGenerate {
     /**
      * 解析Claims
      *
-     * @param token
+     * @param token 用户token
      * @return
      */
     public  Map<String,Object> getClaimMap(String token) {
@@ -124,7 +134,7 @@ public class JwtGenerate {
     /**
      * 解析Claims
      *
-     * @param token
+     * @param token 用户token
      * @return
      */
     public  LoginUser getUser(String token){
@@ -134,6 +144,7 @@ public class JwtGenerate {
 
     /**
      * 获取jwt发布时间
+     * @param token 用户token
      */
     public  Date getIssuedAt(String token) {
         Claims claim = getClaim(token);
@@ -142,6 +153,7 @@ public class JwtGenerate {
 
     /**
      * 获取token-id
+     * @param token 用户token
      */
     public  String getId(String token) {
         Claims claim = getClaim(token);
@@ -152,7 +164,7 @@ public class JwtGenerate {
     /**
      *  获取面向用户类型
      *
-     * @param token
+     * @param token 用户token
      * @return
      */
     public  String getSubject(String token){
@@ -163,6 +175,7 @@ public class JwtGenerate {
 
 
     /**
+     *  获取哟怒失效时间
      * @param token 令牌
      * @return 获取jwt失效时间
      */
