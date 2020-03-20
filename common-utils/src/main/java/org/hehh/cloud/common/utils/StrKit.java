@@ -1,8 +1,11 @@
 package org.hehh.cloud.common.utils;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import org.hehh.cloud.common.regular.Regular;
 
+import java.util.Date;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +16,18 @@ import java.util.regex.Pattern;
  **/
 public class StrKit {
 
+    /**
+     * RANDOM 基数
+     */
+    private final static int RANDOM_BASE = 10;
+
+    private final static char[] strs = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+            'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+            's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+
+    private final static char[] ints = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+            'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+            'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
 
     private final static int[] li_SecPosValue = { 1601, 1637, 1833, 2078, 2274,
@@ -258,6 +273,93 @@ public class StrKit {
 
 
 
+
+
+
+
+    /**
+     * 产生指定长度的数字值随机数
+     *
+     * @param length 需要产生的长度
+     * @return
+     */
+    public static String getInt(int length) {
+        Random random = new Random();
+        String randStr = "";
+        for (int i = 0; i < length; i++) {
+            String randItem = String.valueOf(random.nextInt(RANDOM_BASE));
+            randStr += randItem;
+        }
+        return randStr;
+    }
+
+    public static int getIntStartEnd(int start, int end) {
+        return (int) (Math.random() * (end - start + 1) + start);
+    }
+
+    /**
+     * 描述：手机验证码生成带字符，包含数字和字符
+     *
+     * @param len 生成手机验证码长度
+     * @return
+     */
+    public static String getIntAndStr(int len) {
+        return random(true, len);
+    }
+
+    /**
+     * 描述：手机验证码生成带字符不包含数字
+     *
+     * @param len 生成手机验证码长度
+     * @return
+     */
+    public static String getStr(int len) {
+        return random(false, len);
+    }
+
+
+    /**
+     * 生成当前时间 紧凑型字符串
+     *
+     * @return
+     */
+    public static String dateTimeStr() {
+        return DateUtil.format(new Date(), "yyyyMMddHHmmssSSS") + getInt(5);
+    }
+
+
+    /**
+     * 生成号码
+     *
+     * @param serviceCode
+     * @param supplement
+     * @return
+     */
+    public static String generateNo(int serviceCode, Integer supplement) {
+        return serviceCode + DateUtil.format(new Date(), "yyyyMMddHHmmss") + getInt(4) + (null == supplement ? "" : supplement);
+    }
+
+    /**
+     * 生成号码
+     *
+     * @param serviceCode
+     * @return
+     */
+    public static String generateNo(int serviceCode) {
+        return generateNo(serviceCode, null);
+    }
+
+
+    private static String random(boolean isInt, int len) {
+        int min = 0;
+        int maxnum = isInt ? ints.length : strs.length;
+        String codeStr = "";
+        for (int i = 0; i < len; i++) {
+            int num = (int) ((maxnum - min) * Math.random() + min);
+            codeStr += isInt ? ints[num] : strs[num];
+        }
+        return codeStr;
+    }
 
 
 
