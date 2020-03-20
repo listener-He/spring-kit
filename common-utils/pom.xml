@@ -11,6 +11,9 @@
 
     <artifactId>common-utils</artifactId>
 
+    <properties>
+        <hutool.version>5.2.0</hutool.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -22,6 +25,15 @@
             <artifactId>hutool-crypto</artifactId>
             <version>${hutool.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
     </dependencies>
+
+
+
+
 
 </project>

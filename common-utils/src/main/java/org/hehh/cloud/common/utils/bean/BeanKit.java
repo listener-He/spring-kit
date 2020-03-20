@@ -25,7 +25,7 @@ public class BeanKit {
 
     /**
      * 实体转map
-     * @param obj
+     * @param obj 任何类（该传什么自己心里有数!）
      * @return
      * @throws Exception
      */
@@ -52,9 +52,9 @@ public class BeanKit {
 
     /**
      *  map转实体
-     * @param map
-     * @param clz
-     * @return
+     * @param map map对象
+     * @param clz 转成的类型
+     * @return T bean对象
      * @throws Exception
      */
     public static <T>T toBean(Map<String,Object> map,Class<T> clz){
@@ -93,7 +93,7 @@ public class BeanKit {
 
     /**
      *  判断bean是否为null
-     * @param bean
+     * @param bean 任何类
      * @return
      */
     public static boolean isNotNull(Object bean){
@@ -121,8 +121,8 @@ public class BeanKit {
     /**
      *  对象是否为null
      *          所有属性为null也视为null
-     * @param bean
-     * @return
+     * @param bean 任何类
+     * @return 是否
      */
     public static boolean isNull(Object bean){
         return !isNotNull(bean);
@@ -131,8 +131,8 @@ public class BeanKit {
 
     /**
      *  判断有字段不为null
-     * @param obj
-     * @return
+     * @param obj 任何类
+     * @return 是否
      */
     public static boolean fieldIsNotNull(Object obj){
         if(isNull(obj)){
@@ -168,9 +168,9 @@ public class BeanKit {
 
     /**
      *    克隆方式复制list
-     * @param object
-     * @param clazz
-     * @param <T>
+     * @param object 原集合
+     * @param clazz 元素类型class
+     * @param <T> 元素类型
      * @return
      */
     public static <T> List<T> copyList(Collection<?> object, Class<T> clazz){
@@ -187,8 +187,8 @@ public class BeanKit {
 
 
     /**
-     *    copyList
-     * @param object
+     *   克隆方式复制list
+     * @param object 原集合类
      * @param className 类全名
      * @param <T>
      * @return
@@ -206,9 +206,9 @@ public class BeanKit {
 
 
     /**
-     *   copy类
-     * @param object
-     * @param clazz
+     *   copy对象
+     * @param object 原对象
+     * @param clazz 目标类型
      * @param <T>
      * @return
      */
@@ -221,8 +221,8 @@ public class BeanKit {
 
     /**
      *   根据class字符串转copy
-     * @param object
-     * @param classStr
+     * @param object 原类
+     * @param classStr 目录类型字符串
      * @return
      */
     public static <T> T copy(Object object,String classStr){
