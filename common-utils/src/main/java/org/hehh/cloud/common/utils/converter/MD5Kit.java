@@ -2,7 +2,6 @@ package org.hehh.cloud.common.utils.converter;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.InputStream;
@@ -13,7 +12,6 @@ import java.io.InputStream;
  * @create: 2020-03-20 21:58
  * @description: md5工具类, 没做什么操作。基于 SecureUtil包装一下
  **/
-@Slf4j
 public class MD5Kit {
 
 
