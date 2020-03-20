@@ -10,11 +10,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-boot-extend-manager</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>spring-boot-extend-core</module>
+    </modules>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hehh.cloud</groupId>
+            <artifactId>common-utils</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 </project>
