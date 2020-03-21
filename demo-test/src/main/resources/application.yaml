@@ -1,0 +1,21 @@
+server:
+  # 端口号
+  port: 8895
+spring:
+  mvc:
+    favicon:
+      enabled: false
+  application:
+    name: demo-test
+    #日期响应格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    #设置清除null值
+    default-property-inclusion: non_null
+    mapper:
+      sort-properties-alphabetically: false
+
+  decrypt:
+    method: AES
+    privateKey: bdb356ec3d924a98800a68637e705af6
