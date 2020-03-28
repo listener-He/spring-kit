@@ -2,9 +2,11 @@ package org.hehh.cloud.spring.decrypt.adapter;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.common.utils.StrKit;
 import org.hehh.cloud.spring.decrypt.IDecrypt;
+import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
 import org.hehh.cloud.spring.decrypt.annotation.DecryptField;
 import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
 import org.hehh.cloud.spring.mvc.copy.ReplaceInputStreamHttpServletRequest;
@@ -55,6 +57,11 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
      */
     private final boolean scanAnnotation;
 
+    /**
+     *  被扫描的注解
+     */
+    private final Class<? extends Decrypt> annotation;
+
 
 
 
@@ -62,6 +69,7 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
         this.decrypt = decrypt;
         valueModel = false;
         this.scanAnnotation = true;
+        this.annotation = Decrypt.class;
     }
 
 
@@ -69,8 +77,19 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
         this.decrypt = decrypt;
         this.scanAnnotation = decryptParameter.isScanAnnotation();
         this.valueModel = decryptParameter.isValueModel();
+        this.annotation = decryptParameter.getAnnotation();
     }
 
+
+    /**
+     * 支持的注解
+     *
+     * @return
+     */
+    @Override
+    public Class<? extends Decrypt> annotation() {
+        return annotation;
+    }
 
     /**
      * 是否需要有注解才解密

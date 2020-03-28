@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hehh.cloud.spring.decrypt.DecryptMethod;
+import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
 
 /**
  * @author: HeHui
@@ -43,4 +44,10 @@ public class DecryptParameter {
      *  公钥
      */
     private String publicKey;
+
+
+    /**
+     *  扫描的注解
+     */
+    private Class<? extends Decrypt> annotation = Decrypt.class;
 }

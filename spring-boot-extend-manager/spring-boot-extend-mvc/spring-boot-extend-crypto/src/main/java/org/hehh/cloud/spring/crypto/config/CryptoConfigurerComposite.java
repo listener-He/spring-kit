@@ -2,6 +2,7 @@ package org.hehh.cloud.spring.crypto.config;
 
 import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.decrypt.adapter.RequestBodyDecryptAdapter;
+import org.hehh.cloud.spring.decrypt.adapter.RequestFormDecryptAdapter;
 import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
 import org.hehh.cloud.spring.mvc.crypto.CryptoConfiguration;
 import org.hehh.cloud.spring.mvc.crypto.IDecryptAdapter;
@@ -28,12 +29,12 @@ public class CryptoConfigurerComposite implements CryptoConfiguration {
 
 
     /**
-     * 获取芥末适配器
+     * 获取解密适配器
      *
      * @return
      */
     @Override
     public List<IDecryptAdapter> getDecryptAdapters() {
-        return Arrays.asList(new RequestBodyDecryptAdapter(decrypt,decryptParameter));
+        return Arrays.asList(new RequestBodyDecryptAdapter(decrypt,decryptParameter),new RequestFormDecryptAdapter(decrypt,decryptParameter));
     }
 }

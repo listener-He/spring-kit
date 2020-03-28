@@ -64,8 +64,11 @@ public interface IDecryptAdapter extends IHandlerMethodArgumentResolverAdapter {
     NativeWebRequest decode(MethodParameter parameter, NativeWebRequest request,MediaType mediaType, Class<?> paramClass);
 
 
-
-
+    /**
+     *  支持的注解
+     * @return
+     */
+    Class<? extends Decrypt> annotation();
 
 
     /**
@@ -90,9 +93,9 @@ public interface IDecryptAdapter extends IHandlerMethodArgumentResolverAdapter {
         /**
          *  判断class是否存在注解 or 方法上面有没有注解 or 参数上面有没有注释
          */
-        if (supportsDecrypt && (parameter.hasParameterAnnotation(Decrypt.class)
-                || parameter.hasMethodAnnotation(Decrypt.class)
-                || parameter.getContainingClass().getAnnotation(Decrypt.class) != null)) {
+        if (supportsDecrypt && (parameter.hasParameterAnnotation(annotation())
+                || parameter.hasMethodAnnotation(annotation())
+                || parameter.getContainingClass().getAnnotation(annotation()) != null)) {
             return true;
         }
 
