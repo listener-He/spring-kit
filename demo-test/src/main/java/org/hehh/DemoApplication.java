@@ -1,5 +1,6 @@
-package org.hehh.cloud;
+package org.hehh;
 
+import org.hehh.cloud.spring.mvc.config.EnableEnhanceRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description: demo程序启动
  **/
 @SpringBootApplication
+@EnableEnhanceRequest
 public class DemoApplication {
 
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package org.hehh.cloud;
+package org.hehh.demo.cloud;
 
 import org.hehh.cloud.common.bean.result.Result;
 import org.springframework.web.bind.annotation.GetMapping;

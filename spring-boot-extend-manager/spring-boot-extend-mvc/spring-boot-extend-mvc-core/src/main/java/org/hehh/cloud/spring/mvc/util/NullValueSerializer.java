@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.core;
+package org.hehh.cloud.spring.mvc.util;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
