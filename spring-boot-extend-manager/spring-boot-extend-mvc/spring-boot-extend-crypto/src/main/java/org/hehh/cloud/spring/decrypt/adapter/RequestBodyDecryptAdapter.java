@@ -17,11 +17,9 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
@@ -58,6 +56,8 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
     private final boolean scanAnnotation;
 
 
+
+
     public RequestBodyDecryptAdapter(IDecrypt decrypt) {
         this.decrypt = decrypt;
         valueModel = false;
@@ -83,17 +83,17 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
     }
 
 
-
-
     /**
      * 是否支持解密
      *
-     * @param parameter
+     * @param parameter 参数
+     * @param mediaType 请求内容类型
      * @return
      */
     @Override
-    public boolean supportsDecrypt(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(RequestBody.class);
+    public boolean supportsDecrypt(MethodParameter parameter, MediaType mediaType) {
+        //return parameter.hasParameterAnnotation(RequestBody.class);
+        return mediaType.includes(MediaType.APPLICATION_JSON);
     }
 
     /**
@@ -141,7 +141,6 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
             if (data_byte == null) {
                 throw new HttpMessageNotReadableException("request body decrypt error,param body is null.", inputMessage);
             }
-
             return new CopyNativeWebRequest(request, new ReplaceInputStreamHttpServletRequest(request.getNativeRequest(HttpServletRequest.class),data_byte));
 
         }

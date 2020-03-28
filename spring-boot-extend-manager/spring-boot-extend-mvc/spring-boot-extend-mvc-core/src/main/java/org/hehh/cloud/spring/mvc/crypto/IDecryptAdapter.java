@@ -25,10 +25,11 @@ public interface IDecryptAdapter extends IHandlerMethodArgumentResolverAdapter {
 
     /**
      *  是否支持解密
-     * @param parameter
+     * @param parameter 参数
+     * @param mediaType 请求内容类型
      * @return
      */
-    boolean supportsDecrypt(MethodParameter parameter);
+    boolean supportsDecrypt(MethodParameter parameter,MediaType mediaType);
 
 
     /**
@@ -80,7 +81,7 @@ public interface IDecryptAdapter extends IHandlerMethodArgumentResolverAdapter {
      */
     @Override
     default boolean supportsParameter(MethodParameter parameter, MediaType mediaType){
-        boolean supportsDecrypt = supportsDecrypt(parameter);
+        boolean supportsDecrypt = supportsDecrypt(parameter,mediaType);
         if (!isScanAnnotation() && supportsDecrypt) {
             return true;
         }
