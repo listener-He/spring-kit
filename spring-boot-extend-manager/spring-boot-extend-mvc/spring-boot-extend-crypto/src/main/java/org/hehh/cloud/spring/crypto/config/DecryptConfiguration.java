@@ -43,7 +43,6 @@ public class DecryptConfiguration{
      * @return
      */
     @Bean
-    @Primary
     @ConditionalOnProperty(value = "spring.decrypt.method",havingValue = "AES")
     public IDecrypt aesDecrypt(DecryptParameter parameter){
         return new AesDecrypt(parameter.getPrivateKey());
@@ -71,7 +70,6 @@ public class DecryptConfiguration{
      * @return
      */
     @Bean
-    @Primary
     @ConditionalOnProperty(value = "spring.decrypt.method",havingValue = "DEC")
     public IDecrypt desDecrypt(DecryptParameter parameter){
         return new DesDecrypt(parameter.getPrivateKey());
