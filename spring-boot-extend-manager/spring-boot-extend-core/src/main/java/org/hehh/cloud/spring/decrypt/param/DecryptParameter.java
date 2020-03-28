@@ -25,15 +25,16 @@ public class DecryptParameter {
 
     /**
      *  是否值解密模式
-     *      true：只解密key对应的值，客户端请求还需正常的json格式，只是对value进行加密
+     *
      *      false: 客户端请求参数是一个被加密后对json格式，服务端对字符串进行解密
+     *      true：只解密key对应的值，客户端请求还需正常的json格式，只是对value进行加密 (该模式，对场景太苛刻强烈不建议使用!!!  主要是渣没实现)
      */
     private boolean valueModel =  false;
 
     /**
      * 是否需要扫描注解才解密
      */
-    private  boolean scanAnnotation;
+    private  boolean scanAnnotation = true;
 
     /**
      *  私钥
