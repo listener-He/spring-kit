@@ -5,7 +5,6 @@ import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
 import org.hehh.cloud.spring.mvc.core.HandlerMethodArgumentResolverEnhanceComposite;
 import org.hehh.cloud.spring.mvc.core.IHandlerMethodArgumentResolverAdapter;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -38,35 +37,30 @@ public interface IDecryptAdapter extends IHandlerMethodArgumentResolverAdapter {
      *
      * @param parameter    url绑定方法参数
      * @param webRequest   当前请求
-     * @param inputMessage 当前消息体
      * @param mediaType    媒体类型
      * @param paramClass   参数类型
      * @return
      */
     @Override
-    default NativeWebRequest beforeResolver(MethodParameter parameter, NativeWebRequest webRequest, HttpInputMessage inputMessage, MediaType mediaType, Class<?> paramClass){
-        NativeWebRequest request = decode(parameter, inputMessage,webRequest, mediaType, paramClass);
-        if(request == inputMessage){
+    default NativeWebRequest beforeResolver(MethodParameter parameter, NativeWebRequest webRequest, MediaType mediaType, Class<?> paramClass){
+        NativeWebRequest request = decode(parameter,webRequest, mediaType, paramClass);
+        if(request == null){
             return webRequest;
         }
 
-
-        //TODO 待处理 把 HttpInputMessage封装为 NativeWebRequest
-
-        return null;
+        return request;
     }
 
 
     /**
      *  解密
      * @param parameter    url绑定方法参数
-     * @param inputMessage 当前消息体
      * @param request 原始请求
      * @param mediaType    媒体类型
      * @param paramClass   参数类型
      * @return
      */
-    NativeWebRequest decode(MethodParameter parameter, HttpInputMessage inputMessage, NativeWebRequest request,MediaType mediaType, Class<?> paramClass);
+    NativeWebRequest decode(MethodParameter parameter, NativeWebRequest request,MediaType mediaType, Class<?> paramClass);
 
 
 

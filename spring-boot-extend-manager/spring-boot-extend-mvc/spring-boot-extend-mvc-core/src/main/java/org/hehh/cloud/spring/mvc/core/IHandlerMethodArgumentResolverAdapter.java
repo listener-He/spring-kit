@@ -31,10 +31,9 @@ public interface IHandlerMethodArgumentResolverAdapter {
      *    需要返回一个{@link NativeWebRequest} 如果request没变化可直接返回 webRequest,但如果发生变更了。请务必重新组装{@link NativeWebRequest}
      * @param parameter url绑定方法参数
      * @param webRequest 当前请求
-     * @param inputMessage 当前消息体
      * @param mediaType 媒体类型
      * @param paramClass 参数类型
      * @return
      */
-    NativeWebRequest beforeResolver(MethodParameter parameter, NativeWebRequest webRequest, HttpInputMessage inputMessage,MediaType mediaType,Class<?> paramClass);
+    NativeWebRequest beforeResolver(MethodParameter parameter, NativeWebRequest webRequest,MediaType mediaType,Class<?> paramClass);
 }

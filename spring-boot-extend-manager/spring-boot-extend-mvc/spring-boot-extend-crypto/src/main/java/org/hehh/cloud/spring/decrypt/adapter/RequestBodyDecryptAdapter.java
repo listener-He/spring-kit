@@ -8,6 +8,7 @@ import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.DecryptField;
 import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
 import org.hehh.cloud.spring.mvc.copy.ReplaceInputStreamHttpServletRequest;
+import org.hehh.cloud.spring.mvc.core.CacheRequestHttpInputMessage;
 import org.hehh.cloud.spring.mvc.core.CopyNativeWebRequest;
 import org.hehh.cloud.spring.mvc.crypto.IDecryptAdapter;
 import org.hehh.cloud.spring.mvc.util.ObjectMapperKit;
@@ -15,6 +16,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -94,19 +96,32 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
         return parameter.hasParameterAnnotation(RequestBody.class);
     }
 
+    /**
+     *   此处新增代码
+     * Create a new {@link HttpInputMessage} from the given {@link NativeWebRequest}.
+     * @param webRequest the web request to create an input message from
+     * @return the input message
+     */
+    protected HttpInputMessage createInputMessage(NativeWebRequest webRequest) {
+        HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
+        Assert.state(servletRequest != null, "No HttpServletRequest");
+        return new CacheRequestHttpInputMessage(servletRequest);
+    }
+
 
     /**
      * 解密
      *
      * @param parameter    url绑定方法参数
-     * @param inputMessage 当前消息体
      * @param request      原始请求
      * @param mediaType    媒体类型
      * @param paramClass   参数类型
      * @return
      */
     @Override
-    public NativeWebRequest decode(MethodParameter parameter, HttpInputMessage inputMessage, NativeWebRequest request, MediaType mediaType, Class<?> paramClass) {
+    public NativeWebRequest decode(MethodParameter parameter, NativeWebRequest request, MediaType mediaType, Class<?> paramClass) {
+        HttpInputMessage inputMessage = createInputMessage(request);
+
         /**
          *  是否整体解密 ？
          */

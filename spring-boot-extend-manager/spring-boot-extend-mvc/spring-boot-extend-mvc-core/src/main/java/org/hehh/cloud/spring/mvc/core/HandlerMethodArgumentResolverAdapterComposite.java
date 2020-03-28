@@ -63,17 +63,16 @@ public class HandlerMethodArgumentResolverAdapterComposite implements IHandlerMe
      *
      * @param parameter    url绑定方法参数
      * @param webRequest   当前请求
-     * @param inputMessage 当前消息体
      * @param mediaType    媒体类型
      * @param paramClass   参数类型
      * @return
      */
     @Override
-    public NativeWebRequest beforeResolver(MethodParameter parameter, NativeWebRequest webRequest, HttpInputMessage inputMessage, MediaType mediaType, Class<?> paramClass) {
+    public NativeWebRequest beforeResolver(MethodParameter parameter, NativeWebRequest webRequest,  MediaType mediaType, Class<?> paramClass) {
         if(supportsParameter(parameter,mediaType)){
             Optional<IHandlerMethodArgumentResolverAdapter> first = requestParamAdapters.stream().filter(v -> v.supportsParameter(parameter, mediaType)).findFirst();
             if(first.isPresent()){
-               return first.get().beforeResolver(parameter,webRequest,inputMessage,mediaType,paramClass);
+               return first.get().beforeResolver(parameter,webRequest,mediaType,paramClass);
             }
         }
         return webRequest;

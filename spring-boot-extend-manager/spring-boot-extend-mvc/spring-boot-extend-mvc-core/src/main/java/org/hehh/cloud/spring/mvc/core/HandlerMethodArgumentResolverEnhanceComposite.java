@@ -1,11 +1,13 @@
 package org.hehh.cloud.spring.mvc.core;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -96,14 +98,12 @@ public class HandlerMethodArgumentResolverEnhanceComposite  extends HandlerMetho
         }
 
         if(resolverAdapter != null){
-            /**
-             *  获取请求参数流
-             */
-            HttpInputMessage inputMessage = createInputMessage(webRequest);
-            MediaType mediaType = inputMessage.getHeaders().getContentType();
+
+            String content_type = webRequest.getHeader(HttpHeaders.CONTENT_TYPE);
+            MediaType mediaType = (StringUtils.hasLength(content_type) ? MediaType.parseMediaType(content_type) : null);
             Class<?> aClass = parameter.getContainingClass();
             if(resolverAdapter.supportsParameter(parameter,mediaType)){
-                webRequest = resolverAdapter.beforeResolver(parameter, webRequest, inputMessage, mediaType,aClass);
+                webRequest = resolverAdapter.beforeResolver(parameter, webRequest, mediaType,aClass);
             }
 
 
@@ -161,6 +161,7 @@ public class HandlerMethodArgumentResolverEnhanceComposite  extends HandlerMetho
         }
         return result;
     }
+
 
 
 
