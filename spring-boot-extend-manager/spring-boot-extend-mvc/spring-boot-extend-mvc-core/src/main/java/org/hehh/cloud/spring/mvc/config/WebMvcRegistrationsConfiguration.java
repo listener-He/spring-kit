@@ -1,5 +1,8 @@
 package org.hehh.cloud.spring.mvc.config;
 
+import cn.hutool.core.collection.CollUtil;
+import org.hehh.cloud.spring.decrypt.DecryptManager;
+import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.mvc.core.HandlerMethodArgumentResolverEnhanceComposite;
 import org.hehh.cloud.spring.mvc.core.IHandlerMethodArgumentResolverAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +43,20 @@ public class WebMvcRegistrationsConfiguration  implements WebMvcRegistrations {
     @Autowired(required = false)
     public  WebMvcRegistrationsConfiguration(List<ResolverAdapterConfiguration> resolverAdapterConfigurations) {
         if (!CollectionUtils.isEmpty(resolverAdapterConfigurations)) {
+             List<IHandlerMethodArgumentResolverAdapter> resolverAdapters = new LinkedList<>();
 
-            List<IHandlerMethodArgumentResolverAdapter> resolverAdapters = new LinkedList<>();
-            resolverAdapterConfigurations.forEach(v-> v.addResolverAdapters(resolverAdapters));
+
+            resolverAdapterConfigurations.forEach(v-> {
+                v.addResolverAdapters(resolverAdapters);
+            });
 
             resolverEnhanceComposite = new HandlerMethodArgumentResolverEnhanceComposite(resolverAdapters);
         }
     }
+
+
+
+
 
     /**
      * Return the custom {@link RequestMappingHandlerAdapter} that should be used and

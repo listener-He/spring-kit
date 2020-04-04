@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 public interface IDecrypt {
 
 
+
     /**
      * 解密
      *

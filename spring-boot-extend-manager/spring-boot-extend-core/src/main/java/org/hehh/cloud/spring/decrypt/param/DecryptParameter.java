@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hehh.cloud.spring.decrypt.DecryptMethod;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author: HeHui

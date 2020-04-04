@@ -24,12 +24,12 @@ public class SpringContextKit implements ApplicationContextAware {
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        if (applicationContext == null) {
+        if (this.applicationContext == null) {
              this.applicationContext = applicationContext;
         }
 
         if (null == defaultListableBeanFactory) {
-            this.defaultListableBeanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
+            this.defaultListableBeanFactory = (DefaultListableBeanFactory) this.applicationContext.getAutowireCapableBeanFactory();
         }
 
     }

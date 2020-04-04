@@ -1,5 +1,6 @@
 package org.hehh.cloud.spring.core;
 
+import org.hehh.cloud.spring.decrypt.DecryptManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,5 +24,17 @@ public class CoreConfiguration {
     @ConditionalOnMissingBean(SpringContextKit.class)
     public SpringContextKit springContextKit(){
         return new SpringContextKit();
+    }
+
+
+    /**
+     *  解密管理器
+     * @return
+     */
+    @Bean
+    @Primary
+    @ConditionalOnMissingBean(DecryptManager.class)
+    public DecryptManager decryptManager(SpringContextKit springContextKit){
+        return new DecryptManager(springContextKit);
     }
 }

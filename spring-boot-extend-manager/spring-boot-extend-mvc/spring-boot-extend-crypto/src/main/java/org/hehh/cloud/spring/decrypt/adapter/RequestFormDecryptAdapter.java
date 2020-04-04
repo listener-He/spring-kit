@@ -3,6 +3,7 @@ package org.hehh.cloud.spring.decrypt.adapter;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.common.utils.StrKit;
+import org.hehh.cloud.spring.decrypt.DecryptManager;
 import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
 import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
@@ -31,7 +32,7 @@ public class RequestFormDecryptAdapter implements IDecryptAdapter {
     /**
      * 解密对象
      */
-    private final IDecrypt decrypt;
+    private final DecryptManager decryptManager;
 
 
     /**
@@ -55,16 +56,16 @@ public class RequestFormDecryptAdapter implements IDecryptAdapter {
 
 
 
-    public RequestFormDecryptAdapter(IDecrypt decrypt) {
-        this.decrypt = decrypt;
+    public RequestFormDecryptAdapter(DecryptManager decryptManager) {
+        this.decryptManager = decryptManager;
         valueModel = false;
         this.scanAnnotation = true;
         this.annotation = Decrypt.class;
     }
 
 
-    public RequestFormDecryptAdapter(IDecrypt decrypt, DecryptParameter decryptParameter) {
-        this.decrypt = decrypt;
+    public RequestFormDecryptAdapter(DecryptManager decryptManager, DecryptParameter decryptParameter) {
+        this.decryptManager = decryptManager;
         this.scanAnnotation = decryptParameter.isScanAnnotation();
         this.valueModel = decryptParameter.isValueModel();
         this.annotation = decryptParameter.getAnnotation();
@@ -109,6 +110,8 @@ public class RequestFormDecryptAdapter implements IDecryptAdapter {
      */
     @Override
     public NativeWebRequest decode(MethodParameter parameter, NativeWebRequest request, MediaType mediaType, Class<?> paramClass) {
+
+        IDecrypt decrypt = decryptManager.get();
         /**
          *  是否整体解密？,表单提交貌似没有整体解密的，除非是url上面
          */

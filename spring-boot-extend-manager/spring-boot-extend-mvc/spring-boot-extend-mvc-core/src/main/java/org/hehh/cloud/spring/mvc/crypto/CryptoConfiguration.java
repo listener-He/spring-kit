@@ -15,10 +15,16 @@ public interface CryptoConfiguration extends ResolverAdapterConfiguration {
 
 
     /**
-     *  获取芥末适配器
+     *  获取解密适配器
      * @return
      */
     List<IDecryptAdapter> getDecryptAdapters();
+
+
+
+
+
+
 
 
 

@@ -14,6 +14,8 @@ public class DesDecrypt implements IDecrypt {
      */
     private final DES des;
 
+
+
     public DesDecrypt(DES des){
         this.des = des;
     }

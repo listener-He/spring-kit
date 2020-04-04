@@ -2,9 +2,9 @@ package org.hehh.cloud.spring.decrypt.adapter;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.common.utils.StrKit;
+import org.hehh.cloud.spring.decrypt.DecryptManager;
 import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
 import org.hehh.cloud.spring.decrypt.annotation.DecryptField;
@@ -41,7 +41,7 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
     /**
      * 解密对象
      */
-    private final IDecrypt decrypt;
+    private final DecryptManager decryptManager;
 
 
     /**
@@ -65,16 +65,16 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
 
 
 
-    public RequestBodyDecryptAdapter(IDecrypt decrypt) {
-        this.decrypt = decrypt;
+    public RequestBodyDecryptAdapter(DecryptManager decryptManager) {
+        this.decryptManager = decryptManager;
         valueModel = false;
         this.scanAnnotation = true;
         this.annotation = Decrypt.class;
     }
 
 
-    public RequestBodyDecryptAdapter(IDecrypt decrypt, DecryptParameter decryptParameter) {
-        this.decrypt = decrypt;
+    public RequestBodyDecryptAdapter(DecryptManager decryptManager, DecryptParameter decryptParameter) {
+        this.decryptManager = decryptManager;
         this.scanAnnotation = decryptParameter.isScanAnnotation();
         this.valueModel = decryptParameter.isValueModel();
         this.annotation = decryptParameter.getAnnotation();
@@ -140,6 +140,7 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
     @Override
     public NativeWebRequest decode(MethodParameter parameter, NativeWebRequest request, MediaType mediaType, Class<?> paramClass) {
         HttpInputMessage inputMessage = createInputMessage(request);
+        IDecrypt decrypt = decryptManager.get();
 
         /**
          *  是否整体解密 ？
@@ -152,7 +153,7 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
                 /**
                  *  解密
                  */
-                data_byte  = this.decrypt.decrypt(inputMessage.getBody());
+                data_byte  = decrypt.decrypt(inputMessage.getBody());
             }catch (Exception e){
                 log.error("解密body失败:{}", e);
             }
