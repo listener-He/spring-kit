@@ -622,6 +622,7 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
         resolvers.add(new MatrixVariableMapMethodArgumentResolver());
         resolvers.add(new ServletModelAttributeMethodProcessor(false));
         resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
+        resolvers.add(new ParamArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice));
         resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice));
         resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));
         resolvers.add(new RequestHeaderMapMethodArgumentResolver());

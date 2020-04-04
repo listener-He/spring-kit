@@ -1,4 +1,4 @@
-package org.hehh;
+package org.hehh.demo;
 
 import org.hehh.cloud.spring.mvc.config.EnableEnhanceRequest;
 import org.springframework.boot.SpringApplication;
