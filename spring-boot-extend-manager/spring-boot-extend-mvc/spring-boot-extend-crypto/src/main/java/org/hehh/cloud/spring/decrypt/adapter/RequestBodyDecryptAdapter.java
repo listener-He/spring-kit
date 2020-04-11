@@ -73,17 +73,7 @@ public class RequestBodyDecryptAdapter extends IDecryptAdapter {
     }
 
 
-    /**
-     * 在参数绑定之前处理
-     *
-     * @param request       原始请求
-     * @param handlerMethod 适配方法
-     * @return
-     */
-    @Override
-    public HttpServletRequest beforeResolver(HttpServletRequest request, HandlerMethod handlerMethod) {
-        return null;
-    }
+
 
 
     /**
