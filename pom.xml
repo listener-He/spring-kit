@@ -36,7 +36,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <revision>1.1.RELEASE</revision>
+        <revision>1.1-RELEASE</revision>
         <javadoc.version>1.8</javadoc.version>
         <skipTests>true</skipTests>
         <spring.cloud.version>Finchley.SR2</spring.cloud.version>
