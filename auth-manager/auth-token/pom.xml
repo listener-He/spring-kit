@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>auth-bean</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
 
 
