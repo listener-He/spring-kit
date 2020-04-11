@@ -45,7 +45,7 @@ public class RequestBodyDecryptAdapter extends IDecryptAdapter {
 
 
     public RequestBodyDecryptAdapter(DecryptManager decryptManager, DecryptParameter decryptParameter) {
-        super(decryptManager, decryptParameter.isScanAnnotation(), decryptParameter.isValueModel(), decryptParameter.getAnnotation());
+        super(decryptManager, decryptParameter.isValueModel(), decryptParameter.isScanAnnotation(), decryptParameter.getAnnotation());
     }
 
 
