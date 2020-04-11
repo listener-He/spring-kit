@@ -18,8 +18,11 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -33,119 +36,73 @@ import java.util.Map;
  * @description: body参数解析
  **/
 @Slf4j
-public class RequestBodyDecryptAdapter implements IDecryptAdapter {
-
-
-
-
-    /**
-     * 解密对象
-     */
-    private final DecryptManager decryptManager;
-
-
-    /**
-     * 是否值解密模式
-     * true：只解密key对应的值，客户端请求还需正常的json格式，只是对value进行加密
-     * false: 客户端请求参数是一个被加密后对json格式，服务端对字符串进行解密
-     */
-    private final boolean valueModel;
-
-
-    /**
-     * 是否需要扫描注解才解密
-     */
-    private final boolean scanAnnotation;
-
-    /**
-     *  被扫描的注解
-     */
-    private final Class<? extends Decrypt> annotation;
-
-
+public class RequestBodyDecryptAdapter extends IDecryptAdapter {
 
 
     public RequestBodyDecryptAdapter(DecryptManager decryptManager) {
-        this.decryptManager = decryptManager;
-        valueModel = false;
-        this.scanAnnotation = true;
-        this.annotation = Decrypt.class;
+        super(decryptManager, false, true, Decrypt.class);
     }
 
 
     public RequestBodyDecryptAdapter(DecryptManager decryptManager, DecryptParameter decryptParameter) {
-        this.decryptManager = decryptManager;
-        this.scanAnnotation = decryptParameter.isScanAnnotation();
-        this.valueModel = decryptParameter.isValueModel();
-        this.annotation = decryptParameter.getAnnotation();
-    }
-
-
-    /**
-     * 支持的注解
-     *
-     * @return
-     */
-    @Override
-    public Class<? extends Decrypt> annotation() {
-        return annotation;
-    }
-
-    /**
-     * 是否需要有注解才解密
-     *
-     * @return
-     */
-    @Override
-    public boolean isScanAnnotation() {
-        return scanAnnotation;
+        super(decryptManager, decryptParameter.isScanAnnotation(), decryptParameter.isValueModel(), decryptParameter.getAnnotation());
     }
 
 
     /**
      * 是否支持解密
      *
-     * @param parameter 参数
      * @param mediaType 请求内容类型
      * @return
      */
     @Override
-    public boolean supportsDecrypt(MethodParameter parameter, MediaType mediaType) {
-        //return parameter.hasParameterAnnotation(RequestBody.class);
-        return mediaType.includes(MediaType.APPLICATION_JSON);
+    public boolean supportsDecrypt(MediaType mediaType) {
+        return mediaType != null && mediaType.includes(MediaType.APPLICATION_JSON);
     }
 
+
     /**
-     *   此处新增代码
-     * Create a new {@link HttpInputMessage} from the given {@link NativeWebRequest}.
-     * @param webRequest the web request to create an input message from
+     * 此处新增代码
+     * Create a new {@link HttpInputMessage} from the given {@link HttpServletRequest}.
+     *
+     * @param request the web request to create an input message from
      * @return the input message
      */
-    protected HttpInputMessage createInputMessage(NativeWebRequest webRequest) {
-        HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
-        Assert.state(servletRequest != null, "No HttpServletRequest");
-        return new CacheRequestHttpInputMessage(servletRequest);
+    protected HttpInputMessage createInputMessage(HttpServletRequest request) {
+        return new ServletServerHttpRequest(request);
+    }
+
+
+    /**
+     * 在参数绑定之前处理
+     *
+     * @param request       原始请求
+     * @param handlerMethod 适配方法
+     * @return
+     */
+    @Override
+    public HttpServletRequest beforeResolver(HttpServletRequest request, HandlerMethod handlerMethod) {
+        return null;
     }
 
 
     /**
      * 解密
      *
-     * @param parameter    url绑定方法参数
-     * @param request      原始请求
-     * @param mediaType    媒体类型
-     * @param paramClass   参数类型
+     * @param decrypt       解密器
+     * @param request       原始请求
+     * @param handlerMethod 绑定方法
      * @return
      */
     @Override
-    public NativeWebRequest decode(MethodParameter parameter, NativeWebRequest request, MediaType mediaType, Class<?> paramClass) {
+    protected HttpServletRequest decode(IDecrypt decrypt, HttpServletRequest request, HandlerMethod handlerMethod) {
+
         HttpInputMessage inputMessage = createInputMessage(request);
-        IDecrypt decrypt = decryptManager.get();
 
         /**
          *  是否整体解密 ？
          */
-        if (!valueModel) {
+        if (!super.isValueModel()) {
 
             byte[] data_byte = null;
 
@@ -153,16 +110,15 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
                 /**
                  *  解密
                  */
-                data_byte  = decrypt.decrypt(inputMessage.getBody());
-            }catch (Exception e){
+                data_byte = decrypt.decrypt(inputMessage.getBody());
+            } catch (Exception e) {
                 log.error("解密body失败:{}", e);
             }
 
             if (data_byte == null) {
                 throw new HttpMessageNotReadableException("request body decrypt error,param body is null.", inputMessage);
             }
-            return new CopyNativeWebRequest(request, new ReplaceInputStreamHttpServletRequest(request.getNativeRequest(HttpServletRequest.class),data_byte));
-
+            return new ReplaceInputStreamHttpServletRequest(request, data_byte);
         }
 
 
@@ -194,7 +150,6 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
         }
 
 
-
         try {
 
 
@@ -203,44 +158,149 @@ public class RequestBodyDecryptAdapter implements IDecryptAdapter {
              */
             Map<String, Object> jsonMap = ObjectMapperKit.json2MapRecursion(jsonStr);
 
-            /**
-             *  循环字段
-             */
-            for (Field field : paramClass.getDeclaredFields()) {
 
-
-                /**
-                 *  需要解密的注解
-                 */
-                DecryptField decryptField = field.getAnnotation(DecryptField.class);
-                if (decryptField != null) {
-
-                    /**
-                     *  获取字段值
-                     */
-                    Object v = jsonMap.get(field.getName());
+            for (MethodParameter parameter : handlerMethod.getMethodParameters()) {
+                Decrypt annotation = parameter.getParameterAnnotation(super.getAnnotation());
+                if (annotation != null) {
+                    String k = StringUtils.hasText(annotation.value()) ? annotation.value() : parameter.getParameterName();
+                    Object v = jsonMap.get(k);
                     if (v == null) {
-                        log.warn("字段:{}值为空,无法解密.", field.getName());
+                        log.warn("字段:{}值为空,无法解密.", k);
                     } else {
                         if (v instanceof String) {
-                            jsonMap.put(field.getName(), decrypt.decryptStr(v.toString()));
+                            v = decrypt.decryptStr(v.toString());
+                            jsonMap.put(k,v);
                         } else {
-                            log.warn("字段:{},并未加密or不是值不是一个字符串.值:{}", field.getName(), v);
+                            log.warn("字段:{},并未加密or不是值不是一个字符串.值:{}", k, v);
                         }
 
                     }
 
-
                 }
             }
 
-            return new CopyNativeWebRequest(request, new ReplaceInputStreamHttpServletRequest(request.getNativeRequest(HttpServletRequest.class),StrKit.hex2Byte(ObjectMapperKit.toJsonStr(jsonMap))));
-           // return new DecryptHttpInputMessage(new ByteArrayInputStream(StrKit.hex2Byte(ObjectMapperKit.toJsonStr(jsonMap))), inputMessage.getHeaders());
-
+            return new ReplaceInputStreamHttpServletRequest(request, StrKit.hex2Byte(ObjectMapperKit.toJsonStr(jsonMap)));
         } catch (Exception e) {
             log.error("解密body,json TO map时异常:{}", e);
         }
 
         return request;
     }
+
+
+
+//    /**
+//     * 解密
+//     *
+//     * @param parameter  url绑定方法参数
+//     * @param request    原始请求
+//     * @param mediaType  媒体类型
+//     * @param paramClass 参数类型
+//     * @return
+//     */
+//    @Override
+//    public NativeWebRequest decode(MethodParameter parameter, NativeWebRequest request, MediaType mediaType, Class<?> paramClass) {
+//        HttpInputMessage inputMessage = createInputMessage(request);
+//        IDecrypt decrypt = decryptManager.get();
+//
+//        /**
+//         *  是否整体解密 ？
+//         */
+//        if (!valueModel) {
+//
+//            byte[] data_byte = null;
+//
+//            try {
+//                /**
+//                 *  解密
+//                 */
+//                data_byte = decrypt.decrypt(inputMessage.getBody());
+//            } catch (Exception e) {
+//                log.error("解密body失败:{}", e);
+//            }
+//
+//            if (data_byte == null) {
+//                throw new HttpMessageNotReadableException("request body decrypt error,param body is null.", inputMessage);
+//            }
+//            return new CopyNativeWebRequest(request, new ReplaceInputStreamHttpServletRequest(request.getNativeRequest(HttpServletRequest.class), data_byte));
+//
+//        }
+//
+//
+//        /**
+//         *  读取数据
+//         */
+//        String jsonStr = null;
+//        try {
+//            jsonStr = IoUtil.read(inputMessage.getBody(), StandardCharsets.UTF_8);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        if (StrUtil.isBlank(jsonStr)) {
+//            throw new HttpMessageNotReadableException("request body decrypt error,param body is null.", inputMessage);
+//        }
+//
+//
+//        /**
+//         *  验证是否为body格式
+//         */
+//        if (!StrKit.isJson(jsonStr)) {
+//            throw new HttpMessageNotReadableException("request body decrypt error,param body is not json format.", inputMessage);
+//        }
+//
+//
+//        if (StrKit.isJsonArray(jsonStr)) {
+//            log.error("暂时不支持集合解密");
+//            return request;
+//        }
+//
+//
+//        try {
+//
+//
+//            /**
+//             *  字符串转json
+//             */
+//            Map<String, Object> jsonMap = ObjectMapperKit.json2MapRecursion(jsonStr);
+//
+//            /**
+//             *  循环字段
+//             */
+//            for (Field field : paramClass.getDeclaredFields()) {
+//
+//
+//                /**
+//                 *  需要解密的注解
+//                 */
+//                DecryptField decryptField = field.getAnnotation(DecryptField.class);
+//                if (decryptField != null) {
+//
+//                    /**
+//                     *  获取字段值
+//                     */
+//                    Object v = jsonMap.get(field.getName());
+//                    if (v == null) {
+//                        log.warn("字段:{}值为空,无法解密.", field.getName());
+//                    } else {
+//                        if (v instanceof String) {
+//                            jsonMap.put(field.getName(), decrypt.decryptStr(v.toString()));
+//                        } else {
+//                            log.warn("字段:{},并未加密or不是值不是一个字符串.值:{}", field.getName(), v);
+//                        }
+//
+//                    }
+//
+//
+//                }
+//            }
+//
+//            return new CopyNativeWebRequest(request, new ReplaceInputStreamHttpServletRequest(request.getNativeRequest(HttpServletRequest.class), StrKit.hex2Byte(ObjectMapperKit.toJsonStr(jsonMap))));
+//            // return new DecryptHttpInputMessage(new ByteArrayInputStream(StrKit.hex2Byte(ObjectMapperKit.toJsonStr(jsonMap))), inputMessage.getHeaders());
+//
+//        } catch (Exception e) {
+//            log.error("解密body,json TO map时异常:{}", e);
+//        }
+//
+//        return request;
+//    }
 }

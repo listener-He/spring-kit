@@ -5,8 +5,9 @@
     <parent>
         <artifactId>spring-parent</artifactId>
         <groupId>org.hehh.cloud</groupId>
-        <version>1.0-RELEASE</version>
+        <version>${revision}</version>
     </parent>
+    <version>${revision}</version>
     <modelVersion>4.0.0</modelVersion>
 
     <!-- 公共bean类 -->

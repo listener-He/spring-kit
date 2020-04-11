@@ -1,6 +1,6 @@
 package org.hehh.cloud.spring.mvc.config;
 
-import org.hehh.cloud.spring.decrypt.IDecrypt;
+import org.hehh.cloud.spring.mvc.core.IHandlerMethodAdapter;
 import org.hehh.cloud.spring.mvc.core.IHandlerMethodArgumentResolverAdapter;
 
 import java.util.List;
@@ -22,6 +22,10 @@ public interface ResolverAdapterConfiguration {
 
 
 
-
+    /**
+     *  添加请求方法切面适配器
+     * @param methodAdapters
+     */
+    void addMethodAdapters(List<IHandlerMethodAdapter> methodAdapters);
 
 }
