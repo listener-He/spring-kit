@@ -1,9 +1,8 @@
 package org.hehh.cloud.spring.mvc.config;
 
-import cn.hutool.core.collection.CollUtil;
-import org.hehh.cloud.spring.decrypt.DecryptManager;
-import org.hehh.cloud.spring.decrypt.IDecrypt;
+import org.hehh.cloud.spring.mvc.core.HandelMethodAdapterManager;
 import org.hehh.cloud.spring.mvc.core.HandlerMethodArgumentResolverEnhanceComposite;
+import org.hehh.cloud.spring.mvc.core.IHandlerMethodAdapter;
 import org.hehh.cloud.spring.mvc.core.IHandlerMethodArgumentResolverAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
@@ -11,7 +10,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerEnhanceAdapter;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +29,8 @@ public class WebMvcRegistrationsConfiguration  implements WebMvcRegistrations {
 
     private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
 
+    private HandelMethodAdapterManager methodAdapterManager;
+
 
 //    @Autowired(required = false)
 //    public  WebMvcRegistrationsConfiguration(List<IHandlerMethodArgumentResolverAdapter> resolverAdapters) {
@@ -44,13 +44,19 @@ public class WebMvcRegistrationsConfiguration  implements WebMvcRegistrations {
     public  WebMvcRegistrationsConfiguration(List<ResolverAdapterConfiguration> resolverAdapterConfigurations) {
         if (!CollectionUtils.isEmpty(resolverAdapterConfigurations)) {
              List<IHandlerMethodArgumentResolverAdapter> resolverAdapters = new LinkedList<>();
+             List<IHandlerMethodAdapter> methodAdapters = new LinkedList<>();
 
 
             resolverAdapterConfigurations.forEach(v-> {
                 v.addResolverAdapters(resolverAdapters);
+                v.addMethodAdapters(methodAdapters);
             });
 
             resolverEnhanceComposite = new HandlerMethodArgumentResolverEnhanceComposite(resolverAdapters);
+            if(!CollectionUtils.isEmpty(methodAdapters)){
+                methodAdapterManager = new HandelMethodAdapterManager();
+                methodAdapterManager.addResolvers(methodAdapters);
+            }
         }
     }
 
@@ -69,7 +75,7 @@ public class WebMvcRegistrationsConfiguration  implements WebMvcRegistrations {
         if(requestMappingHandlerAdapter != null){
             return requestMappingHandlerAdapter;
         }
-        this.requestMappingHandlerAdapter =  new RequestMappingHandlerEnhanceAdapter(resolverEnhanceComposite);
+        this.requestMappingHandlerAdapter =  new RequestMappingHandlerEnhanceAdapter(resolverEnhanceComposite,methodAdapterManager);
         return requestMappingHandlerAdapter;
     }
 }

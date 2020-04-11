@@ -1,90 +1,128 @@
 package org.hehh.cloud.spring.mvc.crypto;
 
 
+import lombok.Getter;
+import org.hehh.cloud.spring.decrypt.DecryptManager;
+import org.hehh.cloud.spring.decrypt.IDecrypt;
+import org.hehh.cloud.spring.decrypt.annotation.ChooseDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
+import org.hehh.cloud.spring.exception.DecryptException;
 import org.hehh.cloud.spring.mvc.core.HandlerMethodArgumentResolverEnhanceComposite;
+import org.hehh.cloud.spring.mvc.core.IHandlerMethodAdapter;
 import org.hehh.cloud.spring.mvc.core.IHandlerMethodArgumentResolverAdapter;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.HandlerMethod;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author: HeHui
  * @create: 2020-03-22 17:14
  * @description: 解密适配器
  **/
-public interface IDecryptAdapter extends IHandlerMethodArgumentResolverAdapter {
+public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
 
 
     /**
-     *  是否需要有注解才解密
-     * @return
+     * 解密对象
      */
-    boolean isScanAnnotation();
+    private final DecryptManager decryptManager;
+
+    /**
+     * 是否值解密模式
+     * true：只解密key对应的值，客户端请求还需正常的json格式，只是对value进行加密
+     * false: 客户端请求参数是一个被加密后对json格式，服务端对字符串进行解密
+     */
+    @Getter
+    private final boolean valueModel;
+
+
+    /**
+     * 是否需要扫描注解才解密
+     */
+    @Getter
+    private final boolean scanAnnotation;
+
+    /**
+     *  被扫描的注解
+     */
+    @Getter
+    private final Class<? extends Decrypt> annotation;
+
+
+
+    public IDecryptAdapter(DecryptManager decryptManager,boolean valueModel,boolean scanAnnotation,Class<? extends Decrypt> annotation){
+        this.decryptManager = decryptManager;
+        this.valueModel = valueModel;
+        this.scanAnnotation = scanAnnotation;
+        this.annotation = annotation;
+    }
+
+
+
+
+
+
 
 
     /**
      *  是否支持解密
-     * @param parameter 参数
      * @param mediaType 请求内容类型
      * @return
      */
-    boolean supportsDecrypt(MethodParameter parameter,MediaType mediaType);
+    protected abstract boolean supportsDecrypt(MediaType mediaType);
 
 
     /**
-     * 在参数解析之前调用,{@link HandlerMethodArgumentResolverEnhanceComposite}
-     * 需要返回一个{@link NativeWebRequest} 如果request没变化可直接返回 webRequest,但如果发生变更了。请务必重新组装{@link NativeWebRequest}
+     * 在参数绑定之前处理
      *
-     * @param parameter    url绑定方法参数
-     * @param webRequest   当前请求
-     * @param mediaType    媒体类型
-     * @param paramClass   参数类型
+     * @param request       原始请求
+     * @param handlerMethod 适配方法
      * @return
      */
     @Override
-    default NativeWebRequest beforeResolver(MethodParameter parameter, NativeWebRequest webRequest, MediaType mediaType, Class<?> paramClass){
-        NativeWebRequest request = decode(parameter,webRequest, mediaType, paramClass);
-        if(request == null){
-            return webRequest;
-        }
+    public HttpServletRequest beforeResolver(HttpServletRequest request, HandlerMethod handlerMethod) {
 
-        return request;
+        ChooseDecrypt chooseDecrypt = handlerMethod.getMethodAnnotation(ChooseDecrypt.class);
+
+        try {
+            return decode(((null == chooseDecrypt || !StringUtils.hasText(chooseDecrypt.value())) ? decryptManager.get() : decryptManager.get(chooseDecrypt.value())), request, handlerMethod);
+        }catch (Exception e){
+            if( e instanceof DecryptException){
+                throw e;
+            }
+            throw new DecryptException("Decrypted form submission count exception",e);
+        }
     }
 
 
     /**
      *  解密
-     * @param parameter    url绑定方法参数
+     * @param decrypt 解密器
      * @param request 原始请求
-     * @param mediaType    媒体类型
-     * @param paramClass   参数类型
+     * @param handlerMethod 绑定方法
      * @return
      */
-    NativeWebRequest decode(MethodParameter parameter, NativeWebRequest request,MediaType mediaType, Class<?> paramClass);
+    protected abstract HttpServletRequest decode(IDecrypt decrypt, HttpServletRequest request, HandlerMethod handlerMethod);
+
+
+
 
 
     /**
-     *  支持的注解
-     * @return
-     */
-    Class<? extends Decrypt> annotation();
-
-
-    /**
-     * 判断是否支持参数适配
-     * Whether the given {@linkplain MethodParameter method parameter} is
-     * supported by this resolver.
-     * 调用方{@link HandlerMethodArgumentResolverEnhanceComposite}
+     * 判断是否支持适配
      *
-     * @param parameter the method parameter to check
-     * @param mediaType request  mediaType
-     * @return {@code true} if this resolver supports the supplied parameter;
+     * @param handlerMethod the method  to check
+     * @param mediaType     request  mediaType
+     * @return {@code true} if this resolver supports the supplied method;
      * {@code false} otherwise
      */
     @Override
-    default boolean supportsParameter(MethodParameter parameter, MediaType mediaType){
-        boolean supportsDecrypt = supportsDecrypt(parameter,mediaType);
+    public boolean supportsMethod(HandlerMethod handlerMethod, MediaType mediaType){
+        boolean supportsDecrypt = supportsDecrypt(mediaType);
         if (!isScanAnnotation() && supportsDecrypt) {
             return true;
         }
@@ -93,12 +131,18 @@ public interface IDecryptAdapter extends IHandlerMethodArgumentResolverAdapter {
         /**
          *  判断class是否存在注解 or 方法上面有没有注解 or 参数上面有没有注释
          */
-        if (supportsDecrypt && (parameter.hasParameterAnnotation(annotation())
-                || parameter.hasMethodAnnotation(annotation())
-                || parameter.getContainingClass().getAnnotation(annotation()) != null)) {
-            return true;
+        if (supportsDecrypt) {
+            MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
+            if(methodParameters != null){
+                for (MethodParameter parameter : methodParameters) {
+                    return parameter.hasParameterAnnotation(annotation);
+                }
+            }
+
         }
 
         return false;
     }
+
+
 }

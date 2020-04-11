@@ -1,6 +1,7 @@
 package org.hehh.cloud.spring.mvc.crypto;
 
 import org.hehh.cloud.spring.mvc.config.ResolverAdapterConfiguration;
+import org.hehh.cloud.spring.mvc.core.IHandlerMethodAdapter;
 import org.hehh.cloud.spring.mvc.core.IHandlerMethodArgumentResolverAdapter;
 import org.springframework.util.CollectionUtils;
 
@@ -24,6 +25,19 @@ public interface CryptoConfiguration extends ResolverAdapterConfiguration {
 
 
 
+    /**
+     * 添加请求方法切面适配器
+     *
+     * @param methodAdapters
+     */
+    @Override
+    default void addMethodAdapters(List<IHandlerMethodAdapter> methodAdapters){
+        List<IDecryptAdapter> decryptAdapters = getDecryptAdapters();
+        if(!CollectionUtils.isEmpty(decryptAdapters)){
+            methodAdapters.addAll(decryptAdapters);
+        }
+    }
+
 
 
 
@@ -35,10 +49,5 @@ public interface CryptoConfiguration extends ResolverAdapterConfiguration {
      * @param resolverAdapters
      */
     @Override
-    default void addResolverAdapters(List<IHandlerMethodArgumentResolverAdapter> resolverAdapters){
-        List<IDecryptAdapter> decryptAdapters = getDecryptAdapters();
-        if(!CollectionUtils.isEmpty(decryptAdapters)){
-            resolverAdapters.addAll(decryptAdapters);
-        }
-    }
+    default void addResolverAdapters(List<IHandlerMethodArgumentResolverAdapter> resolverAdapters){ }
 }

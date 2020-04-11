@@ -1,5 +1,6 @@
 package org.springframework.web.servlet.mvc.method.annotation;
 
+import org.hehh.cloud.spring.mvc.core.HandelMethodAdapterManager;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -86,6 +87,12 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
     @Nullable
     private HandlerMethodArgumentResolverComposite argumentResolvers;
 
+
+    /**
+     *  请求方法切面
+     */
+    private HandelMethodAdapterManager handelMethodAdapterManager;
+
     /**
      *  默认的，此属性为新增的
      */
@@ -167,9 +174,10 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
      *
      * @param defaultArgumentResolvers 默认的参数解析器组合
      */
-    public RequestMappingHandlerEnhanceAdapter(HandlerMethodArgumentResolverComposite defaultArgumentResolvers){
+    public RequestMappingHandlerEnhanceAdapter(HandlerMethodArgumentResolverComposite defaultArgumentResolvers,HandelMethodAdapterManager handelMethodAdapterManager){
         this();
         this.defaultArgumentResolvers = defaultArgumentResolvers;
+        this.handelMethodAdapterManager = handelMethodAdapterManager;
     }
 
 
@@ -753,6 +761,9 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
 
         ModelAndView mav;
         checkRequest(request);
+        if(null != handelMethodAdapterManager){
+            request = handelMethodAdapterManager.resolve(request,handlerMethod);
+        }
 
         // Execute invokeHandlerMethod in synchronized block if required.
         if (this.synchronizeOnSession) {

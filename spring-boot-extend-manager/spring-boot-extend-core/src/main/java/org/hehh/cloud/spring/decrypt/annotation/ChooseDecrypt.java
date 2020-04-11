@@ -4,18 +4,17 @@ import java.lang.annotation.*;
 
 /**
  * @author: HeHui
- * @create: 2020-03-21 13:13
- * @description: 解密注解
- **/
-@Target({ElementType.PARAMETER})
+ * @date: 2020-04-12 02:48
+ * @description: 选择解密器
+ */
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface Decrypt {
+public @interface ChooseDecrypt {
 
     /**
-     *  解密的参数名称
+     *  解密器beanName
      * @return
      */
-    String value() default "";
-
+    String value();
 }
