@@ -5,10 +5,10 @@
     <parent>
         <artifactId>spring-parent</artifactId>
         <groupId>org.hehh.cloud</groupId>
-        <version>${revision}</version>
+        <version>1.1-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>${revision}</version>
+    <version>1.1-RELEASE</version>
 
     <artifactId>spring-boot-extend-manager</artifactId>
     <packaging>pom</packaging>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>common-utils</artifactId>
-            <version>${revision}</version>
+            <version>1.1-RELEASE</version>
         </dependency>
     </dependencies>
 </project>

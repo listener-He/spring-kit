@@ -5,10 +5,10 @@
     <parent>
         <artifactId>spring-boot-extend-mvc</artifactId>
         <groupId>org.hehh.cloud</groupId>
-        <version>${revision}</version>
+        <version>1.1-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>${revision}</version>
+    <version>1.1-RELEASE</version>
 
     <artifactId>spring-boot-extend-mvc-core</artifactId>
 

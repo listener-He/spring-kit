@@ -5,10 +5,10 @@
     <parent>
         <artifactId>spring-boot-extend-mvc</artifactId>
         <groupId>org.hehh.cloud</groupId>
-        <version>${revision}</version>
+        <version>1.1-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>${revision}</version>
+    <version>1.1-RELEASE</version>
 
     <artifactId>spring-boot-extend-crypto</artifactId>
 
@@ -20,14 +20,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>spring-boot-extend-mvc-core</artifactId>
-            <version>${revision}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -37,6 +32,7 @@
 
 
     </dependencies>
+
 
     <build>
         <plugins>
@@ -53,6 +49,9 @@
                 </configuration>
             </plugin>
 
+            <!--配置生成Javadoc包-->
+
+            <!-- 配置源库 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -69,5 +68,6 @@
             </plugin>
         </plugins>
     </build>
-    
+
+
 </project>
