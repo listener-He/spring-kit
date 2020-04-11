@@ -3,37 +3,33 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>spring-parent</artifactId>
+        <artifactId>spring-boot-extend-mvc</artifactId>
         <groupId>org.hehh.cloud</groupId>
         <version>1.0-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>auth-manager</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>spring-boot-extend-crypto</artifactId>
 
-    <modules>
-        <module>auth-bean</module>
-        <module>auth-token</module>
-    </modules>
-
+    <description>加密解密</description>
 
     <properties>
-        <jwt.version>0.9.1</jwt.version>
+        <hutool.version>5.2.0</hutool.version>
     </properties>
 
-
     <dependencies>
-
-
         <dependency>
             <groupId>org.hehh.cloud</groupId>
-            <artifactId>common-bean</artifactId>
+            <artifactId>spring-boot-extend-mvc-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+
+
     </dependencies>
-
-
-
-
+    
 </project>

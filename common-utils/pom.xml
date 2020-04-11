@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-parent</artifactId>
         <groupId>org.hehh.cloud</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,18 +16,24 @@
     </properties>
     <dependencies>
         <dependency>
+            <groupId>org.hehh.cloud</groupId>
+            <artifactId>common-bean</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
             <version>${hutool.version}</version>
         </dependency>
+
         <dependency>
             <groupId>cn.hutool</groupId>
-            <artifactId>hutool-crypto</artifactId>
+            <artifactId>hutool-http</artifactId>
             <version>${hutool.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
-            <artifactId>hutool-http</artifactId>
+            <artifactId>hutool-system</artifactId>
             <version>${hutool.version}</version>
         </dependency>
     </dependencies>
