@@ -13,7 +13,6 @@
         <module>auth-manager</module>
         <module>common-utils</module>
         <module>spring-boot-extend-manager</module>
-        <module>demo-test</module>
     </modules>
 
 
