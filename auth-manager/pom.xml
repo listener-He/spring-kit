@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>common-bean</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 
