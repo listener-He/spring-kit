@@ -20,6 +20,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>spring-boot-extend-mvc-core</artifactId>
             <version>${project.parent.version}</version>
@@ -59,7 +64,7 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
-                        <phase>install</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <goal>jar-no-fork</goal>
                         </goals>
