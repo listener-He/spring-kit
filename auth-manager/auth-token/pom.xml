@@ -5,9 +5,8 @@
     <parent>
         <artifactId>auth-manager</artifactId>
         <groupId>org.hehh.cloud</groupId>
-        <version>1.1-RELEASE</version>
+        <version>1.2-RELEASE</version>
     </parent>
-    <version>1.1-RELEASE</version>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>auth-token</artifactId>
@@ -21,7 +20,7 @@
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>auth-bean</artifactId>
-            <version>1.1-RELEASE</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
 
