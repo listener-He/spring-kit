@@ -1,6 +1,7 @@
 package org.springframework.web.servlet.mvc.method.annotation;
 
 import org.hehh.cloud.spring.mvc.core.HandelMethodAdapterManager;
+import org.hehh.cloud.spring.mvc.http.ContentCachingRequestWrapper;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -11,6 +12,8 @@ import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.log.LogFormatUtils;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -20,6 +23,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -622,6 +626,7 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
         List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>();
 
         // Annotation-based argument resolution
+        resolvers.add(new RequestParamJsonArgumentResolver(getMessageConverters(),this.requestResponseBodyAdvice,getBeanFactory()));
         resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
         resolvers.add(new RequestParamMapMethodArgumentResolver());
         resolvers.add(new PathVariableMethodArgumentResolver());
@@ -630,7 +635,6 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
         resolvers.add(new MatrixVariableMapMethodArgumentResolver());
         resolvers.add(new ServletModelAttributeMethodProcessor(false));
         resolvers.add(new RequestResponseBodyMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
-        resolvers.add(new ParamArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice));
         resolvers.add(new RequestPartMethodArgumentResolver(getMessageConverters(), this.requestResponseBodyAdvice));
         resolvers.add(new RequestHeaderMethodArgumentResolver(getBeanFactory()));
         resolvers.add(new RequestHeaderMapMethodArgumentResolver());
@@ -658,6 +662,7 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
         // Catch-all
         resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), true));
         resolvers.add(new ServletModelAttributeMethodProcessor(true));
+
 
         return resolvers;
     }
@@ -764,6 +769,19 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
         if(null != handelMethodAdapterManager){
             request = handelMethodAdapterManager.resolve(request,handlerMethod);
         }
+
+        /**
+         *  解析请求头
+         */
+        String content_type = request.getHeader(HttpHeaders.CONTENT_TYPE);
+        MediaType mediaType = (StringUtils.hasLength(content_type) ? MediaType.parseMediaType(content_type) : null);
+        if(null != mediaType && mediaType.includes(MediaType.APPLICATION_JSON)){
+            /**
+             *  替换request
+             */
+            request = new ContentCachingRequestWrapper(request);
+        }
+
 
         // Execute invokeHandlerMethod in synchronized block if required.
         if (this.synchronizeOnSession) {

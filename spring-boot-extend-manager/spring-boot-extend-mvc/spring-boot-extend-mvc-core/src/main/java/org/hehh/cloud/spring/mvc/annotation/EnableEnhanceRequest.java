@@ -1,6 +1,7 @@
-package org.hehh.cloud.spring.mvc.config;
+package org.hehh.cloud.spring.mvc.annotation;
 
 import org.hehh.cloud.spring.core.CoreConfiguration;
+import org.hehh.cloud.spring.mvc.config.WebMvcRegistrationsConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -13,6 +14,6 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import({CoreConfiguration.class,WebMvcRegistrationsConfiguration.class})
+@Import({CoreConfiguration.class, WebMvcRegistrationsConfiguration.class})
 public @interface EnableEnhanceRequest {
 }

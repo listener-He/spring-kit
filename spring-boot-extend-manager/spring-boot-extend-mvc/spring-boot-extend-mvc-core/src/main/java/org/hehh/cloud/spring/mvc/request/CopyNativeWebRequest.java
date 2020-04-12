@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.core;
+package org.hehh.cloud.spring.mvc.request;
 
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;

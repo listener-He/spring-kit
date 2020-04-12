@@ -1,6 +1,6 @@
 package org.hehh.demo;
 
-import org.hehh.cloud.spring.mvc.config.EnableEnhanceRequest;
+import org.hehh.cloud.spring.mvc.annotation.EnableEnhanceRequest;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

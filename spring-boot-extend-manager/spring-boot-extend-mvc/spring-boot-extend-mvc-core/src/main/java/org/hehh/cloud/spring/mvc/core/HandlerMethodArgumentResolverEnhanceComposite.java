@@ -1,5 +1,7 @@
 package org.hehh.cloud.spring.mvc.core;
 
+import org.hehh.cloud.spring.mvc.annotation.Param;
+import org.hehh.cloud.spring.mvc.http.CacheRequestHttpInputMessage;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
@@ -8,11 +10,13 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolverComposite;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestParamJsonArgumentResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
@@ -41,7 +45,7 @@ public class HandlerMethodArgumentResolverEnhanceComposite  extends HandlerMetho
     private HandlerMethodArgumentResolverAdapterComposite resolverAdapter;
 
 
-    private final Map<MethodParameter, HandlerMethodArgumentResolver> argumentResolverCache =
+    private final Map<MethodParameter, Map<MediaType,HandlerMethodArgumentResolver>> argumentResolverCache =
             new ConcurrentHashMap<>(256);
 
 
@@ -76,7 +80,16 @@ public class HandlerMethodArgumentResolverEnhanceComposite  extends HandlerMetho
     }
 
 
-
+    /**
+     * Whether the given {@linkplain MethodParameter method parameter} is
+     * supported by any registered {@link HandlerMethodArgumentResolver}.
+     *
+     * @param parameter
+     */
+    @Override
+    public boolean supportsParameter(MethodParameter parameter) {
+        return true;
+    }
 
     /**
      * Iterate over registered
@@ -91,7 +104,12 @@ public class HandlerMethodArgumentResolverEnhanceComposite  extends HandlerMetho
      */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        HandlerMethodArgumentResolver resolver = getArgumentResolver(parameter);
+
+
+        String content_type = webRequest.getHeader(HttpHeaders.CONTENT_TYPE);
+        MediaType mediaType = (StringUtils.hasLength(content_type) ? MediaType.parseMediaType(content_type) : MediaType.MULTIPART_FORM_DATA);
+
+        HandlerMethodArgumentResolver resolver = getArgumentResolver(parameter,mediaType);
         if (resolver == null) {
             throw new IllegalArgumentException("Unsupported parameter type [" +
                     parameter.getParameterType().getName() + "]. supportsParameter should be called first.");
@@ -99,8 +117,7 @@ public class HandlerMethodArgumentResolverEnhanceComposite  extends HandlerMetho
 
         if(resolverAdapter != null){
 
-            String content_type = webRequest.getHeader(HttpHeaders.CONTENT_TYPE);
-            MediaType mediaType = (StringUtils.hasLength(content_type) ? MediaType.parseMediaType(content_type) : null);
+
             Class<?> aClass = parameter.getContainingClass();
             if(resolverAdapter.supportsParameter(parameter,mediaType)){
                 webRequest = resolverAdapter.beforeResolver(parameter, webRequest, mediaType,aClass);
@@ -145,21 +162,32 @@ public class HandlerMethodArgumentResolverEnhanceComposite  extends HandlerMetho
      * the given method parameter.
      */
     @Nullable
-    private HandlerMethodArgumentResolver getArgumentResolver(MethodParameter parameter) {
-        HandlerMethodArgumentResolver result = this.argumentResolverCache.get(parameter);
-        if (result == null) {
-            /**
-             *  此处解析器集合原是父类的 this.argumentResolverCache.
-             */
-            for (HandlerMethodArgumentResolver resolver : getResolvers()) {
-                if (resolver.supportsParameter(parameter)) {
-                    result = resolver;
-                    this.argumentResolverCache.put(parameter, result);
-                    break;
+    private HandlerMethodArgumentResolver getArgumentResolver(MethodParameter parameter, MediaType mediaType) {
+        if(mediaType != null){
+            Map<MediaType,HandlerMethodArgumentResolver> result = this.argumentResolverCache.get(parameter);
+            if (result == null || result.get(mediaType) == null) {
+                /**
+                 *  此处解析器集合原是父类的 this.argumentResolverCache.
+                 */
+                for (HandlerMethodArgumentResolver resolver : getResolvers()) {
+                    if (resolver.supportsParameter(parameter)) {
+                        if(parameter.hasParameterAnnotation(Param.class)
+                                && resolver instanceof RequestParamJsonArgumentResolver
+                                && !(null != mediaType  && mediaType.includes(MediaType.APPLICATION_JSON))){
+                            continue;
+                        }
+                        if(result == null){
+                            result = new ConcurrentHashMap(3);
+                        }
+                        result.put(mediaType,resolver);
+                        this.argumentResolverCache.put(parameter, result);
+                        break;
+                    }
                 }
             }
+            return null == result ? null : result.get(mediaType);
         }
-        return result;
+        return null;
     }
 
 

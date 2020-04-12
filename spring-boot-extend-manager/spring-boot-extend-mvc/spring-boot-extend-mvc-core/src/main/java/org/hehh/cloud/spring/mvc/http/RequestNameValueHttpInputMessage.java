@@ -1,43 +1,82 @@
-package org.hehh.cloud.spring.mvc.copy;
+package org.hehh.cloud.spring.mvc.http;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.StrUtil;
+import org.hehh.cloud.common.utils.StrKit;
+import org.hehh.cloud.spring.mvc.util.ObjectMapperKit;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.ReadListener;
+import javax.servlet.ServletInputStream;
+import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @author: HeHui
- * @date: 2020-03-28 17:08
- * @description: 替换InputStream request
+ * @date: 2020-04-12 17:29
+ * @description: 请求参数名值请求消息
  */
-public class ReplaceInputStreamHttpServletRequest extends HttpServletRequestWrapper {
+public class RequestNameValueHttpInputMessage  extends ServletServerHttpRequest {
 
 
-    private ServletInputStream replaceInputStream;
+    private InputStream inputStream;
 
 
-    public ReplaceInputStreamHttpServletRequest(HttpServletRequest request,byte[] data_byte){
+
+
+
+    public RequestNameValueHttpInputMessage(HttpServletRequest request, String body, String name) throws Exception {
         super(request);
-        this.replaceInputStream = new BodyInputStream(data_byte);
+        Assert.hasText(name, "Request name must not be null");
+
+
+
+        /**
+         *  读取数据
+         */
+        if(StringUtils.hasText(body)){
+            Map<String, Object> map = ObjectMapperKit.json2MapRecursion(body);
+            if(map != null){
+                Object o = map.get(name);
+                if(o != null){
+                    String s = ObjectMapperKit.toJsonStr(o);
+                    inputStream = new ByteArrayInputStream(s.getBytes());
+                }
+            }
+
+        }
+
+
+
     }
 
-    public ReplaceInputStreamHttpServletRequest(HttpServletRequest request,InputStream body){
-        super(request);
-        this.replaceInputStream = new BodyInputStream(body);
-    }
+
+
+
+
+
+
 
 
     /**
-     * The default behavior of this method is to return getInputStream() on the
-     * wrapped request object.
+     * Return the body of the message as an input stream.
+     *
+     * @return the input stream body (never {@code null})
+     * @throws IOException in case of I/O errors
      */
     @Override
-    public ServletInputStream getInputStream() throws IOException {
-        if(replaceInputStream != null){
-            return replaceInputStream;
+    public InputStream getBody() throws IOException {
+        if(inputStream != null){
+            return inputStream;
         }
-        return super.getInputStream();
+        return super.getBody();
     }
 
 
@@ -48,10 +87,6 @@ public class ReplaceInputStreamHttpServletRequest extends HttpServletRequestWrap
     private static class BodyInputStream extends ServletInputStream {
 
         private final InputStream delegate;
-
-        public BodyInputStream(InputStream inputStream){
-            this.delegate  = inputStream;
-        }
 
         public BodyInputStream(byte[] body) {
             this.delegate = new ByteArrayInputStream(body);
@@ -117,4 +152,5 @@ public class ReplaceInputStreamHttpServletRequest extends HttpServletRequestWrap
             return this.delegate.markSupported();
         }
     }
+
 }

@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.core;
+package org.hehh.cloud.spring.mvc.http;
 
 import org.springframework.http.server.ServletServerHttpRequest;
 

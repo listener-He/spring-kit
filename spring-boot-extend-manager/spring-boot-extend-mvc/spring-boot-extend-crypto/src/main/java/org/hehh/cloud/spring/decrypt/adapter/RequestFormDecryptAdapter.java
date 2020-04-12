@@ -8,17 +8,12 @@ import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
 import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
 import org.hehh.cloud.spring.exception.DecryptException;
-import org.hehh.cloud.spring.mvc.copy.ReplaceInputStreamHttpServletRequest;
 import org.hehh.cloud.spring.mvc.copy.ReplaceParamHttpServletRequest;
-import org.hehh.cloud.spring.mvc.core.CopyNativeWebRequest;
 import org.hehh.cloud.spring.mvc.crypto.IDecryptAdapter;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.HandlerMethod;
-import sun.misc.SoftCache;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -62,7 +57,7 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
      */
     @Override
     protected boolean supportsDecrypt(MediaType mediaType) {
-        return mediaType != null && mediaType.includes(MediaType.APPLICATION_FORM_URLENCODED) || mediaType.includes(MediaType.MULTIPART_FORM_DATA);
+        return mediaType != null && (mediaType.includes(MediaType.APPLICATION_FORM_URLENCODED) || mediaType.includes(MediaType.MULTIPART_FORM_DATA));
     }
 
 

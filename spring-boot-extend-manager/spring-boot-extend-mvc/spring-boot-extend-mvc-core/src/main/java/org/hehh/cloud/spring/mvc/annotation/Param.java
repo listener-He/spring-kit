@@ -1,5 +1,7 @@
 package org.hehh.cloud.spring.mvc.annotation;
 
+import org.springframework.core.annotation.AliasFor;
+
 import java.lang.annotation.*;
 
 /**
@@ -7,9 +9,10 @@ import java.lang.annotation.*;
  * @date: 2020-04-04 15:24
  * @description: 参数解析器 客户端传递 body 参数
  */
-@Target({ElementType.PARAMETER})
+@Target({ElementType.TYPE,ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Inherited
 public @interface Param {
 
 
@@ -21,7 +24,15 @@ public @interface Param {
      *           如果action参数只有一个那么此参数可以忽略
      *           如多个复杂类型 必须指定value值
      */
+    @AliasFor("name")
     String value()default "";
+
+    /**
+     *  参数名称
+     * @return
+     */
+    @AliasFor("value")
+    String name() default "";
 
     /**
      *  是否必填
