@@ -7,7 +7,7 @@
     <parent>
         <artifactId>spring-parent</artifactId>
         <groupId>org.hehh.cloud</groupId>
-        <version>1.1-RELEASE</version>
+        <version>1.2-RELEASE</version>
     </parent>
 
     <artifactId>spring-mvc-test</artifactId>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>common-utils</artifactId>
-            <version>1.1-RELEASE</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>spring-boot-extend-crypto</artifactId>
-            <version>1.1-RELEASE</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 
