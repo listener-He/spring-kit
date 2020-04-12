@@ -235,7 +235,7 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
             /**
              * 新增如果默认的有值，使用默认的，如果没有就使用 HandlerMethodArgumentResolverComposite原生的
              */
-            this.initBinderArgumentResolvers = defaultArgumentResolvers == null ? new HandlerMethodArgumentResolverComposite() :defaultArgumentResolvers;
+            this.initBinderArgumentResolvers =  defaultArgumentResolvers == null ? new HandlerMethodArgumentResolverComposite() :defaultArgumentResolvers;
             this.initBinderArgumentResolvers.addResolvers(argumentResolvers);
         }
     }
