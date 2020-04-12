@@ -1,19 +1,14 @@
 package org.springframework.web.servlet.mvc.method.annotation;
 
 import cn.hutool.core.io.IoUtil;
-import org.hehh.cloud.common.utils.StrKit;
 import org.hehh.cloud.spring.mvc.annotation.Param;
-import org.hehh.cloud.spring.mvc.copy.ReplaceInputStreamHttpServletRequest;
 import org.hehh.cloud.spring.mvc.http.ContentCachingRequestWrapper;
 import org.hehh.cloud.spring.mvc.http.RequestNameValueHttpInputMessage;
-import org.hehh.cloud.spring.mvc.request.CopyNativeWebRequest;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.BeanExpressionContext;
 import org.springframework.beans.factory.config.BeanExpressionResolver;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.Conventions;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -26,28 +21,19 @@ import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ValueConstants;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.RequestScope;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver;
-import org.springframework.web.method.annotation.RequestParamMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import org.springframework.web.multipart.support.MultipartResolutionDelegate;
-import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -55,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date: 2020-04-04 15:20
  * @description: 参数解析器 {@link Param 支持body格式}
  */
-public class RequestParamJsonArgumentResolver extends RequestResponseBodyMethodProcessor {
+public class ParamJsonArgumentResolver extends RequestResponseBodyMethodProcessor {
 
 
     private ConfigurableBeanFactory beanFactory;
@@ -67,7 +53,7 @@ public class RequestParamJsonArgumentResolver extends RequestResponseBodyMethodP
     /**
      *  请求参数名绑定缓存
      */
-    private final Map<MethodParameter, RequestParamJsonArgumentResolver.NamedValueInfo> namedValueInfoCache = new ConcurrentHashMap<>(256);
+    private final Map<MethodParameter, ParamJsonArgumentResolver.NamedValueInfo> namedValueInfoCache = new ConcurrentHashMap<>(256);
 
 
     /**
@@ -84,7 +70,7 @@ public class RequestParamJsonArgumentResolver extends RequestResponseBodyMethodP
      *
      * @param converters
      */
-    public RequestParamJsonArgumentResolver(List<HttpMessageConverter<?>> converters) {
+    public ParamJsonArgumentResolver(List<HttpMessageConverter<?>> converters) {
         super(converters);
     }
 
@@ -97,7 +83,7 @@ public class RequestParamJsonArgumentResolver extends RequestResponseBodyMethodP
      * @param converters
      * @param manager
      */
-    public RequestParamJsonArgumentResolver(List<HttpMessageConverter<?>> converters, ContentNegotiationManager manager) {
+    public ParamJsonArgumentResolver(List<HttpMessageConverter<?>> converters, ContentNegotiationManager manager) {
         super(converters, manager);
     }
 
@@ -114,7 +100,7 @@ public class RequestParamJsonArgumentResolver extends RequestResponseBodyMethodP
      * @param beanFactory
      * @since 4.2
      */
-    public RequestParamJsonArgumentResolver(List<HttpMessageConverter<?>> converters, List<Object> requestResponseBodyAdvice, ConfigurableBeanFactory beanFactory) {
+    public ParamJsonArgumentResolver(List<HttpMessageConverter<?>> converters, List<Object> requestResponseBodyAdvice, ConfigurableBeanFactory beanFactory) {
         super(converters, requestResponseBodyAdvice);
         this.beanFactory = beanFactory;
         this.expressionContext =
@@ -132,7 +118,7 @@ public class RequestParamJsonArgumentResolver extends RequestResponseBodyMethodP
      * @param manager
      * @param requestResponseBodyAdvice
      */
-    public RequestParamJsonArgumentResolver(List<HttpMessageConverter<?>> converters, ContentNegotiationManager manager, List<Object> requestResponseBodyAdvice) {
+    public ParamJsonArgumentResolver(List<HttpMessageConverter<?>> converters, ContentNegotiationManager manager, List<Object> requestResponseBodyAdvice) {
         super(converters, manager, requestResponseBodyAdvice);
     }
 
@@ -170,7 +156,14 @@ public class RequestParamJsonArgumentResolver extends RequestResponseBodyMethodP
         String body = getBody(webRequest);
 
         try {
-             name =  getNamedValueInfo(parameter).name;
+            NamedValueInfo namedValueInfo = getNamedValueInfo(parameter);
+            name = namedValueInfo.name;
+            if(!StringUtils.hasText(body)){
+                 body = namedValueInfo.defaultValue;
+                if(!StringUtils.hasText(body)){
+                    body = "{}";
+                }
+            }
              arg = readBodyMessageConverters(webRequest,body, parameter, parameter.getNestedGenericParameterType());
              resolveStringValue(name);
         }catch(Exception e){
@@ -210,11 +203,13 @@ public class RequestParamJsonArgumentResolver extends RequestResponseBodyMethodP
 //        String s = valueInfoCache.get(request);
 //        if(!StringUtils.hasText(s)){
           ContentCachingRequestWrapper servletRequest = request.getNativeRequest(ContentCachingRequestWrapper.class);
-
+          if(null == servletRequest){
+              return null;
+          }
             String  s = IoUtil.read(new ByteArrayInputStream(servletRequest.getBody()), StandardCharsets.UTF_8);
-            if(!StringUtils.hasText(s)){
-                s = "{}";
-            }
+//            if(!StringUtils.hasText(s)){
+//                s = "{}";
+//            }
 //            valueInfoCache.put(request,s);
 //        }
 
@@ -263,11 +258,15 @@ public class RequestParamJsonArgumentResolver extends RequestResponseBodyMethodP
     }
 
 
+
+
     @Override
     protected boolean checkRequired(MethodParameter parameter) {
         Param requestBody = parameter.getParameterAnnotation(Param.class);
         return (requestBody != null && requestBody.required() && !parameter.isOptional());
     }
+
+
 
     protected NamedValueInfo createNamedValueInfo(MethodParameter parameter) {
         Param ann = parameter.getParameterAnnotation(Param.class);

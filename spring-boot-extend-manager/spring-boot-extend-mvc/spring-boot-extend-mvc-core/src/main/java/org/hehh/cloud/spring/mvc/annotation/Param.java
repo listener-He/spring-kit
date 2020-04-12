@@ -9,7 +9,7 @@ import java.lang.annotation.*;
  * @date: 2020-04-04 15:24
  * @description: 参数解析器 客户端传递 body 参数
  */
-@Target({ElementType.TYPE,ElementType.PARAMETER})
+@Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
@@ -35,21 +35,13 @@ public @interface Param {
     String name() default "";
 
     /**
-     *  是否必填
+     *  是否必填 json格式下才有效 非json格式可配合 {@link Required}使用
      */
     boolean required() default true;
 
-    /**
-     *   默认值
-     */
-    String defaultValue()default "";
 
+    String defaultValue() default "";
 
-    /**
-     *  错误提示
-     * @return
-     */
-    String error() default "";
 
 }
 
