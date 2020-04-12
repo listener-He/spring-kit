@@ -18,7 +18,7 @@ public class TestController {
 
 
     @GetMapping
-    public Result test(@Decrypt String msg,@Decrypt Integer code){
+    public Result test(@Decrypt String msg,@RequestParam @Decrypt Integer code){
         return SuccessResult.succeed(msg);
     }
 

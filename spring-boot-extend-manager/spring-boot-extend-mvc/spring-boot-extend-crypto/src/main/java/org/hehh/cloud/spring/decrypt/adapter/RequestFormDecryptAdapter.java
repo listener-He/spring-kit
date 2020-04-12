@@ -116,7 +116,7 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
             Decrypt annotation = parameter.getParameterAnnotation(super.getAnnotation());
 
             if(annotation != null){
-                String k = StringUtils.hasText(annotation.value()) ? annotation.value() : parameter.getParameterName();
+                String k = StringUtils.hasText(annotation.value()) ? annotation.value() : (StringUtils.hasText(parameter.getParameterName()) ? parameter.getParameterName() :  parameter.getParameter().getName());
                 String[] v = parameterMap.get(k);
 
 

@@ -152,7 +152,7 @@ public class RequestBodyDecryptAdapter extends IDecryptAdapter {
             for (MethodParameter parameter : handlerMethod.getMethodParameters()) {
                 Decrypt annotation = parameter.getParameterAnnotation(super.getAnnotation());
                 if (annotation != null) {
-                    String k = StringUtils.hasText(annotation.value()) ? annotation.value() : parameter.getParameterName();
+                    String k = StringUtils.hasText(annotation.value()) ? annotation.value() : (StringUtils.hasText(parameter.getParameterName()) ? parameter.getParameterName() :  parameter.getParameter().getName());
                     Object v = jsonMap.get(k);
                     if (v == null) {
                         log.warn("字段:{}值为空,无法解密.", k);
