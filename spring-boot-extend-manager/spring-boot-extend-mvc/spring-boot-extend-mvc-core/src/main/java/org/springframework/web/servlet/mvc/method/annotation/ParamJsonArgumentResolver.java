@@ -151,7 +151,7 @@ public class ParamJsonArgumentResolver extends RequestResponseBodyMethodProcesso
 
 
         Object arg = null;
-        String name = null;
+        String  name = null;
 
         String body = getBody(webRequest);
 
@@ -176,18 +176,18 @@ public class ParamJsonArgumentResolver extends RequestResponseBodyMethodProcesso
 
 
 
-        if (binderFactory != null) {
-            WebDataBinder binder = binderFactory.createBinder(webRequest, arg, name);
-            if (arg != null) {
-                validateIfApplicable(binder, parameter);
-                if (binder.getBindingResult().hasErrors() && isBindExceptionRequired(binder, parameter)) {
-                    throw new MethodArgumentNotValidException(parameter, binder.getBindingResult());
-                }
-            }
-            if (mavContainer != null) {
-                mavContainer.addAttribute(BindingResult.MODEL_KEY_PREFIX + name, binder.getBindingResult());
-            }
-        }
+//        if (binderFactory != null) {
+//            WebDataBinder binder = binderFactory.createBinder(webRequest, arg, name);
+//            if (arg != null) {
+//                validateIfApplicable(binder, parameter);
+//                if (binder.getBindingResult().hasErrors() && isBindExceptionRequired(binder, parameter)) {
+//                    throw new MethodArgumentNotValidException(parameter, binder.getBindingResult());
+//                }
+//            }
+//            if (mavContainer != null) {
+//                mavContainer.addAttribute(BindingResult.MODEL_KEY_PREFIX + name, binder.getBindingResult());
+//            }
+//        }
 
         return adaptArgumentIfNecessary(arg, parameter);
     }

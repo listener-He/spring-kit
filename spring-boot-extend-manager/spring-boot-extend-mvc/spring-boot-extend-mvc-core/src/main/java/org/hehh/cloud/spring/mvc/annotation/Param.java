@@ -34,12 +34,18 @@ public @interface Param {
     @AliasFor("value")
     String name() default "";
 
+
+
     /**
-     *  是否必填 json格式下才有效 非json格式可配合 {@link Required}使用
+     *  是否必填
      */
     boolean required() default true;
 
 
+    /**
+     *  默认值
+     * @return
+     */
     String defaultValue() default "";
 
 
