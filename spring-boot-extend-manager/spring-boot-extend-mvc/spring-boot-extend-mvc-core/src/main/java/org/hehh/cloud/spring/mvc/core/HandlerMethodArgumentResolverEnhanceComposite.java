@@ -150,6 +150,10 @@ public class HandlerMethodArgumentResolverEnhanceComposite  extends HandlerMetho
 
 
         if(argument == null && parameter.hasParameterAnnotation(Required.class)){
+            String msg = parameter.getParameterAnnotation(Required.class).value();
+            if(StringUtils.hasText(msg)){
+                throw new ServletRequestBindingException(msg);
+            }
             throw new ServletRequestBindingException("Missing argument '" + parameter.getParameterName() +
                     "' for method parameter of type " + parameter.getNestedParameterType().getSimpleName());
         }
