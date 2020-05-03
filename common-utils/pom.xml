@@ -11,30 +11,12 @@
 
     <artifactId>common-utils</artifactId>
 
-    <properties>
-        <hutool.version>5.2.0</hutool.version>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>common-bean</artifactId>
             <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-http</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-system</artifactId>
-            <version>${hutool.version}</version>
         </dependency>
     </dependencies>
 
