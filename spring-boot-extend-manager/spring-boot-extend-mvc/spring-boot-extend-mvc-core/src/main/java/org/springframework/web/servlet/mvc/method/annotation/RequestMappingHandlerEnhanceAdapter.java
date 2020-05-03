@@ -1,7 +1,7 @@
 package org.springframework.web.servlet.mvc.method.annotation;
 
-import org.hehh.cloud.spring.mvc.core.HandelMethodAdapterManager;
-import org.hehh.cloud.spring.mvc.http.ContentCachingRequestWrapper;
+import org.hehh.cloud.spring.mvc.request.method.HandelMethodAdapterManager;
+import org.hehh.cloud.spring.mvc.request.ContentCachingRequestWrapper;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.DefaultParameterNameDiscoverer;

@@ -5,6 +5,7 @@ import org.hehh.cloud.common.bean.result.Result;
 import org.hehh.cloud.common.bean.result.SuccessResult;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
 import org.hehh.cloud.spring.mvc.annotation.Param;
+import org.hehh.cloud.spring.mvc.annotation.Required;
 import org.hehh.cloud.spring.mvc.util.ObjectMapperKit;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class TestController {
 
 
     @GetMapping
-    public Result test(@Decrypt String msg,@RequestParam @Decrypt Integer code){
+    public Result test(@Required String msg, @RequestParam  Integer code){
         return SuccessResult.succeed(msg);
     }
 

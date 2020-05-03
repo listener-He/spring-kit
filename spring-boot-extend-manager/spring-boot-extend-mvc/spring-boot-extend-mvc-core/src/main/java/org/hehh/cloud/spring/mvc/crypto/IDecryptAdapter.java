@@ -7,13 +7,10 @@ import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.ChooseDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
 import org.hehh.cloud.spring.exception.DecryptException;
-import org.hehh.cloud.spring.mvc.core.HandlerMethodArgumentResolverEnhanceComposite;
-import org.hehh.cloud.spring.mvc.core.IHandlerMethodAdapter;
-import org.hehh.cloud.spring.mvc.core.IHandlerMethodArgumentResolverAdapter;
+import org.hehh.cloud.spring.mvc.request.method.IHandlerMethodAdapter;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletRequest;

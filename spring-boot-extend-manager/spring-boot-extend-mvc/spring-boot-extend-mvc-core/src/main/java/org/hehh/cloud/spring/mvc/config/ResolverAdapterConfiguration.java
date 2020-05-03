@@ -1,7 +1,7 @@
 package org.hehh.cloud.spring.mvc.config;
 
-import org.hehh.cloud.spring.mvc.core.IHandlerMethodAdapter;
-import org.hehh.cloud.spring.mvc.core.IHandlerMethodArgumentResolverAdapter;
+import org.hehh.cloud.spring.mvc.request.method.IHandlerMethodAdapter;
+import org.hehh.cloud.spring.mvc.request.argument.IHandlerMethodArgumentResolverAdapter;
 
 import java.util.List;
 

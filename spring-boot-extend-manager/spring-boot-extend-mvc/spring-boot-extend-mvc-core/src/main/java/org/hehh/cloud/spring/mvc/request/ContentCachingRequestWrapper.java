@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.http;
+package org.hehh.cloud.spring.mvc.request;
 
 import cn.hutool.core.io.IoUtil;
 

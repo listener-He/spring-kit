@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.core;
+package org.hehh.cloud.spring.mvc.request.method;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.method.HandlerMethod;

@@ -15,7 +15,6 @@ spring:
     default-property-inclusion: non_null
     mapper:
       sort-properties-alphabetically: false
-
   decrypt:
     method: AES
     valueModel: true

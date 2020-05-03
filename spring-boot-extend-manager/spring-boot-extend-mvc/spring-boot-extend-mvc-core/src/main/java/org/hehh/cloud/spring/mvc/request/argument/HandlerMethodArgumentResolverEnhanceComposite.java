@@ -1,8 +1,8 @@
-package org.hehh.cloud.spring.mvc.core;
+package org.hehh.cloud.spring.mvc.request.argument;
 
 import org.hehh.cloud.spring.mvc.annotation.Param;
 import org.hehh.cloud.spring.mvc.annotation.Required;
-import org.hehh.cloud.spring.mvc.http.CacheRequestHttpInputMessage;
+import org.hehh.cloud.spring.mvc.request.CacheRequestHttpInputMessage;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.HttpHeaders;

@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.http;
+package org.hehh.cloud.spring.mvc.request;
 
 import org.hehh.cloud.spring.mvc.util.ObjectMapperKit;
 import org.springframework.http.server.ServletServerHttpRequest;

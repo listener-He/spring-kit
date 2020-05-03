@@ -8,7 +8,7 @@ import org.hehh.cloud.spring.decrypt.DecryptManager;
 import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
 import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
-import org.hehh.cloud.spring.mvc.copy.ReplaceInputStreamHttpServletRequest;
+import org.hehh.cloud.spring.mvc.request.ReplaceInputStreamHttpServletRequest;
 import org.hehh.cloud.spring.mvc.crypto.IDecryptAdapter;
 import org.hehh.cloud.spring.mvc.util.ObjectMapperKit;
 import org.springframework.core.MethodParameter;

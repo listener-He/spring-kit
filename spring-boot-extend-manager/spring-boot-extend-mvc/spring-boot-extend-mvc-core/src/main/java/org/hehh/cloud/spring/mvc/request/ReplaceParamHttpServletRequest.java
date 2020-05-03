@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.copy;
+package org.hehh.cloud.spring.mvc.request;
 
 import cn.hutool.core.util.StrUtil;
 import org.hehh.cloud.spring.mvc.util.ObjectMapperKit;
