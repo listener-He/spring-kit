@@ -31,6 +31,8 @@
         <skipTests>true</skipTests>
         <spring.cloud.version>Finchley.SR2</spring.cloud.version>
         <hutool.version>5.2.0</hutool.version>
+        <lombok.version>1.18.12</lombok.version>
+
     </properties>
 
 
@@ -54,7 +56,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>${lombok.version}</version>
         </dependency>
 
     </dependencies>
