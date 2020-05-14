@@ -9,24 +9,30 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>orm-repository-core</artifactId>
+    <artifactId>orm-repository-mybatis-plus</artifactId>
 
-    <description>数据库操作类核心包</description>
+    <description>mybatis-plus 依赖</description>
 
+
+    <properties>
+        <mybatis-plus-boot.version>3.3.1</mybatis-plus-boot.version>
+        <pagehelper-spring-boot.version>1.2.13</pagehelper-spring-boot.version>
+    </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.hehh.cloud</groupId>
-            <artifactId>data-source-start</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus-boot.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>${pagehelper-spring-boot.version}</version>
         </dependency>
-    </dependencies>
 
+    </dependencies>
 
 
     <build>
@@ -63,5 +69,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

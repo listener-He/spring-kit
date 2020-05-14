@@ -15,6 +15,9 @@
     <modules>
         <module>data-source-start</module>
         <module>orm-repository-core</module>
+        <module>orm-repository-jpa</module>
+        <module>orm-repository-mybatis</module>
+        <module>orm-repository-mybatis-plus</module>
     </modules>
 
 </project>
