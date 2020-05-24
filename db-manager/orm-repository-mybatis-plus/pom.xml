@@ -21,6 +21,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.hehh.cloud</groupId>
+            <artifactId>orm-repository-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus-boot.version}</version>
