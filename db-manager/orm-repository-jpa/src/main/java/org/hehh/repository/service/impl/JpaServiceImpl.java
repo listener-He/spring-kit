@@ -116,16 +116,7 @@ public class JpaServiceImpl<T,ID> implements IJpaService<T,ID> {
     }
 
 
-    /**
-     * 查询统计数
-     *
-     * @param example
-     * @return
-     */
-    @Override
-    public long findCount(Example<T> example) {
-        return repository.count(example);
-    }
+
 
 
 

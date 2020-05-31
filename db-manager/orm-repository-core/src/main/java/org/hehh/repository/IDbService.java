@@ -27,12 +27,7 @@ public interface IDbService<T,ID> {
 
 
 
-    /**
-     *  查询统计数
-     * @param example
-     * @return
-     */
-    long findCount(Example<T> example);
+
 
 
 
