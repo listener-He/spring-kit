@@ -18,8 +18,12 @@ import java.util.Optional;
  * @date: 2020-05-04 21:02
  * @description: spring-data-jpa 资源库
  */
-public interface DbJpaRepository<T,ID,S extends T>  extends JpaRepository<T,ID>, Repository<T,ID,Example<S>> {
+public interface DbJpaRepository<T,ID>  extends JpaRepository<T,ID>, Repository<T,ID,Example<T>> {
 
 
-
+    /**
+     *  根据id删除
+     * @param ids
+     */
+    void deleteByIdIn(List<ID> ids);
 }
