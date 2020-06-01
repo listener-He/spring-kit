@@ -10,6 +10,8 @@
     <version>2.2.5.RELEASE</version>
     <modules>
         <module>db-manager</module>
+        <module>spring-boot-extend-manager</module>
+        <module>spring-mvc-test</module>
     </modules>
 
 
