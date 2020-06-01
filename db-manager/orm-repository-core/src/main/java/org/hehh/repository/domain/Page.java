@@ -10,6 +10,9 @@ public interface Page<T> extends org.springframework.data.domain.Page<T> {
 
 
 
+
+
+
     /**
      *  下一页
      */
@@ -19,9 +22,6 @@ public interface Page<T> extends org.springframework.data.domain.Page<T> {
         }
         return getNumber();
     }
-
-
-
 
 
 

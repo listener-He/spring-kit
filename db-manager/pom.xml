@@ -11,7 +11,7 @@
 
     <artifactId>db-manager</artifactId>
     <packaging>pom</packaging>
-    <description>数据库相关聚合项目</description>
+    <description>数据库相关聚合项目 瞎几把乱写的</description>
     <modules>
         <module>data-source-start</module>
         <module>orm-repository-core</module>
