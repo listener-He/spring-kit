@@ -25,7 +25,7 @@
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>common-utils</artifactId>
-            <version>${project.parent.version}</version>
+            <version>2.2.5.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
