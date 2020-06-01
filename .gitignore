@@ -1,3 +1,4 @@
+<<<<<<< .merge_file_3Jz2jK
 
 
 .idea/
@@ -6,3 +7,7 @@
 **/*.iml
 Target
 **/target
+=======
+**.iml
+.idea
+>>>>>>> .merge_file_wRIePE

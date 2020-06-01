@@ -8,10 +8,13 @@
     <artifactId>spring-boot-starter-parent</artifactId>
     <packaging>pom</packaging>
     <version>2.2.5.RELEASE</version>
+    
     <modules>
         <module>db-manager</module>
         <module>spring-boot-extend-manager</module>
         <module>spring-mvc-test</module>
+        <module>common-bean</module>
+        <module>common-utils</module>
     </modules>
 
 
@@ -41,13 +44,6 @@
         <version>2.2.5.RELEASE</version>
         <relativePath/>
     </parent>
-
-
-
-
-
-
-
 
 
     <dependencies>
@@ -107,5 +103,4 @@
             </build>
         </profile>
     </profiles>
-
 </project>
