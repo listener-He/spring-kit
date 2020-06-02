@@ -1,4 +1,4 @@
-package org.hehh.cloud.util;
+package org.hehh.cloud.ffmpeg;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;

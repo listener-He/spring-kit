@@ -1,4 +1,4 @@
-package org.hehh.cloud.util.http.browser;
+package org.hehh.cloud.ffmpeg.http.browser;
 
 import cn.hutool.core.util.ClassLoaderUtil;
 import cn.hutool.http.useragent.Browser;

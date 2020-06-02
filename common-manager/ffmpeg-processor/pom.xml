@@ -12,11 +12,25 @@
     <groupId>org.hehh.cloud.util</groupId>
     <artifactId>ffmpeg-processor</artifactId>
 
+    <properties>
+        <javacpp-presets-ffmpeg.version>4.1-1.4.4</javacpp-presets-ffmpeg.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.hehh.cloud.util</groupId>
             <artifactId>system-processor</artifactId>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.bytedeco.javacpp-presets/ffmpeg -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>ffmpeg</artifactId>
+            <version>${javacpp-presets-ffmpeg.version}</version>
+        </dependency>
+
+
+
     </dependencies>
 
 </project>
