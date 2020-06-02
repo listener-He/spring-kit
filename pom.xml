@@ -11,8 +11,7 @@
 
 
     <modules>
-        <module>common-bean</module>
-        <module>common-utils</module>
+        <module>common-manager</module>
     </modules>
 
 
