@@ -1,4 +1,4 @@
-package org.hehh.cloud.common.utils.shell;
+package org.hehh.cloud.util;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;
@@ -18,12 +18,19 @@ public class FfmpegKit {
     private static String ffmpeg = "ffmpeg";
 
 
+    public static void setFfmpegPath(String ffmpeg){
+        FfmpegKit.ffmpeg = ffmpeg;
+    }
+
+
 
     public static String getFfmpegPath(){
+
         if(StrUtil.isNotBlank(ffmpeg)){
             return ffmpeg;
         }
         OsInfo osInfo = SystemUtil.getOsInfo();
+
         if(osInfo.isWindows()){
             ffmpeg = "C:\\Users\\Administrator\\AppData\\Local\\Temp\\jave-1\\ffmpeg";
         }
@@ -31,6 +38,16 @@ public class FfmpegKit {
        assert StrUtil.isNotBlank(ffmpeg):"The current system not installation ffmpeg";
        return ffmpeg;
     }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -55,7 +72,6 @@ public class FfmpegKit {
             Process exec = RuntimeUtil.exec(StrUtil.format(shell, file, s));
             if(exec != null){
                 String result = RuntimeUtil.getResult(exec);
-                System.out.println("执行结果："+result);
 
                 /** 暂时也只能用这种方案来判断是否成功了*/
                 if(StrUtil.startWith(result,"FFmpeg version")){
@@ -87,7 +103,6 @@ public class FfmpegKit {
             return null;
         }
 
-
         /**
          * 验证转换为的文件
          */
@@ -103,9 +118,7 @@ public class FfmpegKit {
         try {
             Process exec = RuntimeUtil.exec(StrUtil.format(shell, videoFile,frame,audio+"k",compressionVideoFile));
             if(exec != null){
-                String result = RuntimeUtil.getResult(exec);
-                System.out.println("执行结果："+result);
-
+                RuntimeUtil.getResult(exec);
             }
         } catch (Exception e) {
             e.printStackTrace();

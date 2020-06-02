@@ -62,4 +62,10 @@ public class Result<T> implements java.io.Serializable {
          }
           return timestamp;
     }
+
+
+
+    public <E> Result<E> conversion(Class<E> tClass){
+        return new Result<E>(this.code, this.msg, null,this.timestamp);
+    }
 }

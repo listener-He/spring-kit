@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <skipTests>true</skipTests>
-        <hutool.version>5.2.0</hutool.version>
+        <hutool.version>5.3.6</hutool.version>
         <spring.cloud.version>Finchley.SR2</spring.cloud.version>
     </properties>
 
@@ -66,13 +66,29 @@
             </dependency>
 
             <dependency>
-                <groupId>org.hehh.cloud</groupId>
-                <artifactId>common-utils</artifactId>
+                <groupId>org.hehh.cloud.util</groupId>
+                <artifactId>common-core</artifactId>
                 <version>${version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.hehh.cloud</groupId>
                 <artifactId>common-bean</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hehh.cloud.util</groupId>
+                <artifactId>system-processor</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hehh.cloud.util</groupId>
+                <artifactId>http-processor</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hehh.cloud.util</groupId>
+                <artifactId>ffmpeg-processor</artifactId>
                 <version>${version}</version>
             </dependency>
         </dependencies>

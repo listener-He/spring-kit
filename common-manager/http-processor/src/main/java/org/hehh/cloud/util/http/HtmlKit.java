@@ -1,4 +1,4 @@
-package org.hehh.cloud.common.utils.http;
+package org.hehh.cloud.util.http;
 
 
 import org.hehh.cloud.common.utils.StrKit;
@@ -18,6 +18,8 @@ public class HtmlKit {
      *  图片url可能存放的地方
      */
     private final static String[] IMG_URL_NAME = {"src","data-original","originalsrc"};
+
+
 
     /**
      *   获取元素属性

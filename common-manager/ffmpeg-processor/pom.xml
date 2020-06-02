@@ -3,25 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>spring-boot-starter-parent</artifactId>
+        <artifactId>common-manager</artifactId>
         <groupId>org.hehh.cloud</groupId>
         <version>2.2.5.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>common-manager</artifactId>
-    <packaging>pom</packaging>
+    <groupId>org.hehh.cloud.util</groupId>
+    <artifactId>ffmpeg-processor</artifactId>
 
-
-    <modules>
-        <module>common-bean</module>
-        <module>common-core</module>
-        <module>http-processor</module>
-        <module>system-processor</module>
-        <module>ffmpeg-processor</module>
-    </modules>
-
-
-    <description>公共项目</description>
+    <dependencies>
+        <dependency>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>system-processor</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

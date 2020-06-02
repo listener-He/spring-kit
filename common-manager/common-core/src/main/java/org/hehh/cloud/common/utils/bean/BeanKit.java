@@ -57,32 +57,31 @@ public class BeanKit {
      * @return T bean对象
      * @throws Exception
      */
-    public static <T>T toBean(Map<String,Object> map,Class<T> clz){
+    public static <T>T toBean(Map<String,Object> map,Class<T> clz) throws IllegalAccessException{
         if(MapUtil.isEmpty(map)){
             return null;
         }
 
         T obj = null;
+
         try {
             obj = clz.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
-        Field[] declaredFields = obj.getClass().getDeclaredFields();
-        for(Field field:declaredFields){
-            int mod = field.getModifiers();
-            if(Modifier.isStatic(mod) || Modifier.isFinal(mod)){
-                continue;
-            }
-            field.setAccessible(true);
-            try {
+
+        if(null != obj){
+            Field[] declaredFields = obj.getClass().getDeclaredFields();
+            for(Field field:declaredFields){
+                int mod = field.getModifiers();
+                if(Modifier.isStatic(mod) || Modifier.isFinal(mod)){
+                    continue;
+                }
+                field.setAccessible(true);
                 field.set(obj, map.get(field.getName()));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
             }
         }
+
         return obj;
     }
 

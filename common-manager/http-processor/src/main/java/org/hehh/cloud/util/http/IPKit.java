@@ -1,4 +1,4 @@
-package org.hehh.cloud.common.utils.http;
+package org.hehh.cloud.util.http;
 
 import org.hehh.cloud.common.regular.Regular;
 import org.hehh.cloud.common.utils.NumberKit;
@@ -13,6 +13,7 @@ import java.util.List;
  * @description: ip工具
  **/
 public class IPKit {
+
 
 
     private static final int[] CIDR2MASK = new int[]{0x00000000, 0x80000000,
@@ -75,7 +76,9 @@ public class IPKit {
         byte[] bytes = NumberKit.intToByteArray(ipInt);
 
 
-        //把4字节的数组解成IP
+        /**
+         * 把4字节的数组解成IP
+         */
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 4; i++) {
             String tmp = String.valueOf(bytes[i]);

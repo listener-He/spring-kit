@@ -47,6 +47,7 @@ public class WkhtmltopdfKit {
         }
 
         try {
+
             Process exec = RuntimeUtil.exec(getWkhtmltopdfPath() + StrUtil.format(shell, htmlFile, pdfFile));
             String result = RuntimeUtil.getResult(exec);
             System.out.println(result);

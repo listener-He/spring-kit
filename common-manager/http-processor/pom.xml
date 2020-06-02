@@ -9,32 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>common-utils</artifactId>
+    <groupId>org.hehh.cloud.util</groupId>
+    <artifactId>http-processor</artifactId>
 
 
     <dependencies>
-        <dependency>
-            <groupId>org.hehh.cloud</groupId>
-            <artifactId>common-bean</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-http</artifactId>
         </dependency>
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-system</artifactId>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>common-core</artifactId>
         </dependency>
     </dependencies>
-
-
-
-
 
 </project>
