@@ -1,4 +1,4 @@
-package org.hehh.cloud.common.utils.date;
+package org.hehh.utils.date;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.BetweenFormater;

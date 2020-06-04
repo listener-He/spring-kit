@@ -1,4 +1,4 @@
-package org.hehh.cloud.common.utils.bean;
+package org.hehh.utils.bean;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;

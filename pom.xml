@@ -91,6 +91,12 @@
                 <artifactId>ffmpeg-processor</artifactId>
                 <version>${version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.hehh.cloud.util</groupId>
+                <artifactId>file-processor</artifactId>
+                <version>${version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

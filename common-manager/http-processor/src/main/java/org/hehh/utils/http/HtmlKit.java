@@ -1,7 +1,7 @@
-package org.hehh.cloud.ffmpeg.http;
+package org.hehh.utils.http;
 
 
-import org.hehh.cloud.common.utils.StrKit;
+import org.hehh.utils.StrKit;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package org.hehh.cloud.ffmpeg;
+package org.hehh.ffmpeg;
 
 import cn.hutool.core.util.StrUtil;
 

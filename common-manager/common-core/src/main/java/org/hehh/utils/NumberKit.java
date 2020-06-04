@@ -1,4 +1,4 @@
-package org.hehh.cloud.common.utils;
+package org.hehh.utils;
 
 /**
  * @author: HeHui

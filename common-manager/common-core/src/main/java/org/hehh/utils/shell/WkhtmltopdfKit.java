@@ -1,4 +1,4 @@
-package org.hehh.cloud.common.utils.shell;
+package org.hehh.utils.shell;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.RuntimeUtil;

@@ -19,6 +19,7 @@
         <module>http-processor</module>
         <module>system-processor</module>
         <module>ffmpeg-processor</module>
+        <module>file-processor</module>
     </modules>
 
 

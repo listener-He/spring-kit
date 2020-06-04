@@ -1,9 +1,9 @@
-package org.hehh.cloud.ffmpeg.http;
+package org.hehh.utils.http;
 
 
 import org.hehh.cloud.common.regular.Regular;
-import org.hehh.cloud.common.utils.NumberKit;
-import org.hehh.cloud.common.utils.StrKit;
+import org.hehh.utils.NumberKit;
+import org.hehh.utils.StrKit;
 
 import java.util.ArrayList;
 import java.util.List;

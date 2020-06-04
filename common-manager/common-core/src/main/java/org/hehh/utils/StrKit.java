@@ -1,4 +1,4 @@
-package org.hehh.cloud.common.utils;
+package org.hehh.utils;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
