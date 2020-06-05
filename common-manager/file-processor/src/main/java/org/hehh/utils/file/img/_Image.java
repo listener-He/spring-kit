@@ -1,6 +1,5 @@
 package org.hehh.utils.file.img;
 
-import lombok.Getter;
 
 import java.awt.*;
 

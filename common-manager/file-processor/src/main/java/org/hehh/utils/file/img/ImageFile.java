@@ -4,45 +4,79 @@ package org.hehh.utils.file.img;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 /**
  * @author: HeHui
  * @date: 2020-06-04 16:29
  * @description: 图片文件
  */
-public class ImageFile  implements _Image {
-
+public class ImageFile extends File  implements _Image {
 
 
     /**
      *  图片
      */
-    private final Image img;
+    private  Image img;
 
 
     /**
      *
      *  文件名
      */
-    private final String fileName;
+    private  String fileName;
 
 
     /**
      *  宽度
      */
-    private final int width;
+    private  int width;
 
 
     /**
      *  高度
      */
-    private final int high;
+    private  int high;
 
 
     /**
      *  大小
      */
-    private final long size;
+    private  long size;
+
+
+
+
+    private ImageFile(String parent, String child) {
+        super(parent, child);
+    }
+
+
+    private ImageFile(File parent, String child) {
+        super(parent, child);
+    }
+
+
+    private ImageFile(URI uri) {
+        super(uri);
+    }
+
+
+
+
+
+    /**
+     *  静态构建
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    public static ImageFile of(String filePath) throws IOException {
+        assert filePath != null : "I don't think it's a picture";
+        return new ImageFile(filePath);
+    }
+
+
 
 
     /**
@@ -51,43 +85,15 @@ public class ImageFile  implements _Image {
      * @throws IOException
      */
     public ImageFile(String filePath) throws IOException {
-        this(new File(filePath));
-    }
+        super(filePath);
 
 
-
-    /**
-     *  构造器2
-     * @param file 文件
-     * @throws IOException
-     */
-    public ImageFile(File file) throws IOException {
-        this(Toolkit.getDefaultToolkit().getImage(file.getCanonicalPath()),file.length(),file.getName());
-    }
-
-
-
-    /**
-     *   构造器3
-     * @param file 图片
-     * @param size 文件大小
-     */
-    public ImageFile(Image file,long size,String name){
-        assert file != null : "I don't think it's a picture";
-        this.img = file;
+        this.img = Toolkit.getDefaultToolkit().getImage(super.getCanonicalPath());
         this.width = this.img.getWidth(null);
         this.high = this.img.getHeight(null);
-        this.size = size;
-        this.fileName = name;
+        this.size = super.length();
+        this.fileName = super.getName();
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -98,9 +104,6 @@ public class ImageFile  implements _Image {
     public String fileName() {
         return fileName;
     }
-
-
-
 
 
 
@@ -134,8 +137,6 @@ public class ImageFile  implements _Image {
 
 
 
-
-
     /**
      * 图片
      *
@@ -145,4 +146,7 @@ public class ImageFile  implements _Image {
     public Image img() {
         return img;
     }
+
+
+
 }
