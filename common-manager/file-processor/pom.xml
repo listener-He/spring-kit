@@ -13,13 +13,6 @@
     <artifactId>file-processor</artifactId>
 
 
-    <dependencies>
 
-        <dependency>
-            <groupId>org.hehh.cloud.util</groupId>
-            <artifactId>common-core</artifactId>
-        </dependency>
-
-    </dependencies>
 
 </project>
