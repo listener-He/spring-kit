@@ -18,7 +18,6 @@
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>common-bean</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -27,6 +26,41 @@
 
     </dependencies>
 
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <testSource>${java.version}</testSource>
+                    <testTarget>${java.version}</testTarget>
+                </configuration>
+            </plugin>
+
+            <!--配置生成Javadoc包-->
+
+            <!-- 配置源库 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 
 
