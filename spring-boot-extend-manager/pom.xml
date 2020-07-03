@@ -24,8 +24,8 @@
         </dependency>
 
         <dependency>
-            <groupId>org.hehh.cloud</groupId>
-            <artifactId>common-utils</artifactId>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>common-core</artifactId>
             <version>${project.parent.version}</version>
             <exclusions>
                 <exclusion>
