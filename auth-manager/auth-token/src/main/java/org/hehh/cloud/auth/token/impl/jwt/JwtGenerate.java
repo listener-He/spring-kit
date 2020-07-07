@@ -3,7 +3,7 @@ package org.hehh.cloud.auth.token.impl.jwt;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.auth.bean.login.LoginUser;
-import org.hehh.cloud.common.utils.bean.BeanKit;
+import org.hehh.utils.bean.BeanKit;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -138,7 +138,12 @@ public class JwtGenerate {
      * @return
      */
     public  LoginUser getUser(String token){
-        return BeanKit.toBean(getClaimMap(token),LoginUser.class);
+        try {
+            return BeanKit.toBean(getClaimMap(token),LoginUser.class);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

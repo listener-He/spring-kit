@@ -15,6 +15,8 @@
 
 
 
+
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -23,6 +25,8 @@
         <hutool.version>5.2.0</hutool.version>
         <spring.cloud.version>Finchley.SR2</spring.cloud.version>
     </properties>
+
+
 
 
 
