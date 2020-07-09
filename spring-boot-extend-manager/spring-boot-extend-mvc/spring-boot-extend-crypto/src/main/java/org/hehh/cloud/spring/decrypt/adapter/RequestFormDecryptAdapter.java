@@ -9,6 +9,7 @@ import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
 import org.hehh.cloud.spring.exception.DecryptException;
 import org.hehh.cloud.spring.mvc.request.ReplaceParamHttpServletRequest;
 import org.hehh.cloud.spring.mvc.crypto.IDecryptAdapter;
+import org.hehh.utils.StrKit;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
