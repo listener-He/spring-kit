@@ -93,6 +93,7 @@ public class JsonDateFormat extends DateFormat {
     protected final static DateFormat DATE_FORMAT_RFC1123;
 
     protected final static DateFormat DATE_FORMAT_ISO8601;
+    protected final static DateFormat DATE_FORMAT_ALL;
     protected final static DateFormat DATE_FORMAT_ISO8601_Z;
 
     protected final static DateFormat DATE_FORMAT_PLAIN;
@@ -113,6 +114,8 @@ public class JsonDateFormat extends DateFormat {
         DATE_FORMAT_ISO8601_Z.setTimeZone(DEFAULT_TIMEZONE);
         DATE_FORMAT_PLAIN = new SimpleDateFormat(DATE_FORMAT_STR_PLAIN);
         DATE_FORMAT_PLAIN.setTimeZone(DEFAULT_TIMEZONE);
+        DATE_FORMAT_ALL = new SimpleDateFormat(DATE_FORMAT_TO_ALL);
+        DATE_FORMAT_ALL.setTimeZone(DEFAULT_TIMEZONE);
     }
 
     /**
@@ -130,6 +133,7 @@ public class JsonDateFormat extends DateFormat {
     protected transient DateFormat _formatISO8601;
     protected transient DateFormat _formatISO8601_z;
     protected transient DateFormat _formatPlain;
+    protected transient DateFormat _format_all;
 
     /*
     /**********************************************************
@@ -165,42 +169,7 @@ public class JsonDateFormat extends DateFormat {
         return new JsonDateFormat();
     }
 
-    /**
-     * Method for getting the globally shared DateFormat instance
-     * that uses GMT timezone and can handle simple ISO-8601
-     * compliant date format.
-     */
-    public static DateFormat getBlueprintISO8601Format() {
-        return DATE_FORMAT_ISO8601;
-    }
 
-    /**
-     * Method for getting a non-shared DateFormat instance
-     * that uses specified timezone and can handle simple ISO-8601
-     * compliant date format.
-     */
-    public static DateFormat getISO8601Format(TimeZone tz) {
-        return _cloneFormat(DATE_FORMAT_ISO8601, tz);
-    }
-
-    /**
-     * Method for getting the globally shared DateFormat instance
-     * that uses GMT timezone and can handle RFC-1123
-     * compliant date format.
-     */
-    public static DateFormat getBlueprintRFC1123Format() {
-        return DATE_FORMAT_RFC1123;
-    }
-
-
-    /**
-     * Method for getting a non-shared DateFormat instance
-     * that uses specific timezone and can handle RFC-1123
-     * compliant date format.
-     */
-    public static DateFormat getRFC1123Format(TimeZone tz) {
-        return _cloneFormat(DATE_FORMAT_RFC1123, tz);
-    }
 
     /*
     /**********************************************************
@@ -219,6 +188,7 @@ public class JsonDateFormat extends DateFormat {
             _formatISO8601 = null;
             _formatISO8601_z = null;
             _formatPlain = null;
+            _format_all = null;
             _timezone = tz;
         }
     }
@@ -281,10 +251,10 @@ public class JsonDateFormat extends DateFormat {
     public StringBuffer format(Date date, StringBuffer toAppendTo,
                                FieldPosition fieldPosition)
     {
-        if (_formatISO8601 == null) {
-            _formatISO8601 = _cloneFormat(DATE_FORMAT_ISO8601);
+        if (_format_all == null) {
+            _format_all = _cloneFormat(DATE_FORMAT_ALL);
         }
-        return _formatISO8601.format(date, toAppendTo, fieldPosition);
+        return _format_all.format(date, toAppendTo, fieldPosition);
     }
 
     /*
