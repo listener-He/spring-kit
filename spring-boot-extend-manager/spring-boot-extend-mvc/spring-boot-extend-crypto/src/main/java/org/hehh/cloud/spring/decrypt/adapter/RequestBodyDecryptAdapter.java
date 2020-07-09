@@ -3,7 +3,6 @@ package org.hehh.cloud.spring.decrypt.adapter;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.hehh.cloud.common.utils.StrKit;
 import org.hehh.cloud.spring.decrypt.DecryptManager;
 import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
@@ -123,12 +122,12 @@ public class RequestBodyDecryptAdapter extends IDecryptAdapter {
         /**
          *  验证是否为body格式
          */
-        if (!StrKit.isJson(jsonStr)) {
+        if (!isJsonObj(jsonStr) && !isJsonArray(jsonStr)) {
             throw new HttpMessageNotReadableException("request body decrypt error,param body is not json format.", inputMessage);
         }
 
 
-        if (StrKit.isJsonArray(jsonStr)) {
+        if (isJsonArray(jsonStr)) {
             log.error("暂时不支持集合解密");
             return request;
         }
@@ -163,7 +162,7 @@ public class RequestBodyDecryptAdapter extends IDecryptAdapter {
                 }
             }
 
-            return new ReplaceInputStreamHttpServletRequest(request, StrKit.hex2Byte(ObjectMapperKit.toJsonStr(jsonMap)));
+            return new ReplaceInputStreamHttpServletRequest(request, hex2Byte(ObjectMapperKit.toJsonStr(jsonMap)));
         } catch (Exception e) {
             log.error("解密body,json TO map时异常:{}", e);
         }

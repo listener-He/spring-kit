@@ -2,7 +2,6 @@ package org.hehh.cloud.spring.decrypt.adapter;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.hehh.cloud.common.utils.StrKit;
 import org.hehh.cloud.spring.decrypt.DecryptManager;
 import org.hehh.cloud.spring.decrypt.IDecrypt;
 import org.hehh.cloud.spring.decrypt.annotation.Decrypt;
@@ -49,6 +48,7 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
 
 
 
+
     /**
      * 是否支持解密
      *
@@ -86,13 +86,13 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
             /**
              *  不支持非json格式
              */
-            if(!StrKit.isJson(decryptStr)){
+            if(!isJsonObj(decryptStr) && !isJsonArray(decryptStr)){
                 throw new DecryptException("Unsupported non-json format");
             }
             /**
              *  提交的数据不应该是一个数组
              */
-            if(StrKit.isJsonArray(decryptStr)){
+            if(isJsonArray(decryptStr)){
                 throw new DecryptException("Submitted data should be key-value, not an array");
             }
 
