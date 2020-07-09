@@ -70,12 +70,12 @@ public class JsonDateFormat extends DateFormat {
      * For error messages we'll also need a list of all formats.
      */
     protected final static String[] ALL_FORMATS = new String[] {
+            DATE_FORMAT_TO_ALL,
+            DATE_FORMAT_TO_SECOND,
+            DATE_FORMAT_STR_PLAIN,
             DATE_FORMAT_STR_ISO8601,
             DATE_FORMAT_STR_ISO8601_Z,
             DATE_FORMAT_STR_RFC1123,
-            DATE_FORMAT_STR_PLAIN,
-            DATE_FORMAT_TO_ALL,
-            DATE_FORMAT_TO_SECOND,
             DATE_FORMAT_TO_MINUTE,
             HTTP_DATETIME_PATTERN,
             JDK_DATETIME_PATTERN,

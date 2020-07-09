@@ -86,13 +86,5 @@ public class WebMvcRegistrationsConfiguration  implements WebMvcRegistrations {
     }
 
 
-    /**
-     *  jask-json
-     * @return
-     */
-    @Bean
-    @Primary
-    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(){
-        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.timeZone(TimeZone.getTimeZone("GMT+8")).dateFormat(new JsonDateFormat(TimeZone.getTimeZone("GMT+8")));
-    }
+
 }
