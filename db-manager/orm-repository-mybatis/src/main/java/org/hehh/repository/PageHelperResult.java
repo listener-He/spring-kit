@@ -94,7 +94,7 @@ public class PageHelperResult<T> implements Page<T> {
             return result;
         }
 
-        return new PageHelperResult(0,0,0,0,null,false,0);
+        return new PageHelperResult(1,1,0,0,null,false,0);
     }
 
 
