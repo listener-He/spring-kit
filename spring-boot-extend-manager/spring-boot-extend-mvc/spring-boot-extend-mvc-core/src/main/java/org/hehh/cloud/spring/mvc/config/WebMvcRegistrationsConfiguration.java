@@ -4,14 +4,20 @@ import org.hehh.cloud.spring.mvc.request.method.HandelMethodAdapterManager;
 import org.hehh.cloud.spring.mvc.request.argument.HandlerMethodArgumentResolverEnhanceComposite;
 import org.hehh.cloud.spring.mvc.request.method.IHandlerMethodAdapter;
 import org.hehh.cloud.spring.mvc.request.argument.IHandlerMethodArgumentResolverAdapter;
+import org.hehh.cloud.spring.mvc.util.JsonDateFormat;
+import org.hehh.cloud.spring.mvc.util.ObjectMapperKit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerEnhanceAdapter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * @author: HeHui
@@ -77,5 +83,16 @@ public class WebMvcRegistrationsConfiguration  implements WebMvcRegistrations {
         }
         this.requestMappingHandlerAdapter =  new RequestMappingHandlerEnhanceAdapter(resolverEnhanceComposite,methodAdapterManager);
         return requestMappingHandlerAdapter;
+    }
+
+
+    /**
+     *  jask-json
+     * @return
+     */
+    @Bean
+    @Primary
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(){
+        return jacksonObjectMapperBuilder -> jacksonObjectMapperBuilder.timeZone(TimeZone.getTimeZone("GMT+8")).dateFormat(new JsonDateFormat(TimeZone.getTimeZone("GMT+8")));
     }
 }
