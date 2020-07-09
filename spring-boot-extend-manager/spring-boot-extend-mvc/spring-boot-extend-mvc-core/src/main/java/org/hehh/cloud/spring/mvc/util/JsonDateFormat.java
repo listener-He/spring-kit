@@ -114,7 +114,7 @@ public class JsonDateFormat extends DateFormat {
         DATE_FORMAT_ISO8601_Z.setTimeZone(DEFAULT_TIMEZONE);
         DATE_FORMAT_PLAIN = new SimpleDateFormat(DATE_FORMAT_STR_PLAIN);
         DATE_FORMAT_PLAIN.setTimeZone(DEFAULT_TIMEZONE);
-        DATE_FORMAT_ALL = new SimpleDateFormat(DATE_FORMAT_TO_ALL);
+        DATE_FORMAT_ALL = new SimpleDateFormat(DATE_FORMAT_TO_SECOND);
         DATE_FORMAT_ALL.setTimeZone(DEFAULT_TIMEZONE);
     }
 
