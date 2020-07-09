@@ -23,25 +23,8 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.hehh.cloud</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>${project.parent.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hehh.cloud</groupId>
-                    <artifactId>common-bean</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>cn.hutool</groupId>
-                    <artifactId>hutool-http</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>cn.hutool</groupId>
-                    <artifactId>hutool-system</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
+
 
     </dependencies>
 </project>
