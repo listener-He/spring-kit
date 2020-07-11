@@ -30,6 +30,7 @@
         </dependency>
 
 
+
         <!-- 此redis不打包编译 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

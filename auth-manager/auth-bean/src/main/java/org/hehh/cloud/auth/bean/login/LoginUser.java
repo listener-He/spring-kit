@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : HeHui
@@ -72,5 +73,26 @@ public class LoginUser implements java.io.Serializable {
      *  生成时间
      */
     private Long createTime;
+
+
+    /**
+     *  其他扩展参数
+     */
+    private Map<String,String> extend;
+
+
+    public Long longUserId(){
+        if(null != userId){
+            return Long.valueOf(userId);
+        }
+        return null;
+    }
+
+    public Integer intUserId(){
+        if(null != userId){
+            return Integer.valueOf(userId);
+        }
+        return null;
+    }
 
 }

@@ -1,7 +1,5 @@
 package org.hehh.cloud.auth.token.impl.redis;
 
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.auth.bean.login.LoginUser;
 import org.hehh.cloud.auth.token.TokenManager;
@@ -9,6 +7,7 @@ import org.hehh.cloud.auth.token.TokenOutmodedException;
 import org.hehh.cloud.auth.token.impl.jwt.JwtGenerate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -81,10 +80,9 @@ public class RedisJwtTokenManager implements TokenManager {
 
         Assert.notNull(user,"用户信息不能为空");
         Assert.hasText(user.getUserId(),"用户id不能为空");
+        Assert.hasText(user.getToken(),"用户token不能为空");
 
-        if(StrUtil.isBlank(user.getToken())){
-            user.setToken(IdUtil.fastSimpleUUID());
-        }
+
 
 
         /**
@@ -117,7 +115,7 @@ public class RedisJwtTokenManager implements TokenManager {
      */
     @Override
     public boolean validity(String token) {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             LoginUser user = jwtGenerate.getUser(token);
             return null != user && redisService.hasKey(user.getToken());
         }
@@ -133,7 +131,7 @@ public class RedisJwtTokenManager implements TokenManager {
      */
     @Override
     public LoginUser getUser(String token) {
-        if(StrUtil.isBlank(token)){
+        if(StringUtils.isEmpty(token)){
             return null;
         }
 
@@ -232,9 +230,9 @@ public class RedisJwtTokenManager implements TokenManager {
      */
     @Override
     public void remove(String token) {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             String id = jwtGenerate.getId(token);
-            if(StrUtil.isNotBlank(id) && redisService.hasKey(id)){
+            if(StringUtils.hasText(id) && redisService.hasKey(id)){
                 redisService.delete(id);
             }else{
                 log.warn("token不存在,{}", token);

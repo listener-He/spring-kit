@@ -1,14 +1,14 @@
 package org.hehh.cloud.auth.token.impl.redis;
 
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.auth.bean.login.LoginUser;
 import org.hehh.cloud.auth.token.TokenManager;
 import org.hehh.cloud.auth.token.TokenOutmodedException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,10 +49,10 @@ public class RedisTokenManager implements TokenManager {
     public String generateSign(LoginUser user) {
         Assert.notNull(user,"用户信息不能为空");
         Assert.hasText(user.getUserId(),"用户id不能为null");
+        Assert.hasText(user.getToken(),"用户token不能为null");
 
-        if(StrUtil.isBlank(user.getToken())){
-            user.setToken(IdUtil.fastSimpleUUID());
-        }
+
+
 
         user.setCreateTime(System.currentTimeMillis());
         try {
@@ -74,7 +74,7 @@ public class RedisTokenManager implements TokenManager {
      */
     @Override
     public boolean validity(String token) {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             return redisService.hasKey(token);
         }
         return false;
@@ -88,7 +88,7 @@ public class RedisTokenManager implements TokenManager {
      */
     @Override
     public LoginUser getUser(String token) {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             return redisService.opsForValue().get(token);
         }
         return null;
@@ -137,7 +137,7 @@ public class RedisTokenManager implements TokenManager {
      */
     @Override
     public long getExpired(String token) throws TokenOutmodedException {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             Long expire = redisService.getExpire(token, TimeUnit.MILLISECONDS);
             if(expire != null){
                 return System.currentTimeMillis() + expire;
@@ -156,7 +156,7 @@ public class RedisTokenManager implements TokenManager {
      */
     @Override
     public void remove(String token) {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             if(redisService.hasKey(token)){
                 redisService.delete(token);
             }else{
