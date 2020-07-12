@@ -1,6 +1,7 @@
 package org.hehh.cloud.auth.token.impl.redis;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hehh.cloud.auth.bean.LoginUserConstant;
 import org.hehh.cloud.auth.bean.login.LoginUser;
 import org.hehh.cloud.auth.token.TokenManager;
 import org.hehh.cloud.auth.token.TokenOutmodedException;
@@ -39,11 +40,7 @@ public class RedisJwtTokenManager implements TokenManager {
     private final RedisTemplate<String,Long> redisService;
 
 
-    /**
-     *  LoginUser 的过期时间是redis的过期时间
-     *    为了延长用户登陆时间时token无变化
-     */
-    private final long jwtIncrease = 315364000000L;
+
 
 
     /**
@@ -88,7 +85,7 @@ public class RedisJwtTokenManager implements TokenManager {
         /**
          *  jwt生成签名，jwt的有效时间 + 10年
          */
-        user.setOverdueTime(user.getOverdueTime() + jwtIncrease);
+        user.setOverdueTime(user.getOverdueTime() + LoginUserConstant.JWT_INCREASE);
 
         String token = jwtGenerate.createJwtToken(issuer, user);
 
@@ -96,7 +93,7 @@ public class RedisJwtTokenManager implements TokenManager {
             /**
              *  存redis时就设置为传入的过期时间
              */
-            redisService.opsForValue().set(user.getToken(),System.currentTimeMillis(),user.getOverdueTime() - jwtIncrease, TimeUnit.MILLISECONDS);
+            redisService.opsForValue().set(user.getToken(),System.currentTimeMillis(),user.getOverdueTime() - LoginUserConstant.JWT_INCREASE, TimeUnit.MILLISECONDS);
         }catch (Exception e){
             log.error("生成登陆签名异常,原因:{}", e);
         }
@@ -187,7 +184,7 @@ public class RedisJwtTokenManager implements TokenManager {
             /**
              *  延长时间
              */
-            redisService.opsForValue().set(user.getToken(),System.currentTimeMillis(),user.getOverdueTime() - jwtIncrease, TimeUnit.MILLISECONDS);
+            redisService.opsForValue().set(user.getToken(),System.currentTimeMillis(),user.getOverdueTime() - LoginUserConstant.JWT_INCREASE, TimeUnit.MILLISECONDS);
             return user.getToken();
         }catch (Exception e){
             log.error("延长登陆时间异常,原因:{}", e);
