@@ -9,8 +9,10 @@ public interface LimiterCallback<T> {
 
 
     /**
-     *  限流通过
-     * @return
+     * 通过
+     *
+     * @param latencyTime 延迟时间（秒）
+     * @return {@link T}
      */
-     T through();
+    T through(double latencyTime);
 }
