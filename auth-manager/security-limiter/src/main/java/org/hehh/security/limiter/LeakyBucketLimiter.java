@@ -205,4 +205,61 @@ public class LeakyBucketLimiter<T> implements Limiter<T> {
 
         }
     }
+
+
+
+
+
+
+    static class Funnel {
+        int capacity;//容量
+        float leakingRate;//漏斗流水速度
+        int leftQuota;//漏斗剩余空间
+        long leakingTs;//上一次漏水时间
+
+        public Funnel(int capacity, float leakingRate) {
+            this.capacity = capacity;
+            this.leakingRate = leakingRate;
+            this.leftQuota = capacity;
+            this.leakingTs = System.currentTimeMillis();
+        }
+
+        //计算剩余空间
+        void makeSpace() {
+            long nowTs = System.currentTimeMillis();
+            //距离上次开始漏水所经过的时间
+            long deltaTs = nowTs - leakingTs;
+            //距离上次开始漏水到现在总共漏水量
+            int deltaQuota = (int) (deltaTs * leakingRate);
+            if (deltaQuota < 0) { // 间隔时间太长，整数数字过大溢出
+                this.leftQuota = capacity;
+                this.leakingTs = nowTs;
+                return;
+            }
+            //漏的水太少 不计算腾出的空间
+            if (deltaQuota < 1) { // 腾出空间太小，最小单位是1
+                return;
+            }
+            //剩余的空间增加
+            this.leftQuota += deltaQuota;
+            //当前时间标记为上次漏水时间
+            this.leakingTs = nowTs;
+            //如果水全部漏完，剩余空间为漏斗总容量
+            if (this.leftQuota > this.capacity) {
+                this.leftQuota = this.capacity;
+            }
+        }
+
+        //开始漏水，传入需要的空间大小quota，返回是否能分配quota个空间
+        boolean watering(int quota) {
+            //计算剩余的空间
+            makeSpace();
+            //如果剩余空间充足，则分配quota个空间，返回true。不足则返回false
+            if (this.leftQuota >= quota) {
+                this.leftQuota -= quota;
+                return true;
+            }
+            return false;
+        }
+    }
 }
