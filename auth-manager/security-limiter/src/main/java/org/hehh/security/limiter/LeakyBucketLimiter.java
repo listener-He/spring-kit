@@ -37,6 +37,7 @@ public class LeakyBucketLimiter<T> implements PermitsLimiter<T> {
      */
     private long leakTimeStamp;
 
+    private final Funnel funnel;
 
     /**
      * 漏水的桶限幅器
@@ -50,6 +51,7 @@ public class LeakyBucketLimiter<T> implements PermitsLimiter<T> {
         this.leakRate = leakRate;
         this.permits = permits;
         this.leakTimeStamp = System.currentTimeMillis();
+        this.funnel = new Funnel(capacity,leakRate);
     }
 
 
@@ -162,12 +164,12 @@ public class LeakyBucketLimiter<T> implements PermitsLimiter<T> {
     public T acquire(int permits, long timeout, TimeUnit unit, LimiterCallback<T> callback) throws LimiterException {
         long millis = System.currentTimeMillis();
         if(timeout <= 0){
-            if(this.tryWatering(permits,millis)){
+            if(funnel.tryWatering(permits,millis)){
                return  callback.through(System.currentTimeMillis() - millis / SECONDS.toMicros(1L));
             }
         }else{
             long endTime = TimeUnit.MILLISECONDS.convert(timeout, unit);
-            if(this.watering(permits,millis,millis  +endTime)){
+            if(funnel.watering(permits,millis,millis  +endTime)){
                 return  callback.through(System.currentTimeMillis() - millis / SECONDS.toMicros(1L));
             }
         }
@@ -190,85 +192,139 @@ public class LeakyBucketLimiter<T> implements PermitsLimiter<T> {
 
 
     public static void main(String[] args) throws LimiterException {
-        Limiter<Double> limiter = new LeakyBucketLimiter<>(10,1,1);
+        Limiter<Double> limiter = new LeakyBucketLimiter<>(3,1,1);
 
         int a = 100;
         for (int i = 0; i < a; i++) {
             try {
-                Double acquire = limiter.acquire(3000, TimeUnit.MILLISECONDS, (x) -> {
+                Double acquire = limiter.acquire( 5,TimeUnit.SECONDS,(x) -> {
                     return x;
                 });
                 System.out.println("第"+(i+1)+"次成功"+acquire);
             }catch (Exception e){
-                e.printStackTrace();
             }
 
         }
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     *  漏桶
+     */
     static class Funnel {
-        int capacity;//容量
-        float leakingRate;//漏斗流水速度
-        int leftQuota;//漏斗剩余空间
-        long leakingTs;//上一次漏水时间
+        /**
+         * 总容量
+         */
+        private final int capacity;
+        /**
+         * 漏斗流水速度/每秒
+         */
+       private final float leakingRate;
 
-        public Funnel(int capacity, float leakingRate) {
+        /**
+         * 漏斗剩余空间
+         */
+       private int leftQuota;
+        /**
+         * 上一次漏水时间
+         */
+        private long leakingTs;
+
+
+        Funnel(int capacity, float leakingRate) {
             this.capacity = capacity;
             this.leakingRate = leakingRate;
             this.leftQuota = capacity;
             this.leakingTs = System.currentTimeMillis();
         }
 
-        //计算剩余空间
-        void makeSpace() {
-            long nowTs = System.currentTimeMillis();
-            //距离上次开始漏水所经过的时间
+        /**
+         * 计算剩余空间
+         * @param nowTs 当前毫秒
+         */
+        synchronized void makeSpace(long nowTs) {
+            /**
+             * 距离上次开始漏水所经过的时间
+             */
             long deltaTs = nowTs - leakingTs;
-            //距离上次开始漏水到现在总共漏水量
+            /**
+             * 距离上次开始漏水到现在总共漏水量
+             */
             int deltaQuota = (int) (deltaTs * leakingRate);
-            if (deltaQuota < 0) { // 间隔时间太长，整数数字过大溢出
+
+            /**
+             * 间隔时间太长，整数数字过大溢出
+             */
+            if (deltaQuota < 0) {
                 this.leftQuota = capacity;
                 this.leakingTs = nowTs;
                 return;
             }
-            //漏的水太少 不计算腾出的空间
-            if (deltaQuota < 1) { // 腾出空间太小，最小单位是1
+            /**
+             * 漏的水太少 不计算腾出的空间
+             *  腾出空间太小，最小单位是1
+             */
+            if (deltaQuota < 1) {
                 return;
             }
-            //剩余的空间增加
+            /**
+             * 剩余的空间增加
+             */
             this.leftQuota += deltaQuota;
-            //当前时间标记为上次漏水时间
+            /**
+             * 当前时间标记为上次漏水时间
+             */
             this.leakingTs = nowTs;
-            //如果水全部漏完，剩余空间为漏斗总容量
+            /**
+             * 如果水全部漏完，剩余空间为漏斗总容量
+             */
             if (this.leftQuota > this.capacity) {
                 this.leftQuota = this.capacity;
             }
         }
 
-        //开始漏水，传入需要的空间大小quota，返回是否能分配quota个空间
-        boolean watering(int quota) {
-            //计算剩余的空间
-            makeSpace();
-            //如果剩余空间充足，则分配quota个空间，返回true。不足则返回false
+
+
+        /**
+         * 开始漏水，传入需要的空间大小quota，返回是否能分配quota个空间
+         *   如果不够立马返回
+         * @param quota 漏水
+         * @param nowTs 当前毫秒
+         * @return
+         */
+        boolean tryWatering(int quota,long nowTs) {
+            /**
+             * 计算剩余的空间
+             */
+            makeSpace(nowTs);
+            /**
+             * 如果剩余空间充足，则分配quota个空间，返回true。不足则返回false
+             */
             if (this.leftQuota >= quota) {
                 this.leftQuota -= quota;
                 return true;
             }
             return false;
         }
+
+
+
+
+        boolean watering(int quota,long nowTs,Long endTime){
+            boolean temp = true;
+            try {
+                do {
+                   if(tryWatering(quota,System.currentTimeMillis())){
+                       temp = true;
+                       return true;
+                   }
+                   Thread.sleep(10L);
+                } while (temp || (endTime != null && System.currentTimeMillis() >= endTime));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
     }
 }
