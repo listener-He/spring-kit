@@ -10,7 +10,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @date: 2020-07-14 22:23
  * @description: 漏桶算法限流
  */
-public class LeakyBucketLimiter<T> implements Limiter<T> {
+public class LeakyBucketLimiter<T> implements PermitsLimiter<T> {
 
 
     /**
@@ -205,6 +205,15 @@ public class LeakyBucketLimiter<T> implements Limiter<T> {
 
         }
     }
+
+
+
+
+
+
+
+
+
 
 
 

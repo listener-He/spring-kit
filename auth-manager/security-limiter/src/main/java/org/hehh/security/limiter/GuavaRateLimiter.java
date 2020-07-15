@@ -12,7 +12,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @description: 基于谷歌的令牌限流器 中文文档: https://ifeve.com/guava-ratelimiter/
  */
 @SuppressWarnings("ALL")
-public class GuavaRateLimiter<T> implements Limiter<T> {
+public class GuavaRateLimiter<T> implements PermitsLimiter<T> {
 
     private final int permits;
 
