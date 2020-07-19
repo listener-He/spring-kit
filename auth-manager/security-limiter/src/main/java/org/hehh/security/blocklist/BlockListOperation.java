@@ -1,5 +1,6 @@
 package org.hehh.security.blocklist;
 
+import io.netty.util.internal.StringUtil;
 import org.hehh.security.IpRule;
 import org.hehh.security.NotDelException;
 
@@ -8,7 +9,7 @@ import org.hehh.security.NotDelException;
  * @date: 2020-06-17 11:28
  * @description: 黑名单操作类
  */
-public interface BlockListOperation {
+public interface BlockListOperation extends BlockList{
 
 
     /**
@@ -39,4 +40,20 @@ public interface BlockListOperation {
      * @return
      */
     BlockIpRule find(String ip);
+
+
+    /**
+     * 是否在黑名单中
+     *
+     * @param ip 客户端地址
+     * @return
+     */
+    @Override
+    default boolean accept(String ip){
+        if(StringUtil.isNullOrEmpty(ip)){
+            return false;
+        }
+        BlockIpRule rule = this.find(ip);
+        return  rule != null && rule.getExpirationTime() > System.currentTimeMillis();
+    }
 }

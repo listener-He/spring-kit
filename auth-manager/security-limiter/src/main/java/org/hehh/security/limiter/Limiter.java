@@ -45,7 +45,7 @@ public interface Limiter<T> {
      * @throws LimiterException
      */
     default T tryAcquire(LimiterCallback<T> callback) throws LimiterException {
-        return this.acquire(0,null,callback);
+        return this.acquire(0,TimeUnit.MILLISECONDS,callback);
     }
 
 }

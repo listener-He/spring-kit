@@ -8,7 +8,7 @@ import org.hehh.security.NotDelException;
  * @date: 2020-06-19 16:23
  * @description: 白名单操作类
  */
-public interface AllowListOperation {
+public interface AllowListOperation extends AllowList {
 
 
     /**
@@ -32,4 +32,16 @@ public interface AllowListOperation {
      * @return
      */
     boolean existing(String ip);
+
+
+    /**
+     * 是否在白名单中
+     *
+     * @param ip 客户端地址
+     * @return
+     */
+    @Override
+    default boolean accept(String ip){
+        return this.existing(ip);
+    }
 }

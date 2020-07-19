@@ -1,10 +1,6 @@
 package org.hehh.cloud.auth.bean;
 
 
-import org.hehh.cloud.auth.bean.login.LoginUser;
-
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /**
  * @author: HeHui
