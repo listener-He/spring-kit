@@ -1,6 +1,5 @@
 package org.hehh.cloud.common.bean.result;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

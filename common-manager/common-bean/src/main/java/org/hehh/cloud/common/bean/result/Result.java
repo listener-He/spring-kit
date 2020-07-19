@@ -3,6 +3,8 @@ package org.hehh.cloud.common.bean.result;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Optional;
+
 
 /**
  * @author : hehh
@@ -48,7 +50,7 @@ public class Result<T> implements java.io.Serializable {
 
 
     public Result() {
-        this.code = 0;
+        this.code = Code.OK.getCode();
     }
 
 
@@ -64,7 +66,29 @@ public class Result<T> implements java.io.Serializable {
     }
 
 
+    /**
+     *  是否成功
+     * @return
+     */
+    public boolean isOk(){
+        return this.code != null && code.equals(Code.OK.getCode());
+    }
 
+    /**
+     *  Optional方式获取 data
+     * @return
+     */
+    public Optional<T> optionalData(){
+        return Optional.ofNullable(data);
+    }
+
+
+    /**
+     * 转换成其他类型，注意 转换后 data就是null了
+     * @param tClass 目标类型
+     * @param <E>
+     * @return
+     */
     public <E> Result<E> conversion(Class<E> tClass){
         return new Result<E>(this.code, this.msg, null,this.timestamp);
     }
