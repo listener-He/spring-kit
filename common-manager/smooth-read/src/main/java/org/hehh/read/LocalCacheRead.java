@@ -1,5 +1,6 @@
 package org.hehh.read;
 
+import cn.hutool.core.thread.ThreadUtil;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 
 import java.util.List;
@@ -144,23 +145,25 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
     }
 
 
-    public static void main(String[] args) {
-        Read<Double,Integer> read = new LocalCacheRead<Integer>(10D, 61, new ReadStorage<Double, Integer>() {
-            @Override
-            public void increase(Integer key, Double n) {
-                
-            }
-
-            @Override
-            public void increase(Map<Integer, Double> data) {
-
-            }
-        },"read:test");
-
-        read.read(1,1D,null);
-        read.read(1,1D,null);
-
-
-
-    }
+//    public static void main(String[] args) {
+//        Read<Double,Integer> read = new LocalCacheRead<Integer>(10D, 61, new ReadStorage<Double, Integer>() {
+//            @Override
+//            public void increase(Integer key, Double n) {
+//                System.out.println("指定");
+//            }
+//
+//            @Override
+//            public void increase(Map<Integer, Double> data) {
+//                System.out.println("定时"+data.values().toString());
+//            }
+//        },"read:test");
+//
+//        read.read(1,1D,null);
+//        read.read(1,1D,null);
+//
+//        ThreadUtil.sleep(60000);
+//
+//        read.read(1,1D,null);
+//
+//    }
 }
