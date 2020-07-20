@@ -18,10 +18,7 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
 
     private ReadCache cache;
 
-    /**
-     *  缓存前缀
-     */
-    private final String cacheKey;
+
 
     /**
      * 阅读文摘
@@ -30,9 +27,8 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
      * @param jobSeconds  定时秒
      * @param readStorage 读取存储
      */
-    protected LocalCacheRead(Double maxRead, int jobSeconds, ReadStorage<Double, ID> readStorage,String cacheKey) {
+    public LocalCacheRead(Double maxRead, int jobSeconds, ReadStorage<Double, ID> readStorage,String cacheKey) {
         super(maxRead, jobSeconds, readStorage);
-        this.cacheKey = cacheKey;
         cache = new ReadCache(cacheKey);
     }
 

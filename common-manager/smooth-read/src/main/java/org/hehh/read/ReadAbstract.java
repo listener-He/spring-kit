@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author: HeHui
@@ -34,7 +35,7 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
     /**
      *  是否有过读取（决定是否处理任务）
      */
-    private boolean isRead = false;
+    private AtomicInteger isRead = new AtomicInteger(0);
 
 
 
@@ -74,12 +75,12 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      *  执行
      */
     protected void perform(){
-        if(isRead){
+        if(isRead.get() > 0){
             Optional<Map<ID, T>> optional = this.getAll();
             if(optional.isPresent() && !optional.get().isEmpty()){
                 readStorage.increase(optional.get());
                 this.clear();
-                isRead = false;
+                isRead.set(0);
             }
         }
 
@@ -99,6 +100,9 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      */
     @Override
     public void read(ID key, T n, String clientID) {
+
+        isRead.incrementAndGet();
+
         Optional<T> optional = this.increase(key, n);
         /**
          *  达到最大数条件
@@ -111,9 +115,7 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
             this.reduce(key,optional.get());
         }
 
-        if(!isRead){
-            isRead = true;
-        }
+
 
 
     }
