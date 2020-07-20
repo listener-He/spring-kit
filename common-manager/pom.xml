@@ -20,6 +20,7 @@
         <module>system-processor</module>
         <module>ffmpeg-processor</module>
         <module>file-processor</module>
+        <module>smooth-read</module>
     </modules>
 
 
