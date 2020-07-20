@@ -1,11 +1,11 @@
 package org.hehh.read;
 
-import org.springframework.cache.Cache;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 /**
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
 
 
-    private Cache cache;
+    private ReadCache cache;
 
     /**
      *  缓存前缀
@@ -33,7 +33,7 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
     protected LocalCacheRead(Double maxRead, int jobSeconds, ReadStorage<Double, ID> readStorage,String cacheKey) {
         super(maxRead, jobSeconds, readStorage);
         this.cacheKey = cacheKey;
-        cache = new ConcurrentMapCache(cacheKey,false);
+        cache = new ReadCache(cacheKey);
     }
 
 
@@ -84,17 +84,18 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
      */
     @Override
     Optional<Map<ID, Double>> getAll() {
-
-        return Optional.empty();
+        return Optional.ofNullable((Map) cache.getNativeCache());
     }
+
 
     /**
      * 清除
      */
     @Override
     void clear() {
-
+        cache.clear();
     }
+
 
     /**
      * 查询指定key的阅读数
@@ -104,8 +105,11 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
      */
     @Override
     public Optional<Double> getRead(ID key) {
-        return Optional.empty();
+        return Optional.ofNullable(cache.get(key, Double.class));
     }
+
+
+
 
     /**
      * 查询多个key的阅读数
@@ -115,6 +119,31 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
      */
     @Override
     public Optional<Map<ID, Double>> getReads(List<ID> keys) {
-        return Optional.empty();
+        return Optional.ofNullable((Map)cache.getNativeCache().entrySet().stream().filter(v->keys.contains(v.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+    }
+
+
+
+
+
+
+
+
+    /**
+     *  阅读室缓存
+     */
+    static class ReadCache extends ConcurrentMapCache{
+
+
+        /**
+         * Create a new ConcurrentMapCache with the specified name.
+         *
+         * @param name the name of the cache
+         */
+        public ReadCache(String name) {
+            super(name,false);
+        }
+
+
     }
 }
