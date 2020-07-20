@@ -88,8 +88,8 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
                 readStorage.increase(temp);
 
                 this.clear();
-                isRead.set(0);
             }
+            isRead.set(0);
         }
 
     }
