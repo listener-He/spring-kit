@@ -142,4 +142,25 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
 
 
     }
+
+
+    public static void main(String[] args) {
+        Read<Double,Integer> read = new LocalCacheRead<Integer>(10D, 61, new ReadStorage<Double, Integer>() {
+            @Override
+            public void increase(Integer key, Double n) {
+                
+            }
+
+            @Override
+            public void increase(Map<Integer, Double> data) {
+
+            }
+        },"read:test");
+
+        read.read(1,1D,null);
+        read.read(1,1D,null);
+
+
+
+    }
 }
