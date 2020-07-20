@@ -111,7 +111,10 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
             this.reduce(key,optional.get());
         }
 
-        isRead = true;
+        if(!isRead){
+            isRead = true;
+        }
+
 
     }
 
