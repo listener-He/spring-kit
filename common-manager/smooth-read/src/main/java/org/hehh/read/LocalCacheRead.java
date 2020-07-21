@@ -145,7 +145,7 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
 
 
 //    public static void main(String[] args) {
-//        Read<Double,Integer> read = new LocalCacheRead<Integer>(10D, 61, new ReadStorage<Double, Integer>() {
+//        Read<Double,Integer> read = new LocalCacheRead<Integer>(3D, 61, new ReadStorage<Double, Integer>() {
 //            @Override
 //            public void increase(Integer key, Double n) {
 //                System.out.println("指定");
@@ -160,9 +160,12 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
 //        read.read(1,1D,null);
 //        read.read(1,1D,null);
 //
-//        ThreadUtil.sleep(60000);
+//        ThreadUtil.sleep(30000);
 //
-//        read.read(1,1D,null);
+//        int a = 8;
+//        for (int i = 0; i < a; i++) {
+//            read.read(1,1D,null);
+//        }
 //
 //    }
 }

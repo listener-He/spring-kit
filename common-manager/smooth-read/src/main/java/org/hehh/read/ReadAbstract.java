@@ -66,7 +66,7 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      */
     private void initJob(){
         ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
-        scheduledExecutorService.scheduleWithFixedDelay(this::perform,3,jobSeconds, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleWithFixedDelay(this::perform,0,jobSeconds, TimeUnit.SECONDS);
     }
 
 
@@ -89,7 +89,7 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
 
                 this.clear();
             }
-            isRead.set(0);
+            isRead.getAndSet(0);
         }
 
     }
