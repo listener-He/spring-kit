@@ -138,7 +138,7 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      * @param n   阅读数
      * @return {@link T} 返回阅读数
      */
-    abstract Optional<T> increase(ID key, T n);
+    protected abstract Optional<T> increase(ID key, T n);
 
 
 
@@ -148,7 +148,7 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      * @param key 关键
      * @param n   阅读数
      */
-    abstract void reduce(ID key,T n);
+    protected abstract void reduce(ID key,T n);
 
 
     /**
@@ -156,11 +156,11 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      *
      * @return {@link Map<ID, T>}
      */
-    abstract Optional<Map<ID,T>> getAll();
+    protected abstract Optional<Map<ID,T>> getAll();
 
 
     /**
      * 清除
      */
-    abstract void clear();
+    protected abstract void clear();
 }

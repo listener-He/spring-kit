@@ -106,7 +106,7 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
      * @return {@link Double} 返回阅读数
      */
     @Override
-    Optional<Double> increase(ID key, Double n) {
+    protected Optional<Double> increase(ID key, Double n) {
         return Optional.ofNullable(hash.increment(key,n));
     }
 
@@ -126,7 +126,7 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
      * @param n   阅读数
      */
     @Override
-    void reduce(ID key, Double n) {
+    protected void reduce(ID key, Double n) {
         hash.increment(key,-n);
     }
 
@@ -136,7 +136,7 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
      * @return {@link Map <ID, T>}
      */
     @Override
-    Optional<Map<ID,Double>> getAll() {
+    protected Optional<Map<ID,Double>> getAll() {
         return Optional.ofNullable(hash.entries());
     }
 
@@ -146,7 +146,7 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
      * 清除
      */
     @Override
-    void clear() {
+    protected void clear() {
         redisOperations.delete(cacheKey);
     }
 

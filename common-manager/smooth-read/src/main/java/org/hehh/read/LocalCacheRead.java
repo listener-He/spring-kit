@@ -41,7 +41,7 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
      * @return {@link Double} 返回阅读数
      */
     @Override
-    Optional<Double> increase(ID key, Double n) {
+    protected Optional<Double> increase(ID key, Double n) {
         Double aDouble = cache.get(key, Double.class);
         if(aDouble == null){
             aDouble = 0D;
@@ -61,7 +61,7 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
      * @param n   阅读数
      */
     @Override
-    void reduce(ID key, Double n) {
+    protected void reduce(ID key, Double n) {
         Double aDouble = cache.get(key, Double.class);
         if(aDouble != null){
             if(aDouble <= n){
@@ -79,7 +79,7 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
      * @return {@link Map <ID, T>}
      */
     @Override
-    Optional<Map<ID, Double>> getAll() {
+    protected Optional<Map<ID, Double>> getAll() {
         return Optional.ofNullable((Map) cache.getNativeCache());
     }
 
@@ -88,7 +88,7 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
      * 清除
      */
     @Override
-    void clear() {
+    protected void clear() {
         cache.clear();
     }
 
