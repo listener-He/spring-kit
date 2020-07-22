@@ -2,9 +2,11 @@ package org.hehh.read;
 
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 
@@ -80,7 +82,14 @@ public class LocalCacheRead<ID> extends ReadAbstract<Double,ID>{
      */
     @Override
     protected Optional<Map<ID, Double>> getAll() {
-        return Optional.ofNullable((Map) cache.getNativeCache());
+        /**
+          *  创建一个map把当前的数据放入此map中(如果不放进去，下面this.clear()清除时。数据就为空了)
+          */
+        ConcurrentMap<Object, Object> cacheMap = cache.getNativeCache();
+        if(cacheMap == null || !cacheMap.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.ofNullable((Map) new HashMap<>(cacheMap));
     }
 
 
