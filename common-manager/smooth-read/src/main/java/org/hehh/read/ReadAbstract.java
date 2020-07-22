@@ -1,6 +1,5 @@
 package org.hehh.read;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
@@ -78,21 +77,13 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
     protected void perform(){
         if(isRead.get() > 0){
             this.getAll().ifPresent(data->{
-                readStorage.increase(data);
-                this.clear();
+                try {
+                    readStorage.increase(data);
+                    this.clear();
+                }catch (Exception e){
+                    //TODO if exception then ?
+                }
             });
-//            Optional<Map<ID, T>> optional = this.getAll();
-//            if(optional.isPresent() && !optional.get().isEmpty()){
-//
-//                /**
-//                 *  创建一个map把当前的数据放入此map中(如果不放进去，下面this.clear()清除时。数据就为空了)
-//                 */
-//                Map<ID, T> temp = new HashMap<>(optional.get().size());
-//                temp.putAll(optional.get());
-//                readStorage.increase(temp);
-//
-//                this.clear();
-//            }
             isRead.getAndSet(0);
         }
 
@@ -112,23 +103,21 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      */
     @Override
     public void read(ID key, T n, String clientID) {
-
+        //TODO if clientID not null ?
         isRead.incrementAndGet();
 
-        Optional<T> optional = this.increase(key, n);
-        /**
-         *  达到最大数条件
-         */
-        if(optional.isPresent() && optional.get().doubleValue() >= maxRead.doubleValue()){
-            readStorage.increase(key,optional.get());
+        this.increase(key, n).ifPresent(d -> {
             /**
-             *  缓存中马上减少对应数
+             *  达到最大数条件
              */
-            this.reduce(key,optional.get());
-        }
-
-
-
+            if(d.doubleValue() >= maxRead.doubleValue()){
+                readStorage.increase(key,d);
+                /**
+                 *  缓存中马上减少对应数
+                 */
+                this.reduce(key,d);
+            }
+        });
 
     }
 
