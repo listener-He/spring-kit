@@ -15,6 +15,7 @@
         <module>spring-boot-extend-validator</module>
         <module>spring-boot-extend-mvc</module>
         <module>spring-boot-extend-core</module>
+        <module>spring-boot-starter</module>
     </modules>
 
     <dependencies>
@@ -22,9 +23,43 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-
-
-
-
+        <dependency>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>common-core</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <testSource>${java.version}</testSource>
+                    <testTarget>${java.version}</testTarget>
+                </configuration>
+            </plugin>
+
+
+
+            <!-- 配置源库 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

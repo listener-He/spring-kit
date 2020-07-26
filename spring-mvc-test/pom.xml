@@ -23,14 +23,10 @@
     <dependencies>
 
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.hehh.cloud</groupId>
-            <artifactId>spring-boot-extend-crypto</artifactId>
+            <artifactId>spring-boot-web-starter</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

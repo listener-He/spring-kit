@@ -2,7 +2,6 @@ package org.hehh.cloud.validator;
 
 import org.hehh.cloud.validator.annotation.Chinese;
 import org.hehh.utils.StrKit;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 

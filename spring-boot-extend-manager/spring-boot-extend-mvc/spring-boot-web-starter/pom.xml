@@ -9,35 +9,24 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spring-boot-extend-mvc-core</artifactId>
-
-
+    <artifactId>spring-boot-web-starter</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <scope>provided</scope>
         </dependency>
-
-
-
-
+        <dependency>
+            <groupId>org.hehh.cloud</groupId>
+            <artifactId>spring-boot-extend-crypto</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hehh.cloud</groupId>
+            <artifactId>common-bean</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
     </dependencies>
-
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
 
 
     <build>
@@ -55,6 +44,9 @@
                 </configuration>
             </plugin>
 
+
+
+            <!-- 配置源库 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
