@@ -20,7 +20,7 @@ import java.util.List;
  * @description: 加解密配置
  **/
 @Configuration
-@AutoConfigureAfter(DecryptConfiguration.class)
+@AutoConfigureAfter(RequestAutoConfiguration.class)
 public class CryptoConfigurerComposite implements CryptoConfiguration {
 
     @Autowired
