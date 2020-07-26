@@ -26,6 +26,11 @@
             <artifactId>common-bean</artifactId>
             <version>${parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hehh.cloud</groupId>
+            <artifactId>security-limiter</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
     </dependencies>
 
 

@@ -31,7 +31,7 @@ import java.util.Properties;
  **/
 @Configuration
 @ConditionalOnWebApplication
-@EnableConfigurationProperties(FtlParamConfig.class)
+@EnableConfigurationProperties(FtlParameter.class)
 @ConditionalOnBean({FreeMarkerConfigurer.class})
 @Slf4j
 public class FtlConfig {
@@ -46,7 +46,7 @@ public class FtlConfig {
 
 
     @Autowired
-    private FtlParamConfig ftlParamConfig;
+    private FtlParameter ftlParamConfig;
 
 
 

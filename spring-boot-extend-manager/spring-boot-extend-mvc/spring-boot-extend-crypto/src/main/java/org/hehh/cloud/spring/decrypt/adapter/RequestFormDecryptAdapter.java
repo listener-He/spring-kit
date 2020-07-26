@@ -9,6 +9,7 @@ import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
 import org.hehh.cloud.spring.exception.DecryptException;
 import org.hehh.cloud.spring.mvc.request.ReplaceParamHttpServletRequest;
 import org.hehh.cloud.spring.mvc.crypto.IDecryptAdapter;
+import org.hehh.utils.StrKit;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
@@ -86,13 +87,13 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
             /**
              *  不支持非json格式
              */
-            if(!isJsonObj(decryptStr) && !isJsonArray(decryptStr)){
+            if(!StrKit.isJson(decryptStr)){
                 throw new DecryptException("Unsupported non-json format");
             }
             /**
              *  提交的数据不应该是一个数组
              */
-            if(isJsonArray(decryptStr)){
+            if(StrKit.isJsonArray(decryptStr)){
                 throw new DecryptException("Submitted data should be key-value, not an array");
             }
 

@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.crypto.config;
+package org.hehh.cloud.spring.mvc.config;
 
 import org.hehh.cloud.spring.decrypt.*;
 import org.hehh.cloud.spring.decrypt.adapter.RequestBodyDecryptAdapter;
@@ -7,14 +7,9 @@ import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
 import org.hehh.cloud.spring.mvc.crypto.CryptoConfiguration;
 import org.hehh.cloud.spring.mvc.crypto.IDecryptAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +20,7 @@ import java.util.List;
  * @description: 加解密配置
  **/
 @Configuration
-//@EnableConfigurationProperties(DecryptParameter.class)
+@AutoConfigureAfter(DecryptConfiguration.class)
 public class CryptoConfigurerComposite implements CryptoConfiguration {
 
     @Autowired
@@ -46,4 +41,5 @@ public class CryptoConfigurerComposite implements CryptoConfiguration {
     public List<IDecryptAdapter> getDecryptAdapters() {
         return Arrays.asList(new RequestBodyDecryptAdapter(decryptManager, decryptParameter), new RequestFormDecryptAdapter(decryptManager, decryptParameter));
     }
+
 }

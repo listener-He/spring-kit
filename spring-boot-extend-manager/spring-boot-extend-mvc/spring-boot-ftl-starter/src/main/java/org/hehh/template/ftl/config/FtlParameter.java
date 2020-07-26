@@ -14,7 +14,7 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "spring.ftl")
 @EnableConfigurationProperties
 @Data
-public class FtlParamConfig {
+public class FtlParameter {
 
 
     /**

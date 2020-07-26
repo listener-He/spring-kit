@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.crypto.config;
+package org.hehh.cloud.spring.mvc.config;
 
 import org.hehh.cloud.spring.decrypt.AesDecrypt;
 import org.hehh.cloud.spring.decrypt.DesDecrypt;

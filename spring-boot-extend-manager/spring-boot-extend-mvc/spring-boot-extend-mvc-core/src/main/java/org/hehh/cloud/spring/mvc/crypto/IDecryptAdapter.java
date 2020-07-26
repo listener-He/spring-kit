@@ -26,51 +26,10 @@ public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
 
 
 
-    /**
-     * 是否为JSONObject字符串，首尾都为大括号判定为JSONObject字符串
-     *
-     * @param str 字符串
-     * @return 是否为JSON字符串
-     * @since 3.3.0
-     */
-    public static boolean isJsonObj(String str) {
-        if (StrUtil.isBlank(str)) {
-            return false;
-        }
-        return StrUtil.isWrap(str.trim(), '{', '}');
-    }
-
-    /**
-     * 是否为JSONArray字符串，首尾都为中括号判定为JSONArray字符串
-     *
-     * @param str 字符串
-     * @return 是否为JSON字符串
-     * @since 3.3.0
-     */
-    public static boolean isJsonArray(String str) {
-        if (StrUtil.isBlank(str)) {
-            return false;
-        }
-        return StrUtil.isWrap(str.trim(), '[', ']');
-    }
 
 
-    /**
-     * 十六进制字符串转二进位组
-     * @param hexStr 十六进制字符串
-     * @return 二进位组
-     */
-    public static byte[] hex2Byte(String hexStr) {
-        if (hexStr.length() < 1) return null;
-        byte[] result = new byte[hexStr.length() / 2];
 
-        for (int i = 0; i < hexStr.length() / 2; i++) {
-            int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
-            int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16);
-            result[i] = (byte) (high * 16 + low);
-        }
-        return result;
-    }
+
 
 
     /**

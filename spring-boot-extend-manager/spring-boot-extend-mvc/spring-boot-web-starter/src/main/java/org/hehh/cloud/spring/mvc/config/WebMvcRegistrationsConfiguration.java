@@ -1,5 +1,6 @@
 package org.hehh.cloud.spring.mvc.config;
 
+import org.hehh.cloud.spring.core.CoreConfiguration;
 import org.hehh.cloud.spring.mvc.request.method.HandelMethodAdapterManager;
 import org.hehh.cloud.spring.mvc.request.argument.HandlerMethodArgumentResolverEnhanceComposite;
 import org.hehh.cloud.spring.mvc.request.method.IHandlerMethodAdapter;
@@ -7,9 +8,11 @@ import org.hehh.cloud.spring.mvc.request.argument.IHandlerMethodArgumentResolver
 import org.hehh.cloud.spring.mvc.util.JsonDateFormat;
 import org.hehh.cloud.spring.mvc.util.ObjectMapperKit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -24,9 +27,9 @@ import java.util.TimeZone;
  * @create: 2020-03-22 18:55
  * @description: spring mvc注册配置
  **/
+@AutoConfigureAfter(CoreConfiguration.class)
+@Import(CoreConfiguration.class)
 public class WebMvcRegistrationsConfiguration  implements WebMvcRegistrations {
-
-
 
 
 
