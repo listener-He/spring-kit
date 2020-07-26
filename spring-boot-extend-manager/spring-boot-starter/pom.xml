@@ -14,8 +14,8 @@
     <dependencies>
         <dependency>
             <groupId>org.hehh.cloud</groupId>
-            <artifactId>spring-boot-extend-core</artifactId>
-            <version>2.2.5.RELEASE</version>
+            <artifactId>spring-boot-extend-validator</artifactId>
+            <version>${parent.version}</version>
         </dependency>
     </dependencies>
 
