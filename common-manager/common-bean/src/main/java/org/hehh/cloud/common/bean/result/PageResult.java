@@ -19,7 +19,6 @@ public class PageResult<T> extends Result<List<T>> {
      */
     private Long pageTotal;
 
-
     /**
      * 总页数
      */
@@ -27,6 +26,11 @@ public class PageResult<T> extends Result<List<T>> {
 
 
     private Integer pageNumber;
+
+    /**
+     * 是否有下一页
+     */
+    private Boolean next;
 
 
 
