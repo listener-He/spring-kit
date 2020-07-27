@@ -115,7 +115,7 @@ public class LocalReadLock implements ILock  {
      * @return {@link Optional <T> }* @throws LockException 锁例外
      */
     @Override
-    public <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws LockException {
+    public <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws Throwable {
 
         try {
             Lock lock = getLock(key, time, timeUnit);

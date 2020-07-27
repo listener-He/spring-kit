@@ -26,7 +26,7 @@ public class RedisLock implements ILock {
     /**
      *  redis操作类
      */
-    private final RedisOperations<String,Object> redisOperations;
+    private final RedisOperations<String,String> redisOperations;
 
     /**
      *  前缀
@@ -37,17 +37,17 @@ public class RedisLock implements ILock {
 
     private final String script;
 
-    public RedisLock(RedisOperations<String, Object> redisOperations) {
+    public RedisLock(RedisOperations<String, String> redisOperations) {
         this(redisOperations,null);
     }
 
 
-    public RedisLock(RedisOperations<String, Object> redisOperations,String prefix) {
+    public RedisLock(RedisOperations<String, String> redisOperations,String prefix) {
         this(redisOperations,prefix,"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end");
     }
 
 
-    public RedisLock(RedisOperations<String, Object> redisOperations,String prefix,String script) {
+    public RedisLock(RedisOperations<String, String> redisOperations,String prefix,String script) {
         assert redisOperations != null : "redis-lock 操作类不能为空";
         this.redisOperations = redisOperations;
         this.prefix = prefix;
@@ -99,7 +99,7 @@ public class RedisLock implements ILock {
      * @return {@link Optional <T> }* @throws LockException 锁例外
      */
     @Override
-    public <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws LockException {
+    public <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws Throwable {
         getLock(finalPath(key), time, timeUnit);
         return Optional.ofNullable(callback.doInLock());
     }

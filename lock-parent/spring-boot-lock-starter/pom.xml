@@ -9,13 +9,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>lock-core</artifactId>
+    <artifactId>spring-boot-lock-starter</artifactId>
 
 
     <dependencies>
         <dependency>
             <groupId>org.hehh.cloud</groupId>
-            <artifactId>lock-annotations</artifactId>
+            <artifactId>lock-core</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <dependency>
@@ -23,7 +23,12 @@
             <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
     </dependencies>
+
 
 
     <build>
@@ -60,4 +65,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

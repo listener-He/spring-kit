@@ -13,5 +13,5 @@ public interface LockCallback<T> {
      *  拿到锁了，等待释放
      * @return
      */
-    T doInLock();
+    T doInLock() throws Throwable;
 }

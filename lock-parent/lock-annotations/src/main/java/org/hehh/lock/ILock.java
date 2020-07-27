@@ -31,7 +31,7 @@ public interface ILock {
      * @param callback 回调
      * @return {@link Optional<T> }* @throws LockException 锁例外
      */
-    <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws LockException;
+    <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws Throwable;
 
 
 

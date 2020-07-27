@@ -15,6 +15,7 @@
     <modules>
         <module>lock-annotations</module>
         <module>lock-core</module>
+        <module>spring-boot-lock-starter</module>
     </modules>
 
     <dependencies>

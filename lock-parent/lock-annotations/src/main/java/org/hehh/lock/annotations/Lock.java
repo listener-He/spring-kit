@@ -41,6 +41,12 @@ public @interface Lock {
 
 
     /**
+     *  锁的bean-name
+     * @return
+     */
+    String lock() default "";
+
+    /**
      *  锁的超时时间
      * @return
      */
