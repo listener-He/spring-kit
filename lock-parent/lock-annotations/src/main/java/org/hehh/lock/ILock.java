@@ -2,6 +2,7 @@ package org.hehh.lock;
 
 import org.hehh.lock.exception.LockException;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,9 +29,9 @@ public interface ILock {
      * @param time     时间
      * @param timeUnit 时间单位
      * @param callback 回调
-     * @return {@link T}* @throws LockException 锁例外
+     * @return {@link Optional<T> }* @throws LockException 锁例外
      */
-    <T> T mutex(String key,long time, TimeUnit timeUnit,LockCallback<T> callback) throws LockException;
+    <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws LockException;
 
 
 
