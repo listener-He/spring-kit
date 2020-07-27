@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>lock-annotations</module>
-        <module>lock-redis</module>
+        <module>lock-core</module>
     </modules>
 
     <dependencies>
