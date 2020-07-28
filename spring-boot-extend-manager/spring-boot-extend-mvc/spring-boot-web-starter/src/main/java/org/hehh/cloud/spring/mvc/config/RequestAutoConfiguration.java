@@ -1,5 +1,6 @@
 package org.hehh.cloud.spring.mvc.config;
 
+import org.hehh.cloud.spring.core.CoreConfiguration;
 import org.hehh.cloud.spring.decrypt.AesDecrypt;
 import org.hehh.cloud.spring.decrypt.DesDecrypt;
 import org.hehh.cloud.spring.decrypt.IDecrypt;
@@ -9,6 +10,7 @@ import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
 import org.hehh.cloud.spring.mvc.crypto.IDecryptAdapter;
 import org.hehh.cloud.spring.mvc.filter.GlobalLimiterFilter;
 import org.hehh.cloud.spring.mvc.parameter.GlobalLimitingParameter;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,6 +26,7 @@ import java.util.List;
  * @description: 配置类
  **/
 @Configuration
+@AutoConfigureAfter(CoreConfiguration.class)
 public class RequestAutoConfiguration {
 
 

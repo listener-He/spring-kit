@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.hehh.cloud.spring.mvc.config.CryptoConfigurerComposite,org.hehh.cloud.spring.mvc.config.RequestAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.hehh.cloud.spring.core.CoreConfiguration,org.hehh.cloud.spring.mvc.config.RequestAutoConfiguration,org.hehh.cloud.spring.mvc.config.CryptoConfigurerComposite

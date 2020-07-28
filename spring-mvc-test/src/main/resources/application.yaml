@@ -17,5 +17,5 @@ spring:
       sort-properties-alphabetically: false
   decrypt:
     method: AES
-    valueModel: true
+    valueModel: false
     privateKey: bdb356ec3d924a98800a68637e705af6
