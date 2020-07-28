@@ -70,7 +70,7 @@ public class Result<T> implements java.io.Serializable {
      *  是否成功
      * @return
      */
-    public boolean isOk(){
+    public boolean ok(){
         return this.code != null && code.equals(Code.OK.getCode());
     }
 
