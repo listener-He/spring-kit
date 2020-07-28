@@ -23,6 +23,11 @@
         </dependency>
         <dependency>
             <groupId>org.hehh.cloud</groupId>
+            <artifactId>spring-boot-extend-validator</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hehh.cloud</groupId>
             <artifactId>common-bean</artifactId>
             <version>${parent.version}</version>
         </dependency>
