@@ -27,7 +27,6 @@ public class TestController {
 
 
 
-
     @GetMapping("/2")
     public Result test1(@RequestBody @Decrypt Result<String> test1){
         return test1;
