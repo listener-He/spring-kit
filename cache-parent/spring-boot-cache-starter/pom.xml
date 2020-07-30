@@ -12,10 +12,7 @@
     <artifactId>spring-boot-cache-starter</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.hehh.cloud</groupId>
             <artifactId>cache-core</artifactId>
