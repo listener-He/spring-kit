@@ -54,7 +54,7 @@ public class EhCache3Parameter extends CacheParameter {
     /**
      *  disk是否启用
      */
-    private boolean diskEnable = false;
+    private Boolean diskEnable = false;
 
 
 
