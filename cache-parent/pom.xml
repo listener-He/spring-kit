@@ -11,8 +11,12 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cache-parent</artifactId>
-
-
+    <packaging>pom</packaging>
+    <modules>
+        <module>cache-annotations</module>
+        <module>cache-core</module>
+        <module>spring-boot-cache-starter</module>
+    </modules>
 
 
 </project>
