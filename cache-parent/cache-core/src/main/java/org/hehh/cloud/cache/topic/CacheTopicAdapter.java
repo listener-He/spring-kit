@@ -7,10 +7,6 @@ package org.hehh.cloud.cache.topic;
  */
 public interface CacheTopicAdapter {
 
-    /**
-     *  获取topic主题名
-     * @return
-     */
-    String getTopicName();
+
 
 }
