@@ -1,13 +1,11 @@
 package org.hehh.cloud.cache.redis;
 
-import org.hehh.cloud.cache.CacheConfigurationParameter;
 import org.hehh.cloud.cache.CacheParameter;
 import org.hehh.cloud.cache.ehcache2.EhCache2Builders;
 import org.hehh.cloud.cache.ehcache2.EhCache2ConfigurationParameter;
 import org.hehh.cloud.cache.ehcache3.EhCache3CacheManager;
 import org.hehh.cloud.cache.ehcache3.EhCache3ConfigurationParameter;
-import org.hehh.cloud.cache.ehcache3.EhCache3Parameter;
-import org.hehh.cloud.cache.ehcache3.MoreCacheManager;
+import org.hehh.cloud.cache.MoreCacheManager;
 import org.hehh.cloud.cache.topic.CacheNotice;
 import org.hehh.cloud.cache.topic.CacheTopicOperations;
 import org.springframework.cache.Cache;

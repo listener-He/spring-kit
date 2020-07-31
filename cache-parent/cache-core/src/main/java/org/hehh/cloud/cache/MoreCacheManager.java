@@ -1,4 +1,4 @@
-package org.hehh.cloud.cache.ehcache3;
+package org.hehh.cloud.cache;
 
 import org.springframework.cache.CacheManager;
 
