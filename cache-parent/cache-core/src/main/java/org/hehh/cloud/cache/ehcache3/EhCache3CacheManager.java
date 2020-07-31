@@ -4,9 +4,7 @@ import org.ehcache.CacheManager;
 import org.ehcache.Status;
 import org.ehcache.config.CacheConfiguration;
 import org.hehh.cloud.cache.CacheConfigurationParameter;
-import org.hehh.cloud.cache.EhCache3Parameter;
 import org.springframework.cache.Cache;
-import org.springframework.cache.ehcache.EhCacheCache;
 import org.springframework.cache.transaction.AbstractTransactionSupportingCacheManager;
 import org.springframework.util.Assert;
 

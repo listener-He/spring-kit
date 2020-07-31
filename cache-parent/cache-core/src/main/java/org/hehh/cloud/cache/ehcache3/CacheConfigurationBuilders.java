@@ -13,7 +13,6 @@ import org.ehcache.core.EhcacheManager;
 import org.ehcache.impl.persistence.DefaultDiskResourceService;
 import org.ehcache.xml.XmlConfiguration;
 import org.hehh.cloud.cache.CacheConfigurationParameter;
-import org.hehh.cloud.cache.EhCache3Parameter;
 import org.springframework.util.StringUtils;
 
 import java.io.File;

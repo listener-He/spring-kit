@@ -1,8 +1,10 @@
-package org.hehh.cloud.cache;
+package org.hehh.cloud.cache.ehcache2;
 
 import lombok.Data;
+import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import net.sf.ehcache.store.Policy;
 import net.sf.ehcache.store.disk.DiskStore;
+import org.hehh.cloud.cache.CacheParameter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import java.util.concurrent.TimeUnit;
@@ -82,6 +84,6 @@ public class EhCache2Parameter extends CacheParameter {
      *   LFU， 缓存的元素有一个hit属性，hit值最小的将会被清出缓存。
      *   LRU，缓存的元素有一个时间戳，当缓存容量满了，而又需要腾出地方来缓存新的元素的时候，那么现有缓存元素中时间戳离当前时间最远的元素将被清出缓存。
      */
-    private Policy memoryStoreEvictionPolicy;
+    private MemoryStoreEvictionPolicy memoryStoreEvictionPolicy;
 
 }

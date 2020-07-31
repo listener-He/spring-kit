@@ -1,13 +1,18 @@
-package org.hehh.cloud.cache;
+package org.hehh.cloud.cache.redis;
 
+import org.hehh.cloud.cache.CacheConfigurationParameter;
+import org.hehh.cloud.cache.CacheParameter;
+import org.hehh.cloud.cache.ehcache2.EhCache2Builders;
+import org.hehh.cloud.cache.ehcache2.EhCache2ConfigurationParameter;
 import org.hehh.cloud.cache.ehcache3.EhCache3CacheManager;
+import org.hehh.cloud.cache.ehcache3.EhCache3ConfigurationParameter;
+import org.hehh.cloud.cache.ehcache3.EhCache3Parameter;
 import org.hehh.cloud.cache.ehcache3.MoreCacheManager;
-import org.hehh.cloud.cache.redis.RedisCacheManagerBuilders;
-import org.hehh.cloud.cache.redis.RedisTwoCache;
 import org.hehh.cloud.cache.topic.CacheNotice;
 import org.hehh.cloud.cache.topic.CacheTopicOperations;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.support.AbstractCacheManager;
 import org.springframework.cache.transaction.AbstractTransactionSupportingCacheManager;
 import org.springframework.data.redis.cache.RedisCache;
@@ -38,17 +43,34 @@ public class RedisTwoCacheManager extends AbstractTransactionSupportingCacheMana
 
 
     /**
-     * 复述,两个缓存管理器
+     * redis - ehcache3.0,两个缓存管理器
      *
      * @param connectionFactory 连接工厂
      * @param parameter         参数
      * @param topicOperations   主题操作
      */
-    public RedisTwoCacheManager(RedisConnectionFactory connectionFactory, CacheConfigurationParameter<EhCache3Parameter> parameter,
+    public RedisTwoCacheManager(RedisConnectionFactory connectionFactory, EhCache3ConfigurationParameter parameter,
                                 CacheTopicOperations<CacheNotice> topicOperations){
 
         this(connectionFactory,(List)parameter.getCaches(),new EhCache3CacheManager(parameter) ,topicOperations,parameter.getTopicName());
     }
+
+
+
+
+    /**
+     * redis - ehcache2.0,两个缓存管理器
+     *
+     * @param connectionFactory 连接工厂
+     * @param parameter         参数
+     * @param topicOperations   主题操作
+     */
+    public RedisTwoCacheManager(RedisConnectionFactory connectionFactory, EhCache2ConfigurationParameter parameter,
+                                CacheTopicOperations<CacheNotice> topicOperations){
+        this(connectionFactory,(List)parameter.getCaches(),new EhCacheCacheManager(EhCache2Builders.builder(parameter)) ,topicOperations,parameter.getTopicName());
+    }
+
+
 
 
 

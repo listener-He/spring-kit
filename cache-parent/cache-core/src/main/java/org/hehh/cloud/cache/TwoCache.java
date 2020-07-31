@@ -38,6 +38,8 @@ public class TwoCache extends AbstractValueAdaptingCache implements MoreCache {
         this.oneCache = oneCache;
         this.topicName = topicName;
         this.topicOperations = topicOperations;
+
+        oneCache.clear();
     }
 
 

@@ -1,9 +1,10 @@
-package org.hehh.cloud.cache;
+package org.hehh.cloud.cache.ehcache3;
 
 import lombok.Data;
 import net.sf.ehcache.store.Policy;
 import org.ehcache.config.units.EntryUnit;
 import org.ehcache.config.units.MemoryUnit;
+import org.hehh.cloud.cache.CacheParameter;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
