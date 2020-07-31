@@ -1,12 +1,24 @@
 package org.hehh.cloud.cache.ehcache3;
 
+import lombok.extern.slf4j.Slf4j;
+import org.ehcache.CacheManager;
 import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.config.units.EntryUnit;
 import org.ehcache.config.units.MemoryUnit;
+import org.ehcache.core.EhcacheManager;
+import org.ehcache.impl.persistence.DefaultDiskResourceService;
+import org.ehcache.xml.XmlConfiguration;
+import org.hehh.cloud.cache.CacheConfigurationParameter;
+import org.hehh.cloud.cache.EhCache3Parameter;
+import org.springframework.util.StringUtils;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 
 /**
@@ -14,7 +26,58 @@ import java.time.Duration;
  * @date: 2020-07-31 01:26
  * @description: ehcache3配置构造器
  */
+@Slf4j
 public class CacheConfigurationBuilders {
+
+
+    /**
+     * 构建器
+     *
+     * @param parameter 参数
+     * @return {@link CacheManager}
+     */
+    public static CacheManager builder(CacheConfigurationParameter<EhCache3Parameter> parameter){
+        if(StringUtils.isEmpty(parameter.getLoadingFile())){
+            /**
+             *  缓存管理器构造
+             */
+            CacheManagerBuilder cacheManagerBuilder = CacheManagerBuilder.newCacheManagerBuilder();
+
+            if ((null != parameter.getCaches() && parameter.getCaches().size() > 0) ? parameter.getCaches().stream().anyMatch(v -> v.getDiskEnable()) : false) {
+                /**
+                 *  缓存持久化
+                 */
+                cacheManagerBuilder = cacheManagerBuilder.with(CacheManagerBuilder.persistence(new File(parameter.getCacheData(), parameter.getTopicName()))).using(new DefaultDiskResourceService());
+            }
+
+            CacheManager cacheManager = cacheManagerBuilder.build(true);
+
+            if (null != parameter.getCaches() && parameter.getCaches().size() > 0) {
+                /**
+                 *  添加其他缓存
+                 */
+                parameter.getCaches().forEach(v -> {
+                    cacheManager.createCache(v.getName(), CacheConfigurationBuilders.create(v.getKClass(), v.getVClass(), v.getHeap(), v.getHeapUnit(),
+                        v.getOffheap(), v.getOffheapUnit(), v.getDisk(), v.getDiskUnit(), v.getDiskEnable(), (v.getTtl() == null || v.getTtl() == 0) ? null : Duration.ofSeconds(Double.valueOf(Double.valueOf(v.getTtl().toString()) * 0.8D).longValue())));
+
+                    if(log.isDebugEnabled()){
+                        log.debug("create ehcache3.0 name:{},key:{},value:{}",v.getName(),v.getKClass(),v.getVClass());
+                    }
+                });
+            }
+            return cacheManager;
+        }else{
+            try {
+                return new EhcacheManager(new XmlConfiguration(new URL(parameter.getLoadingFile())));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                log.error("根据xml构建ehcache3.0 异常", e);
+            }
+        }
+
+        return null;
+    }
+
 
 
     /**
