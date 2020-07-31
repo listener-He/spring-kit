@@ -58,7 +58,7 @@ public class CacheConfigurationBuilders {
                  */
                 parameter.getCaches().forEach(v -> {
                     cacheManager.createCache(v.getName(), CacheConfigurationBuilders.create(v.getKClass(), v.getVClass(), v.getHeap(), v.getHeapUnit(),
-                        v.getOffheap(), v.getOffheapUnit(), v.getDisk(), v.getDiskUnit(), v.getDiskEnable(), (v.getTtl() == null || v.getTtl() == 0) ? null : Duration.ofSeconds(Double.valueOf(Double.valueOf(v.getTtl().toString()) * 0.8D).longValue())));
+                        v.getOffheap(), v.getOffheapUnit(), v.getDisk(), v.getDiskUnit(), v.getDiskEnable(), (v.getTtl() == null || v.getTtl() == 0) ? null : Duration.ofSeconds(Double.valueOf(v.getTtl().toString()).longValue())));
 
                     if(log.isDebugEnabled()){
                         log.debug("create ehcache3.0 name:{},key:{},value:{}",v.getName(),v.getKClass(),v.getVClass());

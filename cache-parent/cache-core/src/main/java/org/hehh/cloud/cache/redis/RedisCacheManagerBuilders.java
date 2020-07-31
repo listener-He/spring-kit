@@ -33,11 +33,11 @@ public class RedisCacheManagerBuilders {
      * 构建器
      *
      * @param connectionFactory 连接工厂
-     * @param parameter         参数
+     * @param caches         参数
      * @return {@link RedisCacheManager}
      */
-    public static RedisCacheManager builder(RedisConnectionFactory connectionFactory, CacheConfigurationParameter<CacheParameter> parameter){
-       return RedisCacheManager.builder(connectionFactory).withInitialCacheConfigurations(getRedisCacheConfigurationMap(parameter.getCaches()))
+    public static RedisCacheManager builder(RedisConnectionFactory connectionFactory, List<CacheParameter> caches){
+       return RedisCacheManager.builder(connectionFactory).withInitialCacheConfigurations(getRedisCacheConfigurationMap(caches))
             .cacheWriter(new DefaultRedisCacheWriter(connectionFactory))
             .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())
             .build();
