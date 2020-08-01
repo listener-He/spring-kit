@@ -38,7 +38,7 @@ public class CacheConfiguration {
      */
     @Bean
     @ConfigurationProperties(prefix = "spring.cache.ehcache2")
-    @ConditionalOnProperty(prefix = "spring.cache.one",havingValue = "ehcache2")
+    @ConditionalOnProperty(prefix = "spring.cache",name = "one",havingValue = "ehcache2")
     @ConditionalOnMissingBean(EhCache3ConfigurationParameter.class)
     public EhCache2ConfigurationParameter ehCache2ConfigurationParameter(){
         return new EhCache2ConfigurationParameter();
@@ -52,7 +52,7 @@ public class CacheConfiguration {
      */
     @Bean
     @ConfigurationProperties(prefix = "spring.cache.ehcache3")
-    @ConditionalOnProperty(prefix = "spring.cache.one",havingValue = "ehcache3")
+    @ConditionalOnProperty(prefix = "spring.cache",name = "one",havingValue = "ehcache3")
     @ConditionalOnMissingBean(EhCache3ConfigurationParameter.class)
     public EhCache3ConfigurationParameter ehCache3ConfigurationParameter(){
         return new EhCache3ConfigurationParameter();
@@ -89,7 +89,7 @@ public class CacheConfiguration {
          */
         @Bean
         @Primary
-        @ConditionalOnProperty(prefix = "spring.cache.two",havingValue = "redis")
+        @ConditionalOnProperty(prefix = "spring.cache",name = "two",havingValue = "redis")
         @ConditionalOnBean(EhCache3ConfigurationParameter.class)
         @ConditionalOnMissingBean(RedisTwoCacheManager.class)
         public CacheManager redisTowEhcache3CacheManager(RedisConnectionFactory connectionFactory,EhCache3ConfigurationParameter parameter, CacheTopicOperations<CacheNotice> topicOperations){
@@ -111,7 +111,7 @@ public class CacheConfiguration {
          */
         @Bean
         @Primary
-        @ConditionalOnProperty(prefix = "spring.cache.two",havingValue = "redis")
+        @ConditionalOnProperty(prefix = "spring.cache",name = "two",havingValue = "redis")
         @ConditionalOnBean(EhCache2ConfigurationParameter.class)
         @ConditionalOnMissingBean(RedisTwoCacheManager.class)
         public CacheManager redisTowEhcache2CacheManager(RedisConnectionFactory connectionFactory,EhCache2ConfigurationParameter parameter, CacheTopicOperations<CacheNotice> topicOperations){
@@ -129,7 +129,7 @@ public class CacheConfiguration {
          * @return {@link CacheTopicOperations<CacheNotice>}
          */
         @Bean
-        @ConditionalOnProperty(prefix = "spring.cache.topic",havingValue = "redis")
+        @ConditionalOnProperty(prefix = "spring.cache",name = "topic",havingValue = "redis")
         @ConditionalOnMissingBean(CacheTopicOperations.class)
         public CacheTopicOperations<CacheNotice> cacheTopicOperations(RedisOperations<String, String> redisOperations){
             return new RedisCacheTopicOperations(redisOperations);
@@ -145,7 +145,7 @@ public class CacheConfiguration {
          * @return {@link CacheTopicAdapter}
          */
         @Bean
-        @ConditionalOnProperty(prefix = "spring.cache.topic",havingValue = "redis")
+        @ConditionalOnProperty(prefix = "spring.cache",name = "topic",havingValue = "redis")
         @ConditionalOnMissingBean(CacheTopicAdapter.class)
         public CacheTopicAdapter cacheTopicAdapter(RedisConnectionFactory connectionFactory,RedisOperations<String, String> redisOperations, MoreCacheManager cacheManager){
             return new RedisCacheTopicAdapter(redisOperations.getValueSerializer(),connectionFactory,cacheManager,cacheManager.topicName());
