@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils;
  * @date: 2020-07-31 17:14
  * @description: redis cache topic 实现
  */
-public  class RedisCacheTopic extends RedisMessageListenerContainer implements CacheTopicAdapter {
+public  class RedisCacheTopicAdapter extends RedisMessageListenerContainer implements CacheTopicAdapter {
 
 
 
@@ -38,7 +38,7 @@ public  class RedisCacheTopic extends RedisMessageListenerContainer implements C
      * @param cacheManager      缓存管理器
      * @param topicName         主题名称
      */
-    public RedisCacheTopic(RedisSerializer<?> valueSerializer, RedisConnectionFactory connectionFactory, MoreCacheManager cacheManager,String... topicName) {
+    public RedisCacheTopicAdapter(RedisSerializer<?> valueSerializer, RedisConnectionFactory connectionFactory, MoreCacheManager cacheManager,String... topicName) {
 
         super();
         assert valueSerializer != null : "redis 序列化不能为空";
