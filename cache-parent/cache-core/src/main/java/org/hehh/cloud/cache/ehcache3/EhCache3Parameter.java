@@ -1,7 +1,6 @@
 package org.hehh.cloud.cache.ehcache3;
 
 import lombok.Data;
-import net.sf.ehcache.store.Policy;
 import org.ehcache.config.units.EntryUnit;
 import org.ehcache.config.units.MemoryUnit;
 import org.hehh.cloud.cache.CacheParameter;
@@ -66,7 +65,8 @@ public class EhCache3Parameter extends CacheParameter {
      *   FIFO，先进先出。
      *   LFU， 缓存的元素有一个hit属性，hit值最小的将会被清出缓存。
      *   LRU，缓存的元素有一个时间戳，当缓存容量满了，而又需要腾出地方来缓存新的元素的时候，那么现有缓存元素中时间戳离当前时间最远的元素将被清出缓存。
+     *    private Policy memoryStoreEvictionPolicy;
      */
-    private Policy memoryStoreEvictionPolicy;
+
 
 }

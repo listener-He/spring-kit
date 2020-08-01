@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.hehh.cloud.cache.config.CacheConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.hehh.cloud.cache.config.CacheConfiguration,org.hehh.cloud.cache.config.CacheConfiguration.RedisCacheConfiguration

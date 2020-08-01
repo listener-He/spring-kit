@@ -31,7 +31,7 @@ public class EhCache3CacheManager extends AbstractTransactionSupportingCacheMana
      * @param parameter
      */
     public EhCache3CacheManager(CacheConfigurationParameter<EhCache3Parameter> parameter) {
-        this.cacheManager = CacheConfigurationBuilders.builder(parameter);
+        this.cacheManager = Ehcache3Builders.builder(parameter);
         Assert.hasText(parameter.getTopicName(),"ehcache3.0 topicName不能为空");
         this.topicName = parameter.getTopicName();
     }

@@ -26,7 +26,7 @@ import java.time.Duration;
  * @description: ehcache3配置构造器
  */
 @Slf4j
-public class CacheConfigurationBuilders {
+public class Ehcache3Builders {
 
 
     /**
@@ -56,7 +56,7 @@ public class CacheConfigurationBuilders {
                  *  添加其他缓存
                  */
                 parameter.getCaches().forEach(v -> {
-                    cacheManager.createCache(v.getName(), CacheConfigurationBuilders.create(v.getKClass(), v.getVClass(), v.getHeap(), v.getHeapUnit(),
+                    cacheManager.createCache(v.getName(), Ehcache3Builders.create(v.getKClass(), v.getVClass(), v.getHeap(), v.getHeapUnit(),
                         v.getOffheap(), v.getOffheapUnit(), v.getDisk(), v.getDiskUnit(), v.getDiskEnable(), (v.getTtl() == null || v.getTtl() == 0) ? null : Duration.ofSeconds(Double.valueOf(v.getTtl().toString()).longValue())));
 
                     if(log.isDebugEnabled()){

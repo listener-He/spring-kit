@@ -1,11 +1,19 @@
 package org.hehh.cloud.cache.config;
 
+import net.sf.ehcache.Cache;
+import org.hehh.cloud.cache.CacheConfigurationParameter;
 import org.hehh.cloud.cache.MoreCacheManager;
+import org.hehh.cloud.cache.ehcache2.EhCache2Builders;
 import org.hehh.cloud.cache.ehcache2.EhCache2ConfigurationParameter;
+import org.hehh.cloud.cache.ehcache2.EhCache2Parameter;
+import org.hehh.cloud.cache.ehcache3.EhCache3CacheManager;
 import org.hehh.cloud.cache.ehcache3.EhCache3ConfigurationParameter;
+import org.hehh.cloud.cache.ehcache3.EhCache3Parameter;
 import org.hehh.cloud.cache.redis.RedisTwoCacheManager;
 import org.hehh.cloud.cache.topic.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -13,6 +21,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -26,7 +35,6 @@ import org.springframework.util.StringUtils;
  * @description: 缓存配置
  */
 @Configuration
-@ConditionalOnClass(RedisConnectionFactory.class)
 @EnableCaching
 public class CacheConfiguration {
 
@@ -38,7 +46,7 @@ public class CacheConfiguration {
      */
     @Bean
     @ConfigurationProperties(prefix = "spring.cache.ehcache2")
-    @ConditionalOnProperty(prefix = "spring.cache",name = "one",havingValue = "ehcache2")
+    @ConditionalOnClass({ Cache.class})
     @ConditionalOnMissingBean(EhCache3ConfigurationParameter.class)
     public EhCache2ConfigurationParameter ehCache2ConfigurationParameter(){
         return new EhCache2ConfigurationParameter();
@@ -52,11 +60,40 @@ public class CacheConfiguration {
      */
     @Bean
     @ConfigurationProperties(prefix = "spring.cache.ehcache3")
-    @ConditionalOnProperty(prefix = "spring.cache",name = "one",havingValue = "ehcache3")
+    @ConditionalOnClass(org.ehcache.CacheManager.class)
     @ConditionalOnMissingBean(EhCache3ConfigurationParameter.class)
     public EhCache3ConfigurationParameter ehCache3ConfigurationParameter(){
         return new EhCache3ConfigurationParameter();
     }
+
+
+    /**
+     * ehcache2缓存管理器
+     *
+     * @param parameter 参数
+     * @return {@link CacheManager}
+     */
+    @Bean
+    @ConditionalOnMissingBean({MoreCacheManager.class,CacheManager.class})
+    @ConditionalOnProperty(prefix = "spring.cache",name = "enable",havingValue = "ehcache2")
+    public CacheManager ehCache2CacheManager(EhCache2ConfigurationParameter parameter){
+        return new EhCacheCacheManager(EhCache2Builders.builder(parameter));
+    }
+
+
+    /**
+     * ehcache2缓存管理器
+     *
+     * @param parameter 参数
+     * @return {@link CacheManager}
+     */
+    @Bean
+    @ConditionalOnMissingBean({MoreCacheManager.class,CacheManager.class})
+    @ConditionalOnProperty(prefix = "spring.cache",name = "enable",havingValue = "ehcache3")
+    public CacheManager ehCache3CacheManager(EhCache3ConfigurationParameter parameter){
+        return new EhCache3CacheManager(parameter);
+    }
+
 
 
     /**
@@ -67,7 +104,8 @@ public class CacheConfiguration {
      */
     @Configuration
     @ConditionalOnClass(RedisConnectionFactory.class)
-    @ConditionalOnBean(RedisConnectionFactory.class)
+    @AutoConfigureAfter(CacheConfiguration.class)
+    @ConditionalOnProperty(prefix = "spring.cache",name = "two",havingValue = "redis")
     static class RedisCacheConfiguration{
 
 
@@ -89,10 +127,9 @@ public class CacheConfiguration {
          */
         @Bean
         @Primary
-        @ConditionalOnProperty(prefix = "spring.cache",name = "two",havingValue = "redis")
-        @ConditionalOnBean(EhCache3ConfigurationParameter.class)
-        @ConditionalOnMissingBean(RedisTwoCacheManager.class)
-        public CacheManager redisTowEhcache3CacheManager(RedisConnectionFactory connectionFactory,EhCache3ConfigurationParameter parameter, CacheTopicOperations<CacheNotice> topicOperations){
+        @ConditionalOnProperty(prefix = "spring.cache",name = "one",havingValue = "ehcache3")
+        @ConditionalOnMissingBean(MoreCacheManager.class)
+        public CacheManager redisTowEhcache3CacheManager(RedisConnectionFactory connectionFactory,EhCache3ConfigurationParameter parameter, @Autowired(required = false) CacheTopicOperations<CacheNotice> topicOperations){
             if(StringUtils.isEmpty(parameter.getTopicName())){
                 parameter.setTopicName(defaultTopic);
             }
@@ -111,15 +148,15 @@ public class CacheConfiguration {
          */
         @Bean
         @Primary
-        @ConditionalOnProperty(prefix = "spring.cache",name = "two",havingValue = "redis")
-        @ConditionalOnBean(EhCache2ConfigurationParameter.class)
-        @ConditionalOnMissingBean(RedisTwoCacheManager.class)
-        public CacheManager redisTowEhcache2CacheManager(RedisConnectionFactory connectionFactory,EhCache2ConfigurationParameter parameter, CacheTopicOperations<CacheNotice> topicOperations){
+        @ConditionalOnProperty(prefix = "spring.cache",name = "one",havingValue = "ehcache2")
+        @ConditionalOnMissingBean(MoreCacheManager.class)
+        public CacheManager redisTowEhcache2CacheManager(RedisConnectionFactory connectionFactory,EhCache2ConfigurationParameter parameter, @Autowired(required = false) CacheTopicOperations<CacheNotice> topicOperations){
             if(StringUtils.isEmpty(parameter.getTopicName())){
                 parameter.setTopicName(defaultTopic);
             }
             return new RedisTwoCacheManager(connectionFactory,parameter,topicOperations);
         }
+
 
 
         /**
