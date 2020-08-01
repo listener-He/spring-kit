@@ -82,7 +82,7 @@ public class CacheConfiguration {
 
 
     /**
-     * ehcache2缓存管理器
+     * ehcache3缓存管理器
      *
      * @param parameter 参数
      * @return {@link CacheManager}
