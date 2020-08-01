@@ -1,20 +1,15 @@
 package org.hehh.cloud.cache.config;
 
 import net.sf.ehcache.Cache;
-import org.hehh.cloud.cache.CacheConfigurationParameter;
 import org.hehh.cloud.cache.MoreCacheManager;
 import org.hehh.cloud.cache.ehcache2.EhCache2Builders;
 import org.hehh.cloud.cache.ehcache2.EhCache2ConfigurationParameter;
-import org.hehh.cloud.cache.ehcache2.EhCache2Parameter;
 import org.hehh.cloud.cache.ehcache3.EhCache3CacheManager;
 import org.hehh.cloud.cache.ehcache3.EhCache3ConfigurationParameter;
-import org.hehh.cloud.cache.ehcache3.EhCache3Parameter;
 import org.hehh.cloud.cache.redis.RedisTwoCacheManager;
 import org.hehh.cloud.cache.topic.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -34,65 +29,93 @@ import org.springframework.util.StringUtils;
  * @date: 2020-08-01 16:26
  * @description: 缓存配置
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableCaching
 public class CacheConfiguration {
 
 
     /**
-     * ehcache2配置参数
+     * ehcache3缓存配置
      *
-     * @return {@link EhCache2ConfigurationParameter}
+     * @author hehui
+     * @date 2020/08/01
      */
-    @Bean
-    @ConfigurationProperties(prefix = "spring.cache.ehcache2")
-    @ConditionalOnClass({ Cache.class})
-    @ConditionalOnMissingBean(EhCache3ConfigurationParameter.class)
-    public EhCache2ConfigurationParameter ehCache2ConfigurationParameter(){
-        return new EhCache2ConfigurationParameter();
-    }
-
-
-    /**
-     * ehcache3配置参数
-     *
-     * @return {@link EhCache2ConfigurationParameter}
-     */
-    @Bean
-    @ConfigurationProperties(prefix = "spring.cache.ehcache3")
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass(org.ehcache.CacheManager.class)
-    @ConditionalOnMissingBean(EhCache3ConfigurationParameter.class)
-    public EhCache3ConfigurationParameter ehCache3ConfigurationParameter(){
-        return new EhCache3ConfigurationParameter();
+    static class Ehcache3CacheConfiguration{
+        /**
+         * ehcache3配置参数
+         *
+         * @return {@link EhCache2ConfigurationParameter}
+         */
+        @Bean
+        @ConfigurationProperties(prefix = "spring.cache.ehcache3")
+        @ConditionalOnMissingBean(EhCache3ConfigurationParameter.class)
+        public EhCache3ConfigurationParameter ehCache3ConfigurationParameter(){
+            return new EhCache3ConfigurationParameter();
+        }
+
+
+
+
+
+        /**
+         * ehcache3缓存管理器
+         *
+         * @param parameter 参数
+         * @return {@link CacheManager}
+         */
+        @Bean
+        @ConditionalOnMissingBean({MoreCacheManager.class,CacheManager.class})
+        @ConditionalOnProperty(prefix = "spring.cache",name = "enable",havingValue = "ehcache3")
+        public CacheManager ehCache3CacheManager(EhCache3ConfigurationParameter parameter){
+            return new EhCache3CacheManager(parameter);
+        }
     }
+
+
 
 
     /**
-     * ehcache2缓存管理器
+     * ehcache2缓存配置
      *
-     * @param parameter 参数
-     * @return {@link CacheManager}
+     * @author hehui
+     * @date 2020/08/01
      */
-    @Bean
-    @ConditionalOnMissingBean({MoreCacheManager.class,CacheManager.class})
-    @ConditionalOnProperty(prefix = "spring.cache",name = "enable",havingValue = "ehcache2")
-    public CacheManager ehCache2CacheManager(EhCache2ConfigurationParameter parameter){
-        return new EhCacheCacheManager(EhCache2Builders.builder(parameter));
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnClass({ Cache.class})
+    static class Ehcache2CacheConfiguration{
+
+
+        /**
+         * ehcache2配置参数
+         *
+         * @return {@link EhCache2ConfigurationParameter}
+         */
+        @Bean
+        @ConfigurationProperties(prefix = "spring.cache.ehcache2")
+        @ConditionalOnMissingBean(EhCache3ConfigurationParameter.class)
+        public EhCache2ConfigurationParameter ehCache2ConfigurationParameter(){
+            return new EhCache2ConfigurationParameter();
+        }
+
+
+        /**
+         * ehcache2缓存管理器
+         *
+         * @param parameter 参数
+         * @return {@link CacheManager}
+         */
+        @Bean
+        @ConditionalOnMissingBean({MoreCacheManager.class,CacheManager.class})
+        @ConditionalOnProperty(prefix = "spring.cache",name = "enable",havingValue = "ehcache2")
+        public CacheManager ehCache2CacheManager(EhCache2ConfigurationParameter parameter){
+            return new EhCacheCacheManager(EhCache2Builders.builder(parameter));
+        }
     }
 
 
-    /**
-     * ehcache3缓存管理器
-     *
-     * @param parameter 参数
-     * @return {@link CacheManager}
-     */
-    @Bean
-    @ConditionalOnMissingBean({MoreCacheManager.class,CacheManager.class})
-    @ConditionalOnProperty(prefix = "spring.cache",name = "enable",havingValue = "ehcache3")
-    public CacheManager ehCache3CacheManager(EhCache3ConfigurationParameter parameter){
-        return new EhCache3CacheManager(parameter);
-    }
+
 
 
 
@@ -102,9 +125,8 @@ public class CacheConfiguration {
      * @author hehui
      * @date 2020/08/01
      */
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass(RedisConnectionFactory.class)
-    @AutoConfigureAfter(CacheConfiguration.class)
     @ConditionalOnProperty(prefix = "spring.cache",name = "two",havingValue = "redis")
     static class RedisCacheConfiguration{
 
