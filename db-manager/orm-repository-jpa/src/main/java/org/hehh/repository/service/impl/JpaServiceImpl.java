@@ -26,6 +26,10 @@ public class JpaServiceImpl<T,ID> implements IJpaService<T,ID> {
 
 
 
+
+
+
+
     /**
      * 获取条件构造器
      *
@@ -35,7 +39,6 @@ public class JpaServiceImpl<T,ID> implements IJpaService<T,ID> {
     public Example<T> getExample(T t) {
         return Example.of(t);
     }
-
 
 
     /**
