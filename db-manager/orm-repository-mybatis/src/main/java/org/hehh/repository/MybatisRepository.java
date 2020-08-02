@@ -25,7 +25,7 @@ public interface MybatisRepository<T,I> extends Mapper<T>, InsertListMapper<T>,R
      */
     @Override
     @InsertProvider(type = MybatisRepositoryProvider.class, method = "dynamicSQL")
-    int updateList(List<? extends T> recordList);
+    int updateList(List<T> recordList);
 
     /**
      *  批量选择性更新
@@ -35,6 +35,6 @@ public interface MybatisRepository<T,I> extends Mapper<T>, InsertListMapper<T>,R
      */
     @Override
     @InsertProvider(type = MybatisRepositoryProvider.class, method = "dynamicSQL")
-    int updateListSelective(List<? extends T> recordList);
+    int updateListSelective(List<T> recordList);
 
 }

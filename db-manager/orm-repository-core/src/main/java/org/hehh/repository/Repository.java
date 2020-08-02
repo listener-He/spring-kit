@@ -112,7 +112,7 @@ public interface Repository<T,I,W> {
      * @param recordList 记录列表
      * @return int
      */
-    int updateList(List<? extends T> recordList);
+    int updateList(List<T> recordList);
 
 
     /**
@@ -121,7 +121,7 @@ public interface Repository<T,I,W> {
      * @param recordList 记录列表
      * @return int
      */
-    int updateListSelective(List<? extends T> recordList);
+    int updateListSelective(List<T> recordList);
 
 
 }

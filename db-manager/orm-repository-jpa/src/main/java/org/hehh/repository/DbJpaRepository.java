@@ -26,4 +26,23 @@ public interface DbJpaRepository<T,ID>  extends JpaRepository<T,ID>, Repository<
      * @param ids
      */
     void deleteByIdIn(List<ID> ids);
+
+
+    /**
+     * 批量更新
+     *
+     * @param recordList 记录列表
+     * @return int
+     */
+    @Override
+    int updateList(List< T> recordList);
+
+    /**
+     * 批量选择性更新
+     *
+     * @param recordList 记录列表
+     * @return int
+     */
+    @Override
+    int updateListSelective(List<T> recordList);
 }
