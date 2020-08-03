@@ -1,5 +1,9 @@
 package org.hehh.repository.domain;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -14,10 +18,13 @@ import java.util.*;
 public class Example<T> {
 
 
-
     private final Restrictions<T> restrictions = new Restrictions<>();
 
     private Criterion<T> criterion;
+
+    private Pageable pageable;
+
+    private Sort sort;
 
 
     /**
@@ -25,7 +32,7 @@ public class Example<T> {
      *
      * @return {@link Criterion<T>}
      */
-    public Criterion<T> getCriterion() {
+    public org.hehh.repository.domain.Criterion<T> getCriterion() {
         return criterion;
     }
 
@@ -89,6 +96,32 @@ public class Example<T> {
         this.criterion = and;
 
         return criteria;
+    }
+
+
+
+
+
+    /**
+     *  分页
+     *  @param page 页面
+     * @param size 大小
+     * @return
+     */
+    public Pageable page(int page, int size){
+        this.pageable = PageRequest.of(page,size);
+        return this.pageable;
+    }
+
+
+
+    /**
+     * 分页
+     *
+     * @param pageDto 分页dto
+     */
+    public Pageable page(PageDto pageDto){
+       return page(pageDto.getPageNumber(),pageDto.getPageSize());
     }
 
 
