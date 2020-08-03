@@ -5,6 +5,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -20,13 +22,22 @@ public class LogicalExpression<T> implements Criterion<T> {
     private final Operator operator;
 
 
-    private final Criterion<T>[] criteria;
+    private final List<Criterion<T>> criteria;
 
 
     public LogicalExpression(Operator operator, Criterion<T>... criteria) {
+       this(operator,Arrays.asList(criteria));
+    }
+
+
+    public LogicalExpression(Operator operator, List<Criterion<T>> criteria) {
         this.operator = operator;
         this.criteria = criteria;
     }
+
+
+
+
 
 
 
@@ -45,7 +56,7 @@ public class LogicalExpression<T> implements Criterion<T> {
 
         if(operator.equals(Operator.AND) || operator.equals(Operator.OR)){
 
-            Predicate[] predicates = Arrays.stream(criteria).map(v -> v.toPredicate(root,query,builder)).collect(Collectors.toList()).toArray(new Predicate[0]);
+            Predicate[] predicates = criteria.stream().map(v -> v.toPredicate(root,query,builder)).collect(Collectors.toList()).toArray(new Predicate[0]);
             if(operator.equals(Operator.AND)){
                 return builder.and(predicates);
             }

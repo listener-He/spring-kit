@@ -71,7 +71,7 @@ public class Restrictions<T> {
     /**
      * 大于
      */
-    public  Criterion<T> gt(String fieldName, Object value, boolean ignoreNull) {
+    public  Criterion<T> gt(String fieldName, Object value) {
 
         return new SimpleExpression<T>(fieldName, value, Operator.GT);
     }
