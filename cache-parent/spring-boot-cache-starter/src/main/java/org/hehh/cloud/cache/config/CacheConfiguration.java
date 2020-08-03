@@ -43,6 +43,14 @@ public class CacheConfiguration {
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass(org.ehcache.CacheManager.class)
     static class Ehcache3CacheConfiguration{
+
+        /**
+         *  服务名
+         */
+        @Value("${spring.application.name}")
+        private String defaultTopic;
+
+
         /**
          * ehcache3配置参数
          *
@@ -69,6 +77,9 @@ public class CacheConfiguration {
         @ConditionalOnMissingBean({MoreCacheManager.class,CacheManager.class})
         @ConditionalOnProperty(prefix = "spring.cache",name = "enable",havingValue = "ehcache3")
         public CacheManager ehCache3CacheManager(EhCache3ConfigurationParameter parameter){
+            if(StringUtils.isEmpty(parameter.getTopicName())){
+                parameter.setTopicName(defaultTopic);
+            }
             return new EhCache3CacheManager(parameter);
         }
     }
@@ -85,6 +96,12 @@ public class CacheConfiguration {
     @Configuration(proxyBeanMethods = false)
     @ConditionalOnClass({ Cache.class})
     static class Ehcache2CacheConfiguration{
+
+        /**
+         *  服务名
+         */
+        @Value("${spring.application.name}")
+        private String defaultTopic;
 
 
         /**
@@ -110,6 +127,9 @@ public class CacheConfiguration {
         @ConditionalOnMissingBean({MoreCacheManager.class,CacheManager.class})
         @ConditionalOnProperty(prefix = "spring.cache",name = "enable",havingValue = "ehcache2")
         public CacheManager ehCache2CacheManager(EhCache2ConfigurationParameter parameter){
+            if(StringUtils.isEmpty(parameter.getTopicName())){
+                parameter.setTopicName(defaultTopic);
+            }
             return new EhCacheCacheManager(EhCache2Builders.builder(parameter));
         }
     }
