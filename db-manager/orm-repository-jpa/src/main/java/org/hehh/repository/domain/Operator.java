@@ -2,10 +2,11 @@ package org.hehh.repository.domain;
 
 /**
  * @author: HeHui
- * @date: 2020-08-03 15:59
- * @description: where 条件
+ * @date: 2020-08-03 19:29
+ * @description: 条件符
  */
-public enum Where {
+public enum  Operator {
+
 
     /**
      *  包含
@@ -18,32 +19,38 @@ public enum Where {
     LIKE,
 
     /**
-     *  等于
+     *  等于 equal
      */
-    EQUAL,
+    EQ,
 
     /**
      * 不等于
      */
-    NOT_EQUAL,
+    NOT_EQ,
 
     /**
      *  小于
      */
-    LESS_THAN,
+    LT,
 
     /**
      *  小于=
      */
-    LESS_THAN_OR_EQUAL_TO,
+    LE,
 
     /**
      * 大于
      */
-    GREATER_THAN,
+    GT,
+
     /**
      *  大于=
      */
-    GREATER_THAN_OR_EQUAL_TO
+    GE,
 
+    AND,
+
+    OR,
+
+    NOT_IN
 }

@@ -1,4 +1,4 @@
-package org.hehh.repository.impl;
+package org.hehh.repository;
 
 import org.hehh.repository.DbJpaRepository;
 import org.springframework.beans.BeanWrapper;
@@ -152,9 +152,42 @@ public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
-     * Creates a where-clause referencing the given entities key and appends it to the given query string. Binds the given
-     * entities to the query.
+     *  apply 更新
      *
      * @param entity must not be {@literal null}.
      * @param notNull is ignore null attribute
