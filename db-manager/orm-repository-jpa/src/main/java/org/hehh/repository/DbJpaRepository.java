@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -18,6 +19,7 @@ import java.util.Optional;
  * @date: 2020-05-04 21:02
  * @description: spring-data-jpa 资源库
  */
+@NoRepositoryBean
 public interface DbJpaRepository<T,ID>  extends JpaRepository<T,ID>, Repository<T,ID,Example<T>> {
 
 

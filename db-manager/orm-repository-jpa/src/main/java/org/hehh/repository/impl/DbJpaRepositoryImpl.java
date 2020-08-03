@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.IdentifiableType;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
@@ -27,6 +28,9 @@ import java.util.stream.Collectors;
  * @author: HeHui
  * @date: 2020-08-03 00:41
  * @description: 自定义jap Repository实现
+ * https://blog.csdn.net/mjwwjcoder/article/details/80949863?utm_source=blogxgwz8
+ * https://blog.csdn.net/wangyisheng233/article/details/88927026?utm_medium=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-2.channel_param_right&depth_1-utm_source=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-2.channel_param_right
+ * https://www.jianshu.com/p/d9a99b95d094
  */
 public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements DbJpaRepository<T,ID> {
 
@@ -43,6 +47,8 @@ public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
     private final EntityManager entityManager;
 
     private final Set<SingularAttribute<? super T, ?>> attributes;
+
+
     /**
      * Creates a new {@link SimpleJpaRepository} to manage objects of the given {@link JpaEntityInformation}.
      *
@@ -84,9 +90,7 @@ public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
             throw new IllegalArgumentException(
                 String.format("Could not obtain required identifier attribute for table %s!", entityInformation.getEntityName()));
         }
-
-
-       return applyAndBind(QueryUtils.getQueryString(QueryUtils.DELETE_ALL_QUERY_STRING, entityInformation.getEntityName()),idAttribute,ids,entityManager)
+        return applyAndBind(QueryUtils.getQueryString(QueryUtils.DELETE_ALL_QUERY_STRING, entityInformation.getEntityName()),idAttribute,ids,entityManager)
                         .executeUpdate();
     }
 
