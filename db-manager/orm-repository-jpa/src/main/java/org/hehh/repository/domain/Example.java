@@ -36,7 +36,13 @@ public class Example<T> {
         return criterion;
     }
 
+    public Pageable getPageable() {
+        return pageable;
+    }
 
+    public Sort getSort() {
+        return sort;
+    }
 
     /**
      * 创建条件构造器

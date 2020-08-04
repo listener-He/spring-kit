@@ -1,16 +1,10 @@
 package org.hehh.repository;
 
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.hehh.repository.domain.Example;
+import org.hehh.repository.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,4 +60,30 @@ public interface DbJpaRepository<T,ID>  extends JpaRepository<T,ID>, Repository<
      */
     @Override
     int updateListSelective(List<T> recordList);
+
+
+    /**
+     * 找到一个
+     *
+     * @param example 例子
+     * @return {@link Optional<T>}
+     */
+    Optional<T> findOne(Example<T> example);
+
+
+    /**
+     * 找到多个
+     *
+     * @param example 例子
+     * @return {@link Optional<T>}
+     */
+    List<T> findAll(Example<T> example);
+
+
+    /**
+     *  分页
+     * @param example
+     * @return
+     */
+    Page<T> findPage(Example<T> example);
 }

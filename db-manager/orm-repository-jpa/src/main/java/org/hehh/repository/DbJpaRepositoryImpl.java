@@ -1,6 +1,9 @@
 package org.hehh.repository;
 
-import org.hehh.repository.DbJpaRepository;
+import org.hehh.repository.domain.CriterionSpecification;
+import org.hehh.repository.domain.Example;
+import org.hehh.repository.domain.JpaPageResult;
+import org.hehh.repository.domain.Page;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.jpa.repository.query.QueryUtils;
@@ -9,15 +12,12 @@ import org.springframework.data.jpa.repository.support.JpaEntityInformationSuppo
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.metamodel.IdentifiableType;
-import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.Metamodel;
 import javax.persistence.metamodel.SingularAttribute;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
@@ -75,6 +75,8 @@ public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
     public DbJpaRepositoryImpl(Class<T> domainClass, EntityManager em) {
         this(JpaEntityInformationSupport.getEntityInformation(domainClass, em), em);
     }
+
+
 
     /**
      * 根据id删除
@@ -152,29 +154,42 @@ public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
 
 
 
+    /**
+     * 找到一个
+     *
+     * @param example 例子
+     * @return {@link Optional<T>}
+     */
+    @Override
+    public Optional<T> findOne(Example<T> example) {
+       return super.findOne(new CriterionSpecification<>(example.getCriterion()));
+    }
 
+    /**
+     * 找到多个
+     *
+     * @param example 例子
+     * @return {@link Optional<T>}
+     */
+    @Override
+    public List<T> findAll(Example<T> example) {
+        return super.findAll(new CriterionSpecification<>(example.getCriterion()),example.getSort());
+    }
 
+    /**
+     * 分页
+     *
+     * @param example
+     * @return
+     */
+    @Override
+    public Page<T> findPage(Example<T> example) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if(example.getCriterion() == null){
+            return JpaPageResult.create(super.findAll(example.getPageable()));
+        }
+        return JpaPageResult.create(super.findAll(new CriterionSpecification<>(example.getCriterion()),example.getPageable()));
+    }
 
 
 
