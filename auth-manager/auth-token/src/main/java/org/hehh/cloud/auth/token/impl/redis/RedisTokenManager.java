@@ -1,13 +1,12 @@
 package org.hehh.cloud.auth.token.impl.redis;
 
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.auth.bean.login.LoginUser;
 import org.hehh.cloud.auth.token.TokenManager;
 import org.hehh.cloud.auth.token.TokenOutmodedException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,13 +16,13 @@ import java.util.concurrent.TimeUnit;
  * @description: redis token管理器
  **/
 @Slf4j
-public class RedisTokenManager implements TokenManager {
+public class RedisTokenManager<T extends LoginUser> implements TokenManager<T> {
 
 
     /**
      *  redis操作类型
      */
-    private final RedisTemplate<String,LoginUser> redisService;
+    private final RedisTemplate<String,T> redisService;
 
 
 
@@ -31,7 +30,7 @@ public class RedisTokenManager implements TokenManager {
      *  带参数构造器
      * @param redisService
      */
-    public RedisTokenManager(RedisTemplate<String,LoginUser> redisService){
+    public RedisTokenManager(RedisTemplate<String,T> redisService){
         Assert.notNull(redisService,"初始化RedisTokenManager失败,redisService 不能为null!");
         this.redisService = redisService;
     }
@@ -46,20 +45,19 @@ public class RedisTokenManager implements TokenManager {
      * @return 签名
      */
     @Override
-    public String generateSign(LoginUser user) {
+    public String generateSign(T user) {
         Assert.notNull(user,"用户信息不能为空");
         Assert.hasText(user.getUserId(),"用户id不能为null");
+        Assert.hasText(user.getToken(),"用户token不能为null");
 
-        if(StrUtil.isBlank(user.getToken())){
-            user.setToken(IdUtil.fastSimpleUUID());
+
+
+        if(user.getCreateTime() == null){
+            user.setCreateTime(System.currentTimeMillis());
         }
 
-        user.setCreateTime(System.currentTimeMillis());
-        try {
-            redisService.opsForValue().set(user.getToken(),user,user.getOverdueTime(), TimeUnit.MILLISECONDS);
-        }catch (Exception e){
-            log.error("生成登陆签名异常,原因:{}", e);
-        }
+        redisService.opsForValue().set(user.getToken(),user,user.getOverdueTime(), TimeUnit.MILLISECONDS);
+
         return user.getToken();
     }
 
@@ -74,7 +72,7 @@ public class RedisTokenManager implements TokenManager {
      */
     @Override
     public boolean validity(String token) {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             return redisService.hasKey(token);
         }
         return false;
@@ -87,8 +85,8 @@ public class RedisTokenManager implements TokenManager {
      * @return 签名用户
      */
     @Override
-    public LoginUser getUser(String token) {
-        if(StrUtil.isNotBlank(token)){
+    public T getUser(String token) {
+        if(StringUtils.hasText(token)){
             return redisService.opsForValue().get(token);
         }
         return null;
@@ -119,7 +117,7 @@ public class RedisTokenManager implements TokenManager {
      * @throws TokenOutmodedException
      */
     @Override
-    public String delay(LoginUser user) throws TokenOutmodedException {
+    public String delay(T user) throws TokenOutmodedException {
         if(user == null){
             throw new TokenOutmodedException(null);
         }
@@ -137,7 +135,7 @@ public class RedisTokenManager implements TokenManager {
      */
     @Override
     public long getExpired(String token) throws TokenOutmodedException {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             Long expire = redisService.getExpire(token, TimeUnit.MILLISECONDS);
             if(expire != null){
                 return System.currentTimeMillis() + expire;
@@ -156,7 +154,7 @@ public class RedisTokenManager implements TokenManager {
      */
     @Override
     public void remove(String token) {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             if(redisService.hasKey(token)){
                 redisService.delete(token);
             }else{

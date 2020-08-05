@@ -8,7 +8,9 @@ import org.hehh.cloud.auth.bean.login.LoginUser;
  * @create: 2020-03-15 20:39
  * @description: token管理生成
  **/
-public interface TokenManager {
+public interface TokenManager<T extends LoginUser> {
+
+
 
 
     /**
@@ -16,7 +18,7 @@ public interface TokenManager {
      * @param user 用户
      * @return 签名
      */
-    String generateSign(LoginUser user);
+    String generateSign(T user);
 
 
     /**
@@ -32,7 +34,7 @@ public interface TokenManager {
      * @param token 签名
      * @return 签名用户
      */
-    LoginUser getUser(String token);
+    T getUser(String token);
 
 
 
@@ -50,7 +52,7 @@ public interface TokenManager {
      * @return
      * @throws TokenOutmodedException
      */
-    String delay(LoginUser user) throws TokenOutmodedException;
+    String delay(T user) throws TokenOutmodedException;
 
 
     /**

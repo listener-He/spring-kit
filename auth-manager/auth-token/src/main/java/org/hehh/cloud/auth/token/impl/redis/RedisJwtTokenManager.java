@@ -1,15 +1,16 @@
 package org.hehh.cloud.auth.token.impl.redis;
 
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.hehh.cloud.auth.bean.LoginUserConstant;
 import org.hehh.cloud.auth.bean.login.LoginUser;
 import org.hehh.cloud.auth.token.TokenManager;
 import org.hehh.cloud.auth.token.TokenOutmodedException;
 import org.hehh.cloud.auth.token.impl.jwt.JwtGenerate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  * @description: redis + token jwt管理
  **/
 @Slf4j
-public class RedisJwtTokenManager implements TokenManager {
+public class RedisJwtTokenManager<T extends LoginUser> implements TokenManager<T> {
 
 
 
@@ -31,7 +32,7 @@ public class RedisJwtTokenManager implements TokenManager {
     /**
      *  jwt生成
      */
-    private final JwtGenerate jwtGenerate;
+    private final JwtGenerate<T> jwtGenerate;
 
 
     /**
@@ -40,19 +41,15 @@ public class RedisJwtTokenManager implements TokenManager {
     private final RedisTemplate<String,Long> redisService;
 
 
-    /**
-     *  LoginUser 的过期时间是redis的过期时间
-     *    为了延长用户登陆时间时token无变化
-     */
-    private final long jwtIncrease = 315364000000L;
+
 
 
     /**
      *   使用jwt密钥
      * @param secret jwt密钥
      */
-    public RedisJwtTokenManager(String secret, RedisTemplate<String, Long> redisService){
-        this(secret,null,redisService);
+    public RedisJwtTokenManager(String secret, RedisTemplate<String, Long> redisService,Class<T> userClass){
+        this(secret,null,redisService,userClass);
     }
 
 
@@ -61,11 +58,11 @@ public class RedisJwtTokenManager implements TokenManager {
      * @param secret jwt密钥
      * @param issuer 发行人
      */
-    public RedisJwtTokenManager(String secret,String issuer,RedisTemplate<String,Long> redisService){
+    public RedisJwtTokenManager(String secret,String issuer,RedisTemplate<String,Long> redisService,Class<T> userClass){
         Assert.hasText(secret,"jwt签名密钥secret不能为空");
         Assert.notNull(redisService,"初始化RedisJwtTokenManager失败,redisService 不能为null!");
         this.redisService = redisService;
-        this.jwtGenerate = new JwtGenerate(secret);
+        this.jwtGenerate =  JwtGenerate.build(userClass,secret);
         this.issuer = issuer;
     }
 
@@ -77,31 +74,30 @@ public class RedisJwtTokenManager implements TokenManager {
      * @return 签名
      */
     @Override
-    public String generateSign(LoginUser user) {
+    public String generateSign(T user) {
 
         Assert.notNull(user,"用户信息不能为空");
         Assert.hasText(user.getUserId(),"用户id不能为空");
+        Assert.hasText(user.getToken(),"用户token不能为空");
 
-        if(StrUtil.isBlank(user.getToken())){
-            user.setToken(IdUtil.fastSimpleUUID());
+
+        if(user.getCreateTime() == null){
+            user.setCreateTime(System.currentTimeMillis());
         }
-
 
         /**
          *  jwt生成签名，jwt的有效时间 + 10年
          */
-        user.setOverdueTime(user.getOverdueTime() + jwtIncrease);
+        user.setOverdueTime(user.getOverdueTime() + LoginUserConstant.JWT_INCREASE);
 
         String token = jwtGenerate.createJwtToken(issuer, user);
 
-        try {
-            /**
-             *  存redis时就设置为传入的过期时间
-             */
-            redisService.opsForValue().set(user.getToken(),System.currentTimeMillis(),user.getOverdueTime() - jwtIncrease, TimeUnit.MILLISECONDS);
-        }catch (Exception e){
-            log.error("生成登陆签名异常,原因:{}", e);
-        }
+
+        /**
+         *  存redis时就设置为传入的过期时间
+         */
+        redisService.opsForValue().set(user.getToken(),System.currentTimeMillis(),user.getOverdueTime() - LoginUserConstant.JWT_INCREASE, TimeUnit.MILLISECONDS);
+
 
         return token;
 
@@ -117,7 +113,7 @@ public class RedisJwtTokenManager implements TokenManager {
      */
     @Override
     public boolean validity(String token) {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             LoginUser user = jwtGenerate.getUser(token);
             return null != user && redisService.hasKey(user.getToken());
         }
@@ -132,12 +128,12 @@ public class RedisJwtTokenManager implements TokenManager {
      * @return 签名用户
      */
     @Override
-    public LoginUser getUser(String token) {
-        if(StrUtil.isBlank(token)){
+    public T getUser(String token) {
+        if(StringUtils.isEmpty(token)){
             return null;
         }
 
-        LoginUser user = jwtGenerate.getUser(token);
+        T user = jwtGenerate.getUser(token);
         if(user != null){
             /**
              *  获取创建时间
@@ -146,8 +142,6 @@ public class RedisJwtTokenManager implements TokenManager {
             if(createTime == null){
                 return null;
             }
-
-            user.setCreateTime(createTime);
 
             return user;
         }
@@ -189,7 +183,7 @@ public class RedisJwtTokenManager implements TokenManager {
             /**
              *  延长时间
              */
-            redisService.opsForValue().set(user.getToken(),System.currentTimeMillis(),user.getOverdueTime() - jwtIncrease, TimeUnit.MILLISECONDS);
+            redisService.opsForValue().set(user.getToken(),System.currentTimeMillis(),user.getOverdueTime() - LoginUserConstant.JWT_INCREASE, TimeUnit.MILLISECONDS);
             return user.getToken();
         }catch (Exception e){
             log.error("延长登陆时间异常,原因:{}", e);
@@ -210,7 +204,7 @@ public class RedisJwtTokenManager implements TokenManager {
      */
     @Override
     public long getExpired(String token) throws TokenOutmodedException {
-        LoginUser user = jwtGenerate.getUser(token);
+        T user = jwtGenerate.getUser(token);
 
         if(user != null){
             Long expire = redisService.getExpire(user.getToken(), TimeUnit.MILLISECONDS);
@@ -232,9 +226,9 @@ public class RedisJwtTokenManager implements TokenManager {
      */
     @Override
     public void remove(String token) {
-        if(StrUtil.isNotBlank(token)){
+        if(StringUtils.hasText(token)){
             String id = jwtGenerate.getId(token);
-            if(StrUtil.isNotBlank(id) && redisService.hasKey(id)){
+            if(StringUtils.hasText(id) && redisService.hasKey(id)){
                 redisService.delete(id);
             }else{
                 log.warn("token不存在,{}", token);

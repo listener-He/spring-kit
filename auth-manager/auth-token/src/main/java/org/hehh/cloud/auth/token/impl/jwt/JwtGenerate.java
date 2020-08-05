@@ -3,10 +3,11 @@ package org.hehh.cloud.auth.token.impl.jwt;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.auth.bean.login.LoginUser;
-import org.hehh.cloud.common.utils.bean.BeanKit;
+import org.hehh.utils.bean.BeanKit;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
+import java.lang.reflect.ParameterizedType;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @description: jwt生成token
  **/
 @Slf4j
-public class JwtGenerate {
+public class JwtGenerate<T extends LoginUser> {
 
     /**
      *  密钥
@@ -30,14 +31,42 @@ public class JwtGenerate {
      */
     private final SignatureAlgorithm signatureAlgorithm;
 
+    private final Class<T> userClass;
+
+
+    /**
+     * 构建
+     *
+     * @param userClass 用户类
+     * @param secret    秘密
+     * @return {@link JwtGenerate<T>}
+     */
+    public static <T extends LoginUser> JwtGenerate<T> build(Class<T> userClass,String secret){
+        return build(userClass,secret,SignatureAlgorithm.HS256);
+   }
+
+    /**
+     * 构建
+     *
+     * @param userClass 用户类
+     * @param secret    秘密
+     * @param algorithm 算法
+     * @return {@link JwtGenerate<T>}
+     */
+    public static <T extends LoginUser> JwtGenerate<T> build(Class<T> userClass,String secret,SignatureAlgorithm algorithm){
+        return new JwtGenerate<>(secret,algorithm,userClass);
+    }
+
+
     /**
      *  使用密钥构建jwt生成器
      *    默认使用 HS256 加密
      * @param secret 密钥
      */
-    public JwtGenerate(String secret){
-        this(secret,SignatureAlgorithm.HS256);
+    public JwtGenerate(String secret,Class<T> userClass){
+        this(secret,SignatureAlgorithm.HS256,userClass);
     }
+
 
 
     /**
@@ -45,9 +74,10 @@ public class JwtGenerate {
      * @param secret 密钥
      * @param algorithm 加密方式
      */
-    public JwtGenerate(String secret,SignatureAlgorithm algorithm){
+    public JwtGenerate(String secret,SignatureAlgorithm algorithm,Class<T> userClass){
         this.SECRET = secret;
         this.signatureAlgorithm = algorithm;
+        this.userClass = userClass;
     }
 
 
@@ -61,13 +91,15 @@ public class JwtGenerate {
      *            用户登陆信息
      * @return token String
      */
-    public  String createJwtToken(String issuer, LoginUser user) {
+    public  String createJwtToken(String issuer, T user) {
 
 
         /** 生成签发时间 */
         long nowMillis = System.currentTimeMillis();
+        if(user.getCreateTime() == null){
+            user.setCreateTime(nowMillis);
+        }
 
-        user.setCreateTime(nowMillis);
 
         /** 通过秘钥签名JWT */
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SECRET);
@@ -137,8 +169,13 @@ public class JwtGenerate {
      * @param token 用户token
      * @return
      */
-    public  LoginUser getUser(String token){
-        return BeanKit.toBean(getClaimMap(token),LoginUser.class);
+    public  T getUser(String token){
+        try {
+            return BeanKit.toBean(getClaimMap(token),userClass);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -202,5 +239,7 @@ public class JwtGenerate {
             return true;
         }
     }
+
+
 
 }
