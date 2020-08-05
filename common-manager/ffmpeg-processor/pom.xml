@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>common-manager</artifactId>
+        <groupId>org.hehh.cloud</groupId>
+        <version>2.3.2.RELEASE</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.hehh.cloud.util</groupId>
+    <artifactId>ffmpeg-processor</artifactId>
+
+    <properties>
+        <javacpp-presets-ffmpeg.version>4.1-1.4.4</javacpp-presets-ffmpeg.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>system-processor</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.bytedeco.javacpp-presets/ffmpeg -->
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>ffmpeg</artifactId>
+            <version>${javacpp-presets-ffmpeg.version}</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+</project>
