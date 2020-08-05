@@ -6,6 +6,7 @@ import org.hehh.cloud.auth.token.TokenManager;
 import org.hehh.cloud.auth.token.TokenOutmodedException;
 import org.springframework.util.Assert;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.Date;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Date;
  * @description: jwt生成token
  **/
 @Slf4j
-public class JwtTokenManager implements TokenManager {
+public class JwtTokenManager<T extends LoginUser> implements TokenManager<T> {
 
 
     /**
@@ -26,15 +27,15 @@ public class JwtTokenManager implements TokenManager {
     /**
      *  jwt生成
      */
-    private final JwtGenerate jwtGenerate;
+    private final JwtGenerate<T> jwtGenerate;
 
 
     /**
      *   使用jwt密钥
      * @param secret jwt密钥
      */
-    public JwtTokenManager(String secret){
-       this(secret,null);
+    public JwtTokenManager(String secret,Class<T> userClass){
+       this(secret,null,userClass);
     }
 
 
@@ -43,9 +44,9 @@ public class JwtTokenManager implements TokenManager {
      * @param secret jwt密钥
      * @param issuer 发行人
      */
-    public JwtTokenManager(String secret,String issuer){
+    public JwtTokenManager(String secret,String issuer,Class<T> userClass){
         Assert.hasText(secret,"jwt签名密钥secret不能为空");
-        this.jwtGenerate = new JwtGenerate(secret);
+        this.jwtGenerate =  JwtGenerate.build(userClass,secret);
         this.issuer = issuer;
     }
 
@@ -63,7 +64,7 @@ public class JwtTokenManager implements TokenManager {
      * @return 签名
      */
     @Override
-    public String generateSign(LoginUser user) {
+    public String generateSign(T user) {
 
         Assert.notNull(user,"用户信息不能为空");
         Assert.hasText(user.getUserId(),"用户id不能为空");
@@ -96,7 +97,7 @@ public class JwtTokenManager implements TokenManager {
      * @return 签名用户
      */
     @Override
-    public LoginUser getUser(String token) {
+    public T getUser(String token) {
         return jwtGenerate.getUser(token);
     }
 
@@ -124,7 +125,7 @@ public class JwtTokenManager implements TokenManager {
      * @throws TokenOutmodedException
      */
     @Override
-    public String delay(LoginUser user) throws TokenOutmodedException {
+    public String delay(T user) throws TokenOutmodedException {
         if(user == null){
             throw new TokenOutmodedException(null);
         }
@@ -160,31 +161,5 @@ public class JwtTokenManager implements TokenManager {
 
 
 
-    public static void main(String[] args) {
-        JwtTokenManager j = new JwtTokenManager("123456");
 
-        LoginUser user = new LoginUser();
-        user.setUserId("1");
-        user.setAppId(1);
-        user.setName("测试");
-        user.setToken("123");
-        user.setAssociatedId("1");
-        user.setUserType(1);
-        user.setEquipment(1);
-        user.setOverdueTime(7200000);
-
-        String s = j.generateSign(user);
-
-
-        System.out.println(s);
-
-        LoginUser user1 = j.getUser(s);
-
-
-        String delay = j.delay(s);
-
-
-        System.out.println(delay);
-
-    }
 }
