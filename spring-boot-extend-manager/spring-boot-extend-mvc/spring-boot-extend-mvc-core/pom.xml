@@ -20,8 +20,9 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-http</artifactId>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>http-processor</artifactId>
+            <version>${parent.version}</version>
         </dependency>
 
 
