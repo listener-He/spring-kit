@@ -27,21 +27,16 @@ public class TestController {
 
 
 
-
     @GetMapping("/2")
-    public Result test1(@Param Result<String> test1){
+    public Result test1(@RequestBody @Decrypt Result<String> test1){
         return test1;
     }
 
     public static void main(String[] args) {
         AES aes = new AES("bdb356ec3d924a98800a68637e705af6".getBytes());
-        String s = aes.encryptHex("0");
-        String s1 = aes.encryptHex("测试消息");
-        String s2 = aes.encryptHex("测试数据");
+        Result<String> a = SuccessResult.succeed("测试消息","哦豁!");
+        String hex = aes.encryptHex(ObjectMapperKit.toJsonStr(a));
 
-        String str = ObjectMapperKit.toJsonStr(SuccessResult.succeed("测试"));
-        String s3 = aes.encryptHex(str);
-
-        System.out.println(str);
+        System.out.println(hex);
     }
 }

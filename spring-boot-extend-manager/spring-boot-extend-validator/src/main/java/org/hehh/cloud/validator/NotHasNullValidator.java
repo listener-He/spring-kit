@@ -1,7 +1,7 @@
 package org.hehh.cloud.validator;
 
-import cn.hutool.core.collection.CollUtil;
 import org.hehh.cloud.validator.annotation.NotHasNull;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -25,7 +25,7 @@ public class NotHasNullValidator implements ConstraintValidator<NotHasNull, Coll
             return true;
         }
 
-        if(CollUtil.isEmpty(objects)){
+        if(CollectionUtils.isEmpty(objects)){
             return false;
         }
 

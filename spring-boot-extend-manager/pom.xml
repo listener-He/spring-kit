@@ -5,8 +5,10 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.hehh.cloud</groupId>
-        <version>2.2.5.RELEASE</version>
+        <version>2.3.2.RELEASE</version>
+        <relativePath/>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-boot-extend-manager</artifactId>
@@ -15,6 +17,7 @@
         <module>spring-boot-extend-validator</module>
         <module>spring-boot-extend-mvc</module>
         <module>spring-boot-extend-core</module>
+        <module>spring-boot-starter</module>
     </modules>
 
     <dependencies>
@@ -22,26 +25,45 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.hehh.cloud</groupId>
-            <artifactId>common-utils</artifactId>
-            <version>${project.parent.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hehh.cloud</groupId>
-                    <artifactId>common-bean</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>cn.hutool</groupId>
-                    <artifactId>hutool-http</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>cn.hutool</groupId>
-                    <artifactId>hutool-system</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>common-core</artifactId>
+            <version>${parent.version}</version>
         </dependency>
-
     </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <testSource>${java.version}</testSource>
+                    <testTarget>${java.version}</testTarget>
+                </configuration>
+            </plugin>
+
+
+
+            <!-- 配置源库 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,26 +1,35 @@
 package org.hehh.cloud.spring.mvc.config;
 
+import org.hehh.cloud.spring.core.CoreConfiguration;
 import org.hehh.cloud.spring.mvc.request.method.HandelMethodAdapterManager;
 import org.hehh.cloud.spring.mvc.request.argument.HandlerMethodArgumentResolverEnhanceComposite;
 import org.hehh.cloud.spring.mvc.request.method.IHandlerMethodAdapter;
 import org.hehh.cloud.spring.mvc.request.argument.IHandlerMethodArgumentResolverAdapter;
+import org.hehh.cloud.spring.mvc.util.JsonDateFormat;
+import org.hehh.cloud.spring.mvc.util.ObjectMapperKit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerEnhanceAdapter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * @author: HeHui
  * @create: 2020-03-22 18:55
  * @description: spring mvc注册配置
  **/
+@AutoConfigureAfter(CoreConfiguration.class)
+@Import(CoreConfiguration.class)
 public class WebMvcRegistrationsConfiguration  implements WebMvcRegistrations {
-
-
 
 
 
@@ -78,4 +87,7 @@ public class WebMvcRegistrationsConfiguration  implements WebMvcRegistrations {
         this.requestMappingHandlerAdapter =  new RequestMappingHandlerEnhanceAdapter(resolverEnhanceComposite,methodAdapterManager);
         return requestMappingHandlerAdapter;
     }
+
+
+
 }

@@ -146,26 +146,27 @@ public class ParamJsonArgumentResolver extends RequestResponseBodyMethodProcesso
 
 
 
-
         Object arg = null;
         String  name = null;
 
-        String body = getBody(webRequest);
+
 
         try {
+            arg = super.readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());
+            name = Conventions.getVariableNameForParameter(parameter);
+        }catch(Exception e){
+            //if default exception
+            String body = getBody(webRequest);
             NamedValueInfo namedValueInfo = getNamedValueInfo(parameter);
             name = namedValueInfo.name;
             if(!StringUtils.hasText(body)){
-                 body = namedValueInfo.defaultValue;
+                body = namedValueInfo.defaultValue;
                 if(!StringUtils.hasText(body)){
                     body = "{}";
                 }
             }
-             arg = readBodyMessageConverters(webRequest,body, parameter, parameter.getNestedGenericParameterType());
-             resolveStringValue(name);
-        }catch(Exception e){
-              arg = super.readWithMessageConverters(webRequest, parameter, parameter.getNestedGenericParameterType());
-              name = Conventions.getVariableNameForParameter(parameter);
+            arg = readBodyMessageConverters(webRequest,body, parameter, parameter.getNestedGenericParameterType());
+            resolveStringValue(name);
         }
 
 

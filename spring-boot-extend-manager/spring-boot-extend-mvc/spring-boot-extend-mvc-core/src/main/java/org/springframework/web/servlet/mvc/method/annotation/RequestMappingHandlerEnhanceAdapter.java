@@ -2,6 +2,7 @@ package org.springframework.web.servlet.mvc.method.annotation;
 
 import org.hehh.cloud.spring.mvc.request.method.HandelMethodAdapterManager;
 import org.hehh.cloud.spring.mvc.request.ContentCachingRequestWrapper;
+import org.hehh.cloud.spring.mvc.resolver.UserAgentArgumentResolver;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.core.DefaultParameterNameDiscoverer;
@@ -626,6 +627,7 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
         List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>();
 
         // Annotation-based argument resolution
+        resolvers.add(new UserAgentArgumentResolver());
         resolvers.add(new ParamJsonArgumentResolver(getMessageConverters(),this.requestResponseBodyAdvice,getBeanFactory()));
         resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
         resolvers.add(new RequestParamMapMethodArgumentResolver());

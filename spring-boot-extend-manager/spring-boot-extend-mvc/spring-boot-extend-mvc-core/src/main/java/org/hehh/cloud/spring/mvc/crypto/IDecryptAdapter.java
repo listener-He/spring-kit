@@ -23,6 +23,14 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
 
 
+
+
+
+
+
+
+
+
     /**
      * 解密对象
      */
