@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>org.hehh.cloud</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.2.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>cache-parent</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>cache-annotations</module>
+        <module>cache-core</module>
+        <module>spring-boot-cache-starter</module>
+    </modules>
+
+    <properties>
+        <ehcache-2.version>2.10.6</ehcache-2.version>
+        <ehcache-3.version>3.8.1</ehcache-3.version>
+        <cache-api.version>1.1.1</cache-api.version>
+    </properties>
+
+</project>
