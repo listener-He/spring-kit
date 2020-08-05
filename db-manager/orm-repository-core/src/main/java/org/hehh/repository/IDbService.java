@@ -1,8 +1,7 @@
 package org.hehh.repository;
 
-import org.springframework.data.domain.Example;
 
-import java.io.Serializable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +11,7 @@ import java.util.Optional;
  * @description: db方法接口
  */
 public interface IDbService<T,ID> {
+
 
 
 

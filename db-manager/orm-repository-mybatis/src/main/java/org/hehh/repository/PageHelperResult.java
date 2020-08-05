@@ -1,6 +1,7 @@
 package org.hehh.repository;
 
 import com.github.pagehelper.PageInfo;
+import org.hehh.cloud.common.bean.result.PageResult;
 import org.hehh.repository.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -93,9 +94,19 @@ public class PageHelperResult<T> implements Page<T> {
             return result;
         }
 
-        return new PageHelperResult(0,0,0,0,null,false,0);
+        return new PageHelperResult(1,1,0,0,null,false,0);
     }
 
+
+    /**
+     * 转响应类
+     *
+     * @return
+     */
+    @Override
+    public PageResult<T> toResult() {
+        return PageResult.create(content,pageTotal,pageCount,pageNumber);
+    }
 
     /**
      * Returns the number of total pages.

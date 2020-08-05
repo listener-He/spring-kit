@@ -10,17 +10,17 @@ import java.util.Optional;
 /**
  * @author: HeHui
  * @date: 2020-05-31 20:28
- * @description: mybatis 数据库 service
+ * @description: 通用mapper 数据库 service
  */
 public interface IMybatisService<T,ID>  extends IDbService<T,ID> {
 
 
     /**
      *  获取条件构造器
-     * @return
+     *
+     * @return {@link Example}
      */
     Example getExample();
-
 
     /**
      * 根据条件查询：

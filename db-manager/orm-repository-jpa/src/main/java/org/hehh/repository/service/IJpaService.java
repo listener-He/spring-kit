@@ -15,11 +15,14 @@ import java.util.Optional;
 public interface IJpaService<T,ID>  extends IDbService<T,ID> {
 
 
+
+
     /**
      *  获取条件构造器
      * @return
      */
     Example<T> getExample(T t);
+
 
 
     /**

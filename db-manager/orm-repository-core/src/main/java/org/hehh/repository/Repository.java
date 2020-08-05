@@ -106,4 +106,22 @@ public interface Repository<T,I,W> {
 
 
 
+    /**
+     * 批量更新
+     *
+     * @param recordList 记录列表
+     * @return int
+     */
+    int updateList(List<T> recordList);
+
+
+    /**
+     *  批量选择性更新
+     *
+     * @param recordList 记录列表
+     * @return int
+     */
+    int updateListSelective(List<T> recordList);
+
+
 }

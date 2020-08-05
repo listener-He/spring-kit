@@ -21,9 +21,9 @@ import java.util.Set;
 /**
  * @author: HeHui
  * @date: 2020-05-31 22:05
- * @description: mybatis 数据库 service 实现
+ * @description: 通用mapper 数据库 service 实现
  */
-public class MybatisService<T,ID> implements IMybatisService<T,ID> {
+public class MybatisServiceImpl<T,ID> implements IMybatisService<T,ID> {
 
 
     @Autowired
@@ -60,7 +60,7 @@ public class MybatisService<T,ID> implements IMybatisService<T,ID> {
      * 手动实现：
      * 谁被实例化那么 字节码对象则为，该实例化对象，所指定（所属）的实体对象
      */
-    public MybatisService() {
+    public MybatisServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         /**
          * 返回表示此类型实际类型参数的 Type 对象的数组
