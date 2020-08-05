@@ -33,6 +33,16 @@ public interface DbJpaRepository<T,ID>  extends JpaRepository<T,ID>, Repository<
     <S extends T> int update(S entity);
 
 
+    /**
+     * 根据条件更新
+     *
+     * @param entity  实体
+     * @param example 条件表达式
+     * @return int
+     */
+    <S extends T> int update(S entity,Example<T> example);
+
+
 
     /**
      * 选择性更新，忽略null。根据主键更新
@@ -41,6 +51,16 @@ public interface DbJpaRepository<T,ID>  extends JpaRepository<T,ID>, Repository<
      * @return int
      */
     <S extends T> int updateSelective(S entity);
+
+
+    /**
+     * 根据条件选择性更新
+     *
+     * @param entity 实体
+     * @return int
+     */
+    <S extends T> int updateSelective(S entity,Example<T> example);
+
 
 
     /**

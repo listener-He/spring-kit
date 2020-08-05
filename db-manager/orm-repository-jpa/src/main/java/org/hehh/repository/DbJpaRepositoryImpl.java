@@ -4,6 +4,7 @@ import org.hehh.repository.domain.CriterionSpecification;
 import org.hehh.repository.domain.Example;
 import org.hehh.repository.domain.JpaPageResult;
 import org.hehh.repository.domain.Page;
+import org.hibernate.query.criteria.internal.CriteriaQueryImpl;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.jpa.repository.query.QueryUtils;
@@ -18,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.IdentifiableType;
 import javax.persistence.metamodel.SingularAttribute;
 import java.beans.PropertyDescriptor;
@@ -112,6 +114,22 @@ public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
         return applyUpdate(entity,false).executeUpdate();
     }
 
+
+
+    /**
+     * 根据条件更新
+     *
+     * @param entity  实体
+     * @param example 条件表达式
+     * @return int
+     */
+    @Override
+    public <S extends T> int update(S entity, Example<T> example) {
+        return applyUpdateExample(entity, example,false);
+    }
+
+
+
     /**
      * 选择性更新，忽略null。根据主键更新
      *
@@ -127,6 +145,59 @@ public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
 
 
 
+    /**
+     * 根据条件选择性更新
+     *
+     * @param entity  实体
+     * @param example
+     * @return int
+     */
+    @Transactional
+    @Override
+    public <S extends T> int updateSelective(S entity, Example<T> example) {
+        return applyUpdateExample(entity, example,true);
+    }
+
+
+    /**
+     * 应用更新的例子
+     *
+     * @param entity  实体
+     * @param example 例子
+     * @param notNull 非空
+     * @return int
+     */
+    private <S extends T> int applyUpdateExample(S entity, Example<T> example,boolean notNull) {
+        Assert.notNull(entity,"entity not null");
+        Assert.notNull(example,"Example not null");
+
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+
+        CriteriaUpdate<?> update = builder.createCriteriaUpdate(entity.getClass());
+
+        /**
+         * 获取Bean
+         */
+        BeanWrapper srcBean = new BeanWrapperImpl(entity);
+        PropertyDescriptor[] pds = srcBean.getPropertyDescriptors();
+        Assert.notEmpty(pds,"Entity property is not null");
+
+
+        for (PropertyDescriptor pd : pds) {
+
+            if(notNull){
+                if(!StringUtils.isEmpty(srcBean.getPropertyValue(pd.getName()))){
+                    update.set(pd.getName(),srcBean.getPropertyValue(pd.getName()));
+                }
+            }else{
+                update.set(pd.getName(),srcBean.getPropertyValue(pd.getName()));
+            }
+        }
+
+
+        update.where(example.getCriterion().toPredicate((Root<T>) update.getRoot(),null,builder));
+        return entityManager.createQuery(update).executeUpdate();
+    }
 
 
     /**
@@ -152,6 +223,7 @@ public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
     public int updateListSelective(List<T> recordList) {
         return 0;
     }
+
 
 
 
@@ -191,13 +263,6 @@ public class DbJpaRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRe
         }
         return JpaPageResult.create(super.findAll(new CriterionSpecification<>(example.getCriterion()),example.getPageable()));
     }
-
-
-
-
-
-
-
 
 
 
