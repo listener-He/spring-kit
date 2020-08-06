@@ -53,6 +53,14 @@
         </dependency>
 
         <dependency>
+            <groupId>com.googlecode.xmemcached</groupId>
+            <artifactId>xmemcached</artifactId>
+            <version>${xmemcached.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+
+        <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
             <version>${cache-api.version}</version>

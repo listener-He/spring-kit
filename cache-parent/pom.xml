@@ -22,6 +22,7 @@
         <ehcache-2.version>2.10.6</ehcache-2.version>
         <ehcache-3.version>3.8.1</ehcache-3.version>
         <cache-api.version>1.1.1</cache-api.version>
+        <xmemcached.version>2.4.6</xmemcached.version>
     </properties>
 
 </project>
