@@ -11,30 +11,27 @@ import cn.hutool.http.useragent.OS;
  **/
 public class BrowserEnhance {
 
-    static {
 
+    public void browser() {
+        Browser wacheBrowser = new Browser("WeChat", "MicroMessenger", "MicroMessenger\\/([\\d\\w\\.\\-]+)");
+        Browser alipayBrowser = new Browser("Alipay", "Alipay", "alipay\\/([\\d\\w\\.\\-]+)");
+        Browser browser360 = new Browser("360", "360SE", "360SE\\/([\\d\\w\\.\\-]+)");
+        Browser ucBrowser = new Browser("UCWEB", "UCWEB", "UCWEB\\/([\\d\\w\\.\\-]+)");
+        Browser sogouBrowser = new Browser("MetaSr", "MetaSr", "MetaSr\\/([\\d\\w\\.\\-]+)");
+        Browser ttBrowser = new Browser("TencentTraveler", "TencentTraveler", "TencentTraveler\\/([\\d\\w\\.\\-]+)");
 
-        if(ClassLoaderUtil.isPresent("cn.hutool.http.useragent", BrowserEnhance.class.getClassLoader())){
-
-            Browser wacheBrowser = new Browser("WeChat", "MicroMessenger", "MicroMessenger\\/([\\d\\w\\.\\-]+)");
-            Browser alipayBrowser = new Browser("Alipay", "Alipay", "alipay\\/([\\d\\w\\.\\-]+)");
-            Browser browser360 = new Browser("360", "360SE", "360SE\\/([\\d\\w\\.\\-]+)");
-            Browser ucBrowser = new Browser("UCWEB", "UCWEB", "UCWEB\\/([\\d\\w\\.\\-]+)");
-            Browser sogouBrowser = new Browser("MetaSr", "MetaSr", "MetaSr\\/([\\d\\w\\.\\-]+)");
-            Browser ttBrowser = new Browser("TencentTraveler", "TencentTraveler", "TencentTraveler\\/([\\d\\w\\.\\-]+)");
-
-            OS iosOs = new OS("iPhone", "ios");
-            OS.oses.add(iosOs);
-
-
-            Browser.browers.add(wacheBrowser);
-            Browser.browers.add(alipayBrowser);
-            Browser.browers.add(browser360);
-            Browser.browers.add(ucBrowser);
-            Browser.browers.add(sogouBrowser);
-            Browser.browers.add(ttBrowser);
-        }
-
-
+        Browser.browers.add(wacheBrowser);
+        Browser.browers.add(alipayBrowser);
+        Browser.browers.add(browser360);
+        Browser.browers.add(ucBrowser);
+        Browser.browers.add(sogouBrowser);
+        Browser.browers.add(ttBrowser);
     }
+
+
+    public void os() {
+        OS iosOs = new OS("iPhone", "ios");
+        OS.oses.add(iosOs);
+    }
+
 }
