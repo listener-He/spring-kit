@@ -8,13 +8,13 @@ import lombok.Data;
  * @description: 获取API授权返回
  */
 @Data
-public class APITokenResult extends WxResult {
+public class JSAPITicketResult extends WxResult {
 
 
     /**
      *  接口授权
      */
-    private String access_token;
+    private String ticket;
 
 
     /**

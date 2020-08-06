@@ -17,7 +17,11 @@
              <artifactId>common-bean</artifactId>
              <version>${project.version}</version>
          </dependency>
-
+         <dependency>
+             <groupId>org.hehh.cloud.util</groupId>
+             <artifactId>http-processor</artifactId>
+             <version>${project.version}</version>
+         </dependency>
      </dependencies>
 
 

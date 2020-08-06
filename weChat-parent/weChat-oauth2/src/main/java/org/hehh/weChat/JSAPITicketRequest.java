@@ -2,13 +2,14 @@ package org.hehh.weChat;
 
 import org.hehh.weChat.constant.Oauth2API;
 import org.hehh.weChat.result.APITokenResult;
+import org.hehh.weChat.result.JSAPITicketResult;
 
 /**
  * @author: HeHui
- * @date: 2020-08-06 17:31
- * @description: 获取API access_token 请求
+ * @date: 2020-08-06 19:34
+ * @description: 网页授权请求
  */
-public class APIAccessTokenRequest extends AbstractWxRequest<APITokenResult> {
+public class JSAPITicketRequest extends AbstractWxRequest<JSAPITicketResult> {
 
 
     private final AuthStorage tokenStorage;
@@ -19,7 +20,7 @@ public class APIAccessTokenRequest extends AbstractWxRequest<APITokenResult> {
      *
      * @param httpProxy http代理
      */
-    public APIAccessTokenRequest(WxHttpProxy httpProxy,AuthStorage tokenStorage) {
+    public JSAPITicketRequest(WxHttpProxy httpProxy,AuthStorage tokenStorage) {
         super(httpProxy);
         assert tokenStorage != null : "微信的API access_token 存储不能为空";
         this.tokenStorage = tokenStorage;
@@ -32,21 +33,24 @@ public class APIAccessTokenRequest extends AbstractWxRequest<APITokenResult> {
      * 获取访问令牌
      *
      * @param appId     应用程序id
-     * @param appSecret 应用程序的密钥
+     * @param access_token api 令牌
      * @return {@link String}
      */
-    public String getAccessToken(String appId,String appSecret){
+    public String getTicket(String appId,String access_token){
         assert appId != null : "APP-ID不能为空";
-        assert appSecret != null : "APP-Secret不能为空";
+        assert access_token != null : "access_token不能为空";
 
         String key = appId + this.getClass().getName();
 
         return tokenStorage.getToken(key).orElseGet( ()->{
-            APITokenResult result = getHttpProxy().get(String.format(Oauth2API.accessToken, appId, appSecret), APITokenResult.class);
+            JSAPITicketResult result = getHttpProxy().get(String.format(Oauth2API.jSAPITicket, access_token), JSAPITicketResult.class);
             if(result != null){
                 if(result.ok()){
-                    tokenStorage.put(result,key);
-                    return result.getAccess_token();
+                    APITokenResult tokenResult = new APITokenResult();
+                    tokenResult.setAccess_token(result.getTicket());
+                    tokenResult.setExpires_in(result.getExpires_in());
+                    tokenStorage.put(tokenResult,key);
+                    return result.getTicket();
                 }else{
                     //TODO if error ?
                 }
@@ -54,5 +58,4 @@ public class APIAccessTokenRequest extends AbstractWxRequest<APITokenResult> {
             return null;
         });
     }
-
 }

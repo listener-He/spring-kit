@@ -13,7 +13,7 @@ import org.hehh.cloud.common.bean.result.SuccessResult;
  */
 @Data
 @NoArgsConstructor
-public class WxResult {
+public class WxResult implements java.io.Serializable {
 
     /**响应状态码0为成功*/
     protected String errcode;
