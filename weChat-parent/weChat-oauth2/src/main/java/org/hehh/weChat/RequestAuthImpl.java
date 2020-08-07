@@ -27,11 +27,11 @@ public class RequestAuthImpl implements RequestAuth {
      * @param tokenStorage 令牌存储
      * @param apps         应用程序
      */
-    public RequestAuthImpl(WxHttpProxy httpProxy, AuthStorage tokenStorage, List<WxConfigurationParameter.APP> apps) {
+    public RequestAuthImpl(WxHttpProxy httpProxy, AuthStorage tokenStorage, List<WxConfigurationParameter> apps) {
         this.request = new APIAccessTokenRequest(httpProxy,tokenStorage);
         assert apps != null : "确少微信应用配置参数";
 
-        Map<String, String> map = apps.stream().collect(Collectors.toMap(WxConfigurationParameter.APP::getAppId, WxConfigurationParameter.APP::getAppSecret));
+        Map<String, String> map = apps.stream().collect(Collectors.toMap(WxConfigurationParameter::getAppId, WxConfigurationParameter::getAppSecret));
         appMap = Collections.unmodifiableMap(map);
     }
 

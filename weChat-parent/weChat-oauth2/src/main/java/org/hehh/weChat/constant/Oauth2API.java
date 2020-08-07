@@ -14,9 +14,9 @@ public class Oauth2API {
         "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
 
 
-    /**页面授权api*/
-    public static final String jSAPITicket =
-        "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
+    /**应用授权api*/
+    public static final String ticket =
+        "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=%s";
 
 
     /**

@@ -30,20 +30,51 @@ public class JSAPITicketRequest extends AbstractWxRequest {
 
 
     /**
-     * 获取访问令牌
+     *  页面授权
      *
      * @param appId     应用程序id
      * @param access_token api 令牌
      * @return {@link String}
      */
-    public String getTicket(String appId,String access_token){
+    public String jsTicket(String appId,String access_token){
         assert appId != null : "APP-ID不能为空";
         assert access_token != null : "access_token不能为空";
 
-        String key = appId + this.getClass().getName();
+        String key = appId + this.getClass().getName() + "#jsTicket";
 
         return tokenStorage.getToken(key).orElseGet( ()->{
-            JSAPITicketResult result = getHttpProxy().get(String.format(Oauth2API.jSAPITicket, access_token), JSAPITicketResult.class);
+            JSAPITicketResult result = getHttpProxy().get(String.format(Oauth2API.ticket, access_token,"jsapi"), JSAPITicketResult.class);
+            if(result != null){
+                if(result.ok()){
+                    APITokenResult tokenResult = new APITokenResult();
+                    tokenResult.setAccess_token(result.getTicket());
+                    tokenResult.setExpires_in(result.getExpires_in());
+                    tokenStorage.put(tokenResult,key);
+                    return result.getTicket();
+                }else{
+                    //TODO if error ?
+                }
+            }
+            return null;
+        });
+    }
+
+
+    /**
+     *  app授权
+     *
+     * @param appId     应用程序id
+     * @param access_token api 令牌
+     * @return {@link String}
+     */
+    public String appTicket(String appId,String access_token){
+        assert appId != null : "APP-ID不能为空";
+        assert access_token != null : "access_token不能为空";
+
+        String key = appId + this.getClass().getName() + "#appTicket";
+
+        return tokenStorage.getToken(key).orElseGet( ()->{
+            JSAPITicketResult result = getHttpProxy().get(String.format(Oauth2API.ticket, access_token,"jsapi"), JSAPITicketResult.class);
             if(result != null){
                 if(result.ok()){
                     APITokenResult tokenResult = new APITokenResult();

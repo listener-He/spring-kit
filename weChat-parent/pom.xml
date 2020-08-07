@@ -11,6 +11,7 @@
     <modules>
         <module>weChat-annotation</module>
         <module>weChat-oauth2</module>
+        <module>weChat-pay</module>
     </modules>
 
     <parent>
