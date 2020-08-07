@@ -12,30 +12,29 @@ import org.hehh.wechat.pay.result.WxPaymentCodeResult;
  * @date: 2020-08-07 16:02
  * @description: 付款码支付
  */
-public class WxPaymentCodePay implements WxPay<WxPaymentCodeResult, WxPaymentCodeParam> {
+public class WxPaymentCodePay extends AbstractBinarywangWxPay<WxPaymentCodeResult, WxPaymentCodeParam> {
 
 
-    private final WxPayService wxPayService;
-
-
+    /**
+     * wx付款码支付
+     *
+     * @param wxPayService wx支付服务
+     */
     public WxPaymentCodePay(WxPayService wxPayService) {
-        this.wxPayService = wxPayService;
+        super(wxPayService);
     }
 
 
     /**
-     * 支持支付
+     * 支持类型
      *
-     * @param appId 应用程序id
-     * @param type  类型
+     * @param type 类型
      * @return boolean
      */
     @Override
-    public boolean supportsPay(String appId, PayType type) {
-       return wxPayService.getConfig().getAppId().equals(appId) && type.equals(PayType.PAY_CODE);
+    boolean supportsType(PayType type) {
+        return PayType.PAY_CODE.equals(type);
     }
-
-
 
     /**
      * 支付
@@ -45,7 +44,6 @@ public class WxPaymentCodePay implements WxPay<WxPaymentCodeResult, WxPaymentCod
      */
     @Override
     public WxPaymentCodeResult pay(WxPaymentCodeParam payParam) {
-
 
         try {
             WxPayMicropayRequest request = new WxPayMicropayRequest();
