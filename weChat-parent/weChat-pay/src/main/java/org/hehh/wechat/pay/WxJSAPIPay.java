@@ -1,23 +1,24 @@
 package org.hehh.wechat.pay;
 
-import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import org.hehh.wechat.pay.req.WxAPPPayParam;
-import org.hehh.wechat.pay.result.WxAPPPayResult;
+import org.hehh.wechat.pay.req.WxJSAPIPayParam;
+import org.hehh.wechat.pay.result.WxJSAPIPayResult;
 
 /**
  * @author: HeHui
  * @date: 2020-08-07 17:21
- * @description: app支付
+ * @description: jsapi支付
  */
-public class WxAPPPay extends AbstractBinarywangWxPay<WxAPPPayResult, WxAPPPayParam> {
+public class WxJSAPIPay extends AbstractBinarywangWxPay<WxJSAPIPayResult, WxJSAPIPayParam> {
 
 
 
 
-    public WxAPPPay(WxPayService wxPayService) {
+    public WxJSAPIPay(WxPayService wxPayService) {
         super(wxPayService);
     }
 
@@ -33,7 +34,7 @@ public class WxAPPPay extends AbstractBinarywangWxPay<WxAPPPayResult, WxAPPPayPa
      */
     @Override
     boolean supportsType(PayType type) {
-        return PayType.APP.equals(type);
+        return PayType.JSAPI.equals(type);
     }
 
 
@@ -46,7 +47,7 @@ public class WxAPPPay extends AbstractBinarywangWxPay<WxAPPPayResult, WxAPPPayPa
      * @return {@link WxAPPPayParam}
      */
     @Override
-    public WxAPPPayResult pay(WxAPPPayParam payParam) {
+    public WxJSAPIPayResult pay(WxJSAPIPayParam payParam) {
 
 
         WxPayUnifiedOrderRequest request = new WxPayUnifiedOrderRequest();
@@ -83,20 +84,20 @@ public class WxAPPPay extends AbstractBinarywangWxPay<WxAPPPayResult, WxAPPPayPa
 
 
         try {
-            WxPayAppOrderResult result = wxPayService.createOrder(request);
+            WxPayMpOrderResult result = wxPayService.createOrder(request);
 
-            WxAPPPayResult payResult = new WxAPPPayResult();
-            payResult.setPrepayId(result.getPrepayId());
-            payResult.setPartnerId(result.getPartnerId());
+            WxJSAPIPayResult payResult = new WxJSAPIPayResult();
             payResult.setReturnCode("0");
             payResult.setAppId(result.getAppId());
             payResult.setNonceStr(result.getNonceStr());
-            payResult.setSign(result.getSign());
+            payResult.setPaySign(result.getPaySign());
+            payResult.setSignType(result.getSignType());
+            payResult.setNonceStr(result.getNonceStr());
             payResult.setPackageValue(result.getPackageValue());
             payResult.setTimeStamp(result.getTimeStamp());
             return payResult;
         } catch (WxPayException e) {
-            WxAPPPayResult result = new WxAPPPayResult();
+            WxJSAPIPayResult result = new WxJSAPIPayResult();
             result.setErrCode(e.getErrCode());
             result.setErrCodeDes(e.getErrCodeDes());
             return result;
