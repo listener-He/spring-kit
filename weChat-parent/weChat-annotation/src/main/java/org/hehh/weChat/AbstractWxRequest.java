@@ -1,13 +1,12 @@
 package org.hehh.weChat;
 
-import org.hehh.weChat.result.WxResult;
 
 /**
  * @author: HeHui
  * @date: 2020-08-06 17:34
  * @description: 抽象微信请求
  */
-public abstract class AbstractWxRequest<T extends WxResult> implements WxRequest<T> {
+public abstract class AbstractWxRequest implements WxRequest {
 
 
     /**
@@ -27,7 +26,7 @@ public abstract class AbstractWxRequest<T extends WxResult> implements WxRequest
     }
 
 
-    public WxHttpProxy getHttpProxy() {
+    protected WxHttpProxy getHttpProxy() {
         return httpProxy;
     }
 }

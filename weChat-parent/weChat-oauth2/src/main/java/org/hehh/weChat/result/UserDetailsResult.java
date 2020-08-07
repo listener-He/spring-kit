@@ -1,6 +1,8 @@
 package org.hehh.weChat.result;
 
+
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author: HeHui
@@ -8,7 +10,8 @@ import lombok.Data;
  * @description: 微信用户返回
  */
 @Data
-public class UserResult extends WxResult {
+@NoArgsConstructor
+public class UserDetailsResult extends WxResult {
 
 
     /**
@@ -91,4 +94,10 @@ public class UserResult extends WxResult {
 
     /** 二维码扫码场景描述（开发者自定义） */
     private String qr_scene_str;
+
+
+
+    public UserDetailsResult(String errcode, String errmsg) {
+        super(errcode, errmsg);
+    }
 }

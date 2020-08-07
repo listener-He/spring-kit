@@ -1,10 +1,7 @@
 package org.hehh.weChat.result;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hehh.cloud.common.bean.result.ErrorResult;
-import org.hehh.cloud.common.bean.result.SuccessResult;
 
 /**
  * @author : hehh
@@ -35,5 +32,8 @@ public class WxResult implements java.io.Serializable {
     public boolean ok(){
         return errcode != null && errcode.equals("0");
     }
+
+
+
 
 }

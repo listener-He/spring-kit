@@ -8,7 +8,7 @@ import org.hehh.weChat.result.APITokenResult;
  * @date: 2020-08-06 17:31
  * @description: 获取API access_token 请求
  */
-public class APIAccessTokenRequest extends AbstractWxRequest<APITokenResult> {
+public class APIAccessTokenRequest extends AbstractWxRequest {
 
 
     private final AuthStorage tokenStorage;

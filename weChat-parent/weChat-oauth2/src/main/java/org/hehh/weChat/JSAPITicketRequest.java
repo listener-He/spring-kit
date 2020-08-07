@@ -9,7 +9,7 @@ import org.hehh.weChat.result.JSAPITicketResult;
  * @date: 2020-08-06 19:34
  * @description: 网页授权请求
  */
-public class JSAPITicketRequest extends AbstractWxRequest<JSAPITicketResult> {
+public class JSAPITicketRequest extends AbstractWxRequest {
 
 
     private final AuthStorage tokenStorage;
