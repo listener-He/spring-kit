@@ -1,5 +1,6 @@
 package org.hehh.weChat;
 
+import org.hehh.utils.http.HttpRequest;
 import org.hehh.weChat.constant.Oauth2API;
 import org.hehh.weChat.result.APITokenResult;
 
@@ -19,7 +20,7 @@ public class APIAccessTokenRequest extends AbstractWxRequest {
      *
      * @param httpProxy http代理
      */
-    public APIAccessTokenRequest(WxHttpProxy httpProxy,AuthStorage tokenStorage) {
+    public APIAccessTokenRequest(HttpRequest httpProxy, AuthStorage tokenStorage) {
         super(httpProxy);
         assert tokenStorage != null : "微信的API access_token 存储不能为空";
         this.tokenStorage = tokenStorage;

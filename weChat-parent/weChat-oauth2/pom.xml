@@ -17,6 +17,7 @@
             <artifactId>weChat-annotation</artifactId>
             <version>${project.version}</version>
         </dependency>
+
     </dependencies>
 
 

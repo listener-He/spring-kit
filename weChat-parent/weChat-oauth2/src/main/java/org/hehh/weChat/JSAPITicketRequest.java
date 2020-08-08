@@ -1,5 +1,6 @@
 package org.hehh.weChat;
 
+import org.hehh.utils.http.HttpRequest;
 import org.hehh.weChat.constant.Oauth2API;
 import org.hehh.weChat.result.APITokenResult;
 import org.hehh.weChat.result.JSAPITicketResult;
@@ -20,7 +21,7 @@ public class JSAPITicketRequest extends AbstractWxRequest {
      *
      * @param httpProxy http代理
      */
-    public JSAPITicketRequest(WxHttpProxy httpProxy,AuthStorage tokenStorage) {
+    public JSAPITicketRequest(HttpRequest httpProxy, AuthStorage tokenStorage) {
         super(httpProxy);
         assert tokenStorage != null : "微信的API access_token 存储不能为空";
         this.tokenStorage = tokenStorage;

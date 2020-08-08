@@ -1,6 +1,8 @@
 package org.hehh.weChat;
 
 
+import org.hehh.utils.http.HttpRequest;
+
 /**
  * @author: HeHui
  * @date: 2020-08-06 17:34
@@ -12,7 +14,7 @@ public abstract class AbstractWxRequest implements WxRequest {
     /**
      * http代理
      */
-    private final WxHttpProxy httpProxy;
+    private final HttpRequest httpProxy;
 
 
     /**
@@ -20,13 +22,13 @@ public abstract class AbstractWxRequest implements WxRequest {
      *
      * @param httpProxy http代理
      */
-    protected AbstractWxRequest(WxHttpProxy httpProxy) {
+    protected AbstractWxRequest(HttpRequest httpProxy) {
         assert httpProxy != null : "http代理不能为空";
         this.httpProxy = httpProxy;
     }
 
 
-    protected WxHttpProxy getHttpProxy() {
+    protected HttpRequest getHttpProxy() {
         return httpProxy;
     }
 }

@@ -30,7 +30,7 @@ public class WxResult implements java.io.Serializable {
      * @return
      */
     public boolean ok(){
-        return errcode != null && errcode.equals("0");
+        return errcode == null || errcode.equals("0");
     }
 
 

@@ -1,12 +1,13 @@
 package org.hehh.weChat;
 
+import org.hehh.utils.http.HttpRequest;
 import org.hehh.weChat.constant.Oauth2API;
 import org.hehh.weChat.req.UserDetailsParam;
 import org.hehh.weChat.req.UserOauth2Param;
 import org.hehh.weChat.result.UserDetailsResult;
 import org.hehh.weChat.result.UserOauth2Result;
 
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author: HeHui
@@ -22,7 +23,7 @@ public class UserInfoRequest extends AbstractAuthAPIRequest {
      * @param httpProxy http代理
      * @param auth      接口授权
      */
-    protected UserInfoRequest(WxHttpProxy httpProxy, RequestAuth auth) {
+    protected UserInfoRequest(HttpRequest httpProxy, RequestAuth auth) {
         super(httpProxy, auth);
     }
 
@@ -56,6 +57,7 @@ public class UserInfoRequest extends AbstractAuthAPIRequest {
     public UserOauth2Result oauth2(UserOauth2Param param){
         return  getHttpProxy().get(String.format(Oauth2API.oauth2, param.getAppId(), param.getSecret(),param.getCode()),UserOauth2Result.class,0);
     }
+
 
 
 }
