@@ -5,9 +5,14 @@ import org.hehh.wechat.pay.req.WxPayParam;
 import org.hehh.wechat.pay.result.WxPayResult;
 
 /**
+ *  <pre>
+ *      基于binarywang的微信支付
+ *      http://binary.ac.cn/weixin-java-pay-javadoc/
+ *  </pre>
  * @author: HeHui
  * @date: 2020-08-07 17:25
- * @description: 基于binarywang的微信支付
+ * @description: 微信支付抽象类
+ *
  */
 public abstract class AbstractBinarywangWxPay<R extends WxPayResult,P extends WxPayParam> implements WxPay<R,P> {
 
