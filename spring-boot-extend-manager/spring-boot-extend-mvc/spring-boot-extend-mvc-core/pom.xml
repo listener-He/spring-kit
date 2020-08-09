@@ -20,6 +20,11 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>http-processor</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
 
 
 

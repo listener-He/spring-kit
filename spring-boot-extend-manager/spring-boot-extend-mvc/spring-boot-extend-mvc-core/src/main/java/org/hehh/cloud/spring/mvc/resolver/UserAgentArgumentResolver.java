@@ -1,7 +1,7 @@
 package org.hehh.cloud.spring.mvc.resolver;
 
-import cn.hutool.http.useragent.UserAgent;
-import org.hehh.cloud.spring.userAgent.UserAgentProcessor;
+import org.hehh.utils.http.userAgent.UserAgent;
+import org.hehh.utils.http.userAgent.UserAgentProcessor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.WebDataBinder;
