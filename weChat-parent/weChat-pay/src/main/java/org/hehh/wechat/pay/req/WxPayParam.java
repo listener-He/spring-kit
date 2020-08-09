@@ -3,6 +3,7 @@ package org.hehh.wechat.pay.req;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hehh.weChat.req.WxRequestParam;
 
 import java.io.Serializable;
 
@@ -13,19 +14,9 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)
-public class WxPayParam implements Serializable {
+public class WxPayParam extends WxRequestParam {
 
-    /**
-     * <pre>
-     * 字段名：公众账号ID.
-     * 变量名：appid
-     * 是否必填：是
-     * 类型：String(32)
-     * 示例值：wxd678efh567hg6787
-     * 描述：微信分配的公众账号ID（企业号corpid即为此appId）
-     * </pre>
-     */
-    protected String appId;
+
 
 
     /**

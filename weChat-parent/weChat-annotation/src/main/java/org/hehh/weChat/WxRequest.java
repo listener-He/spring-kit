@@ -1,6 +1,5 @@
 package org.hehh.weChat;
 
-import org.hehh.weChat.result.WxResult;
 
 /**
  * @author: HeHui

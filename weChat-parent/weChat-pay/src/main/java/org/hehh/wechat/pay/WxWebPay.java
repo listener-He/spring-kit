@@ -1,24 +1,13 @@
 package org.hehh.wechat.pay;
 
-import cn.hutool.core.thread.ThreadUtil;
-import cn.hutool.core.util.RandomUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpUtil;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
-import com.github.binarywang.wxpay.bean.order.WxPayNativeOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import org.hehh.wechat.pay.req.WxAPPPayParam;
-import org.hehh.wechat.pay.req.WxNativePayParam;
-import org.hehh.wechat.pay.req.WxPayParam;
 import org.hehh.wechat.pay.req.WxWebPayParam;
-import org.hehh.wechat.pay.result.WxNativePayResult;
 import org.hehh.wechat.pay.result.WxWebPayResult;
 
-import java.net.HttpCookie;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author: HeHui
@@ -104,8 +93,8 @@ public class WxWebPay extends AbstractBinarywangWxPay<WxWebPayResult, WxWebPayPa
             return payResult;
         } catch (WxPayException e) {
             WxWebPayResult result = new WxWebPayResult();
-            result.setErrCode(e.getErrCode());
-            result.setErrCodeDes(e.getErrCodeDes());
+            result.setErrcode(e.getErrCode());
+            result.setErrmsg(e.getErrCodeDes());
             return result;
         }
     }

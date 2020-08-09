@@ -11,7 +11,14 @@ import lombok.Data;
 public class WxRequestParam implements java.io.Serializable {
 
     /**
-     * 应用程序id
+     * <pre>
+     * 字段名：公众账号ID.
+     * 变量名：appid
+     * 是否必填：是
+     * 类型：String(32)
+     * 示例值：wxd678efh567hg6787
+     * 描述：微信分配的公众账号ID（企业号corpid即为此appId）
+     * </pre>
      */
-    private String appId;
+    protected String appId;
 }

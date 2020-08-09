@@ -9,7 +9,7 @@ import org.hehh.wechat.pay.result.WxPayResult;
  * @date: 2020-08-07 15:30
  * @description: 微信支付
  */
-public interface WxPay<R extends WxPayResult,P extends WxPayParam> {
+public interface WxPay<R extends WxPayResult,P extends WxPayParam>  {
 
 
     /**

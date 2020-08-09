@@ -1,6 +1,7 @@
 package org.hehh.wechat.pay.result;
 
 import lombok.Data;
+import org.hehh.weChat.result.WxResult;
 
 import java.io.Serializable;
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * @description: 微信付款返回
  */
 @Data
-public class WxPayResult implements Serializable {
+public class WxPayResult extends WxResult {
 
     /**
      * 返回状态码.
@@ -27,14 +28,8 @@ public class WxPayResult implements Serializable {
      * 业务结果.
      */
     private String resultCode;
-    /**
-     * 错误代码.
-     */
-    private String errCode;
-    /**
-     * 错误代码描述.
-     */
-    private String errCodeDes;
+
+
     /**
      * 公众账号ID.
      */
@@ -59,4 +54,16 @@ public class WxPayResult implements Serializable {
      * 签名.
      */
     private String sign;
+
+
+
+    /**
+     * 响应是否成功
+     *
+     * @return
+     */
+    @Override
+    public boolean ok() {
+        return super.ok() && (resultCode != null && resultCode.equalsIgnoreCase("SUCCESS"));
+    }
 }

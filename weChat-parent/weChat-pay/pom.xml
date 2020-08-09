@@ -18,8 +18,8 @@
     <dependencies>
         <dependency>
             <groupId>org.hehh.wechat</groupId>
-            <artifactId>weChat-oauth2</artifactId>
-            <version>${project.version}</version>
+            <artifactId>weChat-annotation</artifactId>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.binarywang</groupId>
@@ -27,15 +27,7 @@
             <version>${weixin-java-pay.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-http</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-json</artifactId>
-            <version>${hutool.version}</version>
-        </dependency>
+
 
     </dependencies>
 
