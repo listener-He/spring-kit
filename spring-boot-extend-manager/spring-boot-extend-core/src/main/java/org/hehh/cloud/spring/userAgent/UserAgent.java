@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc;
+package org.hehh.cloud.spring.userAgent;
 
 import lombok.Data;
 
@@ -11,9 +11,14 @@ import lombok.Data;
 public class UserAgent implements java.io.Serializable {
 
     /**
-     *  名称
+     *  系统名称
      */
-    private String name;
+    private String osName;
+
+    /**
+     * 浏览器的名字
+     */
+    private String browserName;
 
 
     /**
@@ -26,6 +31,5 @@ public class UserAgent implements java.io.Serializable {
      */
     private String mobileSystem;
 
-    /** 版本 */
-    private String version;
+
 }

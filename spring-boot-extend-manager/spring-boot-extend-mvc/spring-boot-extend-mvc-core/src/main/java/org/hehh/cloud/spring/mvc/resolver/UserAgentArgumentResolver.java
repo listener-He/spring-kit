@@ -1,7 +1,7 @@
 package org.hehh.cloud.spring.mvc.resolver;
 
 import cn.hutool.http.useragent.UserAgent;
-import cn.hutool.http.useragent.UserAgentParser;
+import org.hehh.cloud.spring.userAgent.UserAgentProcessor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.WebDataBinder;
@@ -19,8 +19,11 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class UserAgentArgumentResolver implements HandlerMethodArgumentResolver {
 
 
+    private final UserAgentProcessor userAgentProcessor;
 
-
+    public UserAgentArgumentResolver(UserAgentProcessor userAgentProcessor){
+        this.userAgentProcessor = userAgentProcessor;
+    }
 
     /**
      * Whether the given {@linkplain MethodParameter method parameter} is
@@ -32,7 +35,7 @@ public class UserAgentArgumentResolver implements HandlerMethodArgumentResolver 
      */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return org.hehh.cloud.spring.mvc.UserAgent.class.equals(parameter.getParameterType());
+        return UserAgent.class.equals(parameter.getParameterType());
     }
 
     /**
@@ -53,25 +56,13 @@ public class UserAgentArgumentResolver implements HandlerMethodArgumentResolver 
      */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        if(userAgentProcessor == null){
+            return null;
+        }
         String[] values = webRequest.getHeaderValues(HttpHeaders.USER_AGENT);
         if(values != null && values.length > 0){
             String userAgent = values[0];
-            UserAgent parse = UserAgentParser.parse(userAgent);
-
-            org.hehh.cloud.spring.mvc.UserAgent  agent = new org.hehh.cloud.spring.mvc.UserAgent();
-
-            agent.setMobile(parse.isMobile());
-
-            if(parse.isMobile()){
-                agent.setMobileSystem(parse.getPlatform().getName());
-                agent.setName(parse.getPlatform().getName());
-            }else{
-                agent.setName(parse.getBrowser().getName());
-            }
-
-            agent.setVersion(parse.getVersion());
-
-            return agent;
+            return userAgentProcessor.parse(userAgent);
         }
 
         return null;

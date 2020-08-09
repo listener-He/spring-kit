@@ -627,7 +627,6 @@ public class RequestMappingHandlerEnhanceAdapter extends RequestMappingHandlerAd
         List<HandlerMethodArgumentResolver> resolvers = new ArrayList<>();
 
         // Annotation-based argument resolution
-        resolvers.add(new UserAgentArgumentResolver());
         resolvers.add(new ParamJsonArgumentResolver(getMessageConverters(),this.requestResponseBodyAdvice,getBeanFactory()));
         resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
         resolvers.add(new RequestParamMapMethodArgumentResolver());
