@@ -10,23 +10,30 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.hehh.cloud.util</groupId>
-    <artifactId>http-processor</artifactId>
-
+    <artifactId>spring-boot-http-starter</artifactId>
 
     <dependencies>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
-            <artifactId>hutool-json</artifactId>
-            <version>${hutool.version}</version>
+            <artifactId>hutool-http</artifactId>
+            <optional>true</optional>
         </dependency>
-
-
         <dependency>
             <groupId>org.hehh.cloud.util</groupId>
-            <artifactId>common-core</artifactId>
+            <artifactId>http-processor</artifactId>
+            <version>${parent.version}</version>
         </dependency>
     </dependencies>
+
 
     <build>
         <plugins>

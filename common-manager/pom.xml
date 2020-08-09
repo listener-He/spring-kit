@@ -22,6 +22,7 @@
         <module>ffmpeg-processor</module>
         <module>file-processor</module>
         <module>smooth-read</module>
+        <module>spring-boot-http-starter</module>
     </modules>
 
 
