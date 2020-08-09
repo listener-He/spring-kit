@@ -1,5 +1,6 @@
 package org.hehh.weChat;
 
+import org.hehh.utils.http.HttpRequest;
 import org.hehh.weChat.req.WxRequestParam;
 
 import java.util.*;
@@ -27,7 +28,7 @@ public class RequestAuthImpl implements RequestAuth {
      * @param tokenStorage 令牌存储
      * @param apps         应用程序
      */
-    public RequestAuthImpl(WxHttpProxy httpProxy, AuthStorage tokenStorage, List<WxConfigurationParameter> apps) {
+    public RequestAuthImpl(HttpRequest httpProxy, AuthStorage tokenStorage, List<WxConfigurationParameter> apps) {
         this.request = new APIAccessTokenRequest(httpProxy,tokenStorage);
         assert apps != null : "确少微信应用配置参数";
 

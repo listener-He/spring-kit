@@ -12,6 +12,7 @@
         <module>weChat-annotation</module>
         <module>weChat-oauth2</module>
         <module>weChat-pay</module>
+        <module>spring-boot-wechat-oauth2-starter</module>
     </modules>
 
     <parent>
