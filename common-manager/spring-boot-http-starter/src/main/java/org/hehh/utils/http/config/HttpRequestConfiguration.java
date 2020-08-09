@@ -7,6 +7,9 @@ import org.apache.http.client.HttpClient;
 import org.hehh.utils.http.HttpClientRequestProxy;
 import org.hehh.utils.http.HttpRequestProxy;
 import org.hehh.utils.http.HuToolHttpRequestProxy;
+import org.hehh.utils.http.userAgent.HuToolUserAgentProcessor;
+import org.hehh.utils.http.userAgent.UserAgentConfiguration;
+import org.hehh.utils.http.userAgent.UserAgentProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -38,41 +41,18 @@ public class HttpRequestConfiguration {
     static class HuToolHttpProxyConfiguration {
 
 
-        public HuToolHttpProxyConfiguration(@Autowired(required = false) List<UserAgentConfiguration> userAgentConfigurations) {
-            if (!CollectionUtils.isEmpty(userAgentConfigurations)) {
-                List<org.hehh.utils.http.browser.Browser> browsers = new LinkedList<>();
-                List<org.hehh.utils.http.browser.OS> osList = new LinkedList<>();
-
-                for (UserAgentConfiguration configuration : userAgentConfigurations) {
-                    configuration.addBrowser(browsers);
-                    configuration.addOS(osList);
-                }
-
-                browser(browsers);
-                os(osList);
-            }
+        /**
+         * 用户代理处理器
+         *
+         * @param configurations 配置
+         * @return {@link UserAgentProcessor}
+         */
+        @Bean
+        @ConditionalOnMissingBean(UserAgentProcessor.class)
+        public UserAgentProcessor userAgentProcessor(@Autowired(required = false) List<UserAgentConfiguration> configurations){
+            return new HuToolUserAgentProcessor(configurations);
         }
 
-
-        private void browser(List<org.hehh.utils.http.browser.Browser> browsers) {
-
-            for (org.hehh.utils.http.browser.Browser v : browsers) {
-                Browser wacheBrowser = new Browser(v.getName(), v.getRegex(), v.getVersionRegex());
-                Browser.browers.add(wacheBrowser);
-            }
-            ;
-
-
-        }
-
-
-        private void os(List<org.hehh.utils.http.browser.OS> osList) {
-            for (org.hehh.utils.http.browser.OS v : osList) {
-                OS os = new OS(v.getName(), v.getRegex());
-                OS.oses.add(os);
-            }
-
-        }
 
 
         /**

@@ -26,6 +26,7 @@
             <groupId>org.hehh.cloud.util</groupId>
             <artifactId>common-core</artifactId>
         </dependency>
+
     </dependencies>
 
     <build>

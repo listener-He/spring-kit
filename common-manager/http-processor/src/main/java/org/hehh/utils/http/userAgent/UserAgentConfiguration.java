@@ -1,18 +1,13 @@
-package org.hehh.utils.http.config;
-
-import org.hehh.utils.http.browser.Browser;
-import org.hehh.utils.http.browser.OS;
+package org.hehh.utils.http.userAgent;
 
 import java.util.List;
 
 /**
  * @author: HeHui
- * @date: 2020-08-10 00:04
+ * @date: 2020-08-10 00:55
  * @description: UserAgent 配置
  */
 public interface UserAgentConfiguration {
-
-
     /**
      * 添加操作系统
      *
@@ -27,4 +22,12 @@ public interface UserAgentConfiguration {
      * @param browsers 浏览器
      */
     void addBrowser(List<Browser> browsers);
+
+
+    /**
+     * 添加平台
+     *
+     * @param platforms 平台
+     */
+    void addPlatform(List<Platform> platforms);
 }

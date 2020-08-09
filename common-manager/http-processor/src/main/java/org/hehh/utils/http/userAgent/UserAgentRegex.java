@@ -1,4 +1,4 @@
-package org.hehh.utils.http.browser;
+package org.hehh.utils.http.userAgent;
 
 import lombok.Data;
 

@@ -1,10 +1,10 @@
-package org.hehh.utils.http.browser;
+package org.hehh.utils.http.userAgent;
 
 import lombok.Data;
 
 /**
  * @author: HeHui
- * @date: 2020-08-10 00:06
+ * @date: 2020-08-10 00:54
  * @description: 浏览器
  */
 @Data
