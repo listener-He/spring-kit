@@ -99,8 +99,8 @@ public class WxPaymentCodePay extends AbstractBinarywangWxPay<WxPaymentCodeResul
             result.setReturnCode(micropay.getReturnCode());
             result.setReturnMsg(micropay.getReturnMsg());
             result.setResultCode(micropay.getResultCode());
-            result.setErrCode(micropay.getErrCode());
-            result.setErrCodeDes(micropay.getErrCodeDes());
+            result.setErrcode(micropay.getErrCode());
+            result.setErrmsg(micropay.getErrCodeDes());
             result.setAppId(micropay.getAppid());
             result.setMchId(micropay.getMchId());
             result.setSubAppId(micropay.getSubAppId());
@@ -110,8 +110,8 @@ public class WxPaymentCodePay extends AbstractBinarywangWxPay<WxPaymentCodeResul
         return result;
         } catch (WxPayException e) {
             WxPaymentCodeResult result = new WxPaymentCodeResult();
-            result.setErrCode(e.getErrCode());
-            result.setErrCodeDes(e.getErrCodeDes());
+            result.setErrcode(e.getErrCode());
+            result.setErrmsg(e.getErrCodeDes());
             return result;
         }
     }

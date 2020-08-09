@@ -98,8 +98,8 @@ public class WxJSAPIPay extends AbstractBinarywangWxPay<WxJSAPIPayResult, WxJSAP
             return payResult;
         } catch (WxPayException e) {
             WxJSAPIPayResult result = new WxJSAPIPayResult();
-            result.setErrCode(e.getErrCode());
-            result.setErrCodeDes(e.getErrCodeDes());
+            result.setErrcode(e.getErrCode());
+            result.setErrmsg(e.getErrCodeDes());
             return result;
         }
     }

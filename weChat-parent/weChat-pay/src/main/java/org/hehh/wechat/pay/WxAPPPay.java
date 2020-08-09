@@ -97,8 +97,8 @@ public class WxAPPPay extends AbstractBinarywangWxPay<WxAPPPayResult, WxAPPPayPa
             return payResult;
         } catch (WxPayException e) {
             WxAPPPayResult result = new WxAPPPayResult();
-            result.setErrCode(e.getErrCode());
-            result.setErrCodeDes(e.getErrCodeDes());
+            result.setErrcode(e.getErrCode());
+            result.setErrmsg(e.getErrCodeDes());
             return result;
         }
     }

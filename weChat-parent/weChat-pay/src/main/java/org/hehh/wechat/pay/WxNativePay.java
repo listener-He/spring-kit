@@ -92,8 +92,8 @@ public class WxNativePay extends AbstractBinarywangWxPay<WxNativePayResult, WxNa
             return payResult;
         } catch (WxPayException e) {
             WxNativePayResult result = new WxNativePayResult();
-            result.setErrCode(e.getErrCode());
-            result.setErrCodeDes(e.getErrCodeDes());
+            result.setErrcode(e.getErrCode());
+            result.setErrmsg(e.getErrCodeDes());
             return result;
         }
     }

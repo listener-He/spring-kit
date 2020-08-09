@@ -85,8 +85,8 @@ public class WxFacePay extends AbstractBinarywangWxPay<WxFacePayResult, WxFacePa
             payResult.setReturnCode(result.getReturnCode());
             payResult.setReturnMsg(result.getReturnMsg());
             payResult.setResultCode(result.getResultCode());
-            payResult.setErrCode(result.getErrCode());
-            payResult.setErrCodeDes(result.getErrCodeDes());
+            payResult.setErrcode(result.getErrCode());
+            payResult.setErrmsg(result.getErrCodeDes());
             payResult.setAppId(result.getAppid());
             payResult.setMchId(result.getMchId());
             payResult.setSubAppId(result.getSubAppId());
@@ -97,8 +97,8 @@ public class WxFacePay extends AbstractBinarywangWxPay<WxFacePayResult, WxFacePa
             return payResult;
         } catch (WxPayException e) {
             WxFacePayResult result = new WxFacePayResult();
-            result.setErrCode(e.getErrCode());
-            result.setErrCodeDes(e.getErrCodeDes());
+            result.setErrcode(e.getErrCode());
+            result.setErrmsg(e.getErrCodeDes());
             return result;
         }
     }
