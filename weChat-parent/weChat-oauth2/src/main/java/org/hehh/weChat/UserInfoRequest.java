@@ -1,12 +1,13 @@
 package org.hehh.weChat;
 
-import org.hehh.utils.http.HttpRequest;
+import org.hehh.utils.http.HttpRequestProxy;
 import org.hehh.weChat.constant.Oauth2API;
 import org.hehh.weChat.req.UserDetailsParam;
 import org.hehh.weChat.req.UserOauth2Param;
 import org.hehh.weChat.result.UserDetailsResult;
 import org.hehh.weChat.result.UserOauth2Result;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -23,7 +24,7 @@ public class UserInfoRequest extends AbstractAuthAPIRequest {
      * @param httpProxy http代理
      * @param auth      接口授权
      */
-    protected UserInfoRequest(HttpRequest httpProxy, RequestAuth auth) {
+    protected UserInfoRequest(HttpRequestProxy httpProxy, RequestAuth auth) {
         super(httpProxy, auth);
     }
 
@@ -41,8 +42,12 @@ public class UserInfoRequest extends AbstractAuthAPIRequest {
         if(!optional.isPresent()){
             return new UserDetailsResult("401","API无法授权" );
         }
-        
-      return  getHttpProxy().get(String.format(Oauth2API.userInfo, optional.get(), param.getOpenId()),UserDetailsResult.class,0);
+
+        try {
+            return  getHttpProxy().get(String.format(Oauth2API.userInfo, optional.get(), param.getOpenId()),UserDetailsResult.class,0).getData();
+        } catch (IOException e) {
+        }
+        return new UserDetailsResult("500","请求异常" );
     }
 
 
@@ -55,7 +60,14 @@ public class UserInfoRequest extends AbstractAuthAPIRequest {
      * @return {@link UserOauth2Result}
      */
     public UserOauth2Result oauth2(UserOauth2Param param){
-        return  getHttpProxy().get(String.format(Oauth2API.oauth2, param.getAppId(), param.getSecret(),param.getCode()),UserOauth2Result.class,0);
+        try {
+            return getHttpProxy().get(String.format(Oauth2API.oauth2, param.getAppId(), param.getSecret(),param.getCode()),UserOauth2Result.class,0).getData();
+        } catch (IOException e) {
+        }
+        UserOauth2Result result = new UserOauth2Result();
+        result.setErrcode("500");
+        result.setErrmsg("请求异常");
+        return result;
     }
 
 

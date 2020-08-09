@@ -1,6 +1,6 @@
 package org.hehh.weChat;
 
-import org.hehh.utils.http.HttpRequest;
+import org.hehh.utils.http.HttpRequestProxy;
 
 
 /**
@@ -8,7 +8,7 @@ import org.hehh.utils.http.HttpRequest;
  * @date: 2020-08-06 17:37
  * @description: 微信请求代理
  */
-public abstract class WxHttpProxy implements HttpRequest {
+public abstract class WxHttpProxy implements HttpRequestProxy {
 
 
 

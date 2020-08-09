@@ -1,7 +1,7 @@
 package org.hehh.wechat.config;
 
-import org.hehh.utils.http.HttpRequest;
-import org.hehh.utils.http.HuToolHttpRequest;
+import org.hehh.utils.http.HttpRequestProxy;
+import org.hehh.utils.http.HuToolHttpRequestProxy;
 import org.hehh.weChat.AuthStorage;
 import org.hehh.weChat.RequestAuth;
 import org.hehh.weChat.RequestAuthImpl;
@@ -40,10 +40,7 @@ public class WxOauth2Configuration {
 
     @Bean
     @ConditionalOnMissingBean(RequestAuth.class)
-    public RequestAuth requestAuth(@Autowired(required = false) HttpRequest httpProxy, AuthStorage tokenStorage, WxConfigurationMoreParameter parameter){
-        if(httpProxy == null){
-            httpProxy = new HuToolHttpRequest();
-        }
+    public RequestAuth requestAuth(@Autowired HttpRequestProxy httpProxy, AuthStorage tokenStorage, WxConfigurationMoreParameter parameter){
         return new RequestAuthImpl(httpProxy,tokenStorage,parameter.getApps());
     }
 

@@ -1,9 +1,11 @@
 package org.hehh.weChat;
 
-import org.hehh.utils.http.HttpRequest;
+import org.hehh.utils.http.HttpRequestProxy;
 import org.hehh.weChat.constant.Oauth2API;
 import org.hehh.weChat.result.APITokenResult;
 import org.hehh.weChat.result.JSAPITicketResult;
+
+import java.io.IOException;
 
 /**
  * @author: HeHui
@@ -21,7 +23,7 @@ public class JSAPITicketRequest extends AbstractWxRequest {
      *
      * @param httpProxy http代理
      */
-    public JSAPITicketRequest(HttpRequest httpProxy, AuthStorage tokenStorage) {
+    public JSAPITicketRequest(HttpRequestProxy httpProxy, AuthStorage tokenStorage) {
         super(httpProxy);
         assert tokenStorage != null : "微信的API access_token 存储不能为空";
         this.tokenStorage = tokenStorage;
@@ -44,7 +46,12 @@ public class JSAPITicketRequest extends AbstractWxRequest {
         String key = appId + this.getClass().getName() + "#jsTicket";
 
         return tokenStorage.getToken(key).orElseGet( ()->{
-            JSAPITicketResult result = getHttpProxy().get(String.format(Oauth2API.ticket, access_token,"jsapi"), JSAPITicketResult.class);
+            JSAPITicketResult result = null;
+            try {
+                result = getHttpProxy().get(String.format(Oauth2API.ticket, access_token,"jsapi"), JSAPITicketResult.class).getData();
+            } catch (IOException e) {
+                return null;
+            }
             if(result != null){
                 if(result.ok()){
                     APITokenResult tokenResult = new APITokenResult();
@@ -75,7 +82,12 @@ public class JSAPITicketRequest extends AbstractWxRequest {
         String key = appId + this.getClass().getName() + "#appTicket";
 
         return tokenStorage.getToken(key).orElseGet( ()->{
-            JSAPITicketResult result = getHttpProxy().get(String.format(Oauth2API.ticket, access_token,"jsapi"), JSAPITicketResult.class);
+            JSAPITicketResult result = null;
+            try {
+                result = getHttpProxy().get(String.format(Oauth2API.ticket, access_token,"jsapi"), JSAPITicketResult.class).getData();
+            } catch (IOException e) {
+                return null;
+            }
             if(result != null){
                 if(result.ok()){
                     APITokenResult tokenResult = new APITokenResult();

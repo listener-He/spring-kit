@@ -1,6 +1,6 @@
 package org.hehh.weChat;
 
-import org.hehh.utils.http.HttpRequest;
+import org.hehh.utils.http.HttpRequestProxy;
 import org.hehh.weChat.req.WxRequestParam;
 
 import java.util.Optional;
@@ -23,7 +23,7 @@ public abstract class AbstractAuthAPIRequest extends AbstractWxRequest {
      * @param httpProxy http代理
      * @param auth 接口授权
      */
-    protected AbstractAuthAPIRequest(HttpRequest httpProxy, RequestAuth auth) {
+    protected AbstractAuthAPIRequest(HttpRequestProxy httpProxy, RequestAuth auth) {
         super(httpProxy);
         assert auth != null : "接口授权不能位空";
         this.auth = auth;

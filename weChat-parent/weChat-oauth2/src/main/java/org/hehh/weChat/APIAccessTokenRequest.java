@@ -1,8 +1,10 @@
 package org.hehh.weChat;
 
-import org.hehh.utils.http.HttpRequest;
+import org.hehh.utils.http.HttpRequestProxy;
 import org.hehh.weChat.constant.Oauth2API;
 import org.hehh.weChat.result.APITokenResult;
+
+import java.io.IOException;
 
 /**
  * @author: HeHui
@@ -20,7 +22,7 @@ public class APIAccessTokenRequest extends AbstractWxRequest {
      *
      * @param httpProxy http代理
      */
-    public APIAccessTokenRequest(HttpRequest httpProxy, AuthStorage tokenStorage) {
+    public APIAccessTokenRequest(HttpRequestProxy httpProxy, AuthStorage tokenStorage) {
         super(httpProxy);
         assert tokenStorage != null : "微信的API access_token 存储不能为空";
         this.tokenStorage = tokenStorage;
@@ -43,7 +45,12 @@ public class APIAccessTokenRequest extends AbstractWxRequest {
         String key = appId + this.getClass().getName();
 
         return tokenStorage.getToken(key).orElseGet( ()->{
-            APITokenResult result = getHttpProxy().get(String.format(Oauth2API.accessToken, appId, appSecret), APITokenResult.class);
+            APITokenResult result = null;
+            try {
+                result = getHttpProxy().get(String.format(Oauth2API.accessToken, appId, appSecret), APITokenResult.class).getData();
+            } catch (IOException e) {
+                result = null;
+            }
             if(result != null){
                 if(result.ok()){
                     tokenStorage.put(result,key);
