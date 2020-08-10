@@ -2,8 +2,10 @@ package org.hehh.weChat;
 
 import org.hehh.utils.http.HttpRequestProxy;
 import org.hehh.weChat.constant.Oauth2API;
+import org.hehh.weChat.req.UserAuthCodeParam;
 import org.hehh.weChat.req.UserDetailsParam;
 import org.hehh.weChat.req.UserOauth2Param;
+import org.hehh.weChat.result.UserAuthCodeResult;
 import org.hehh.weChat.result.UserDetailsResult;
 import org.hehh.weChat.result.UserOauth2Result;
 
@@ -70,6 +72,23 @@ public class UserInfoRequest extends AbstractAuthAPIRequest {
         return result;
     }
 
+
+    /**
+     *  验证小程序登陆code授权
+     *
+     * @param param 参数
+     * @return {@link UserAuthCodeResult}
+     */
+    public UserAuthCodeResult authCode(UserAuthCodeParam param){
+        try {
+            return getHttpProxy().get(String.format(Oauth2API.auth_code, param.getAppId(), param.getSecret(),param.getJs_code()),0).getData(UserAuthCodeResult.class);
+        } catch (IOException e) {
+        }
+        UserAuthCodeResult result = new UserAuthCodeResult();
+        result.setErrcode("500");
+        result.setErrmsg("请求异常");
+        return result;
+    }
 
 
 }

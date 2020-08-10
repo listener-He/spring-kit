@@ -84,7 +84,7 @@ public class JSAPITicketRequest extends AbstractWxRequest {
         return tokenStorage.getToken(key).orElseGet( ()->{
             JSAPITicketResult result = null;
             try {
-                result = getHttpProxy().get(String.format(Oauth2API.ticket, access_token,"jsapi")).getData(JSAPITicketResult.class);
+                result = getHttpProxy().get(String.format(Oauth2API.ticket, access_token,"app")).getData(JSAPITicketResult.class);
             } catch (IOException e) {
                 return null;
             }

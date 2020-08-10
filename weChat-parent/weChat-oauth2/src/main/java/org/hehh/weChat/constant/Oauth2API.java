@@ -20,6 +20,12 @@ public class Oauth2API {
 
 
     /**
+     * 小程序 登录凭证校验
+     *  https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html
+     */
+    public static final String auth_code = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
+
+    /**
      *  授权
      */
     public static final String oauth2 =
