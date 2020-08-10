@@ -17,12 +17,10 @@ public interface HttpRequestProxy {
     /**  get 请求
      *
      * @param urlString    url字符串
-     * @param responseType 响应类型
-     * @return {@link T}
      * @throws IOException exception
      */
-    default <T> ResponseProxy<T> get(String urlString, Class<T> responseType) throws IOException {
-        return get(urlString,responseType,-1);
+    default ResponseProxy get(String urlString) throws IOException {
+        return get(urlString,-1);
     };
 
 
@@ -31,13 +29,11 @@ public interface HttpRequestProxy {
      *  get 请求
      *
      * @param urlString    url字符串
-     * @param responseType 响应类型
      * @param timeout 超时毫秒
-     * @return {@link T}
      * @throws IOException exception
      */
-    default <T> ResponseProxy<T> get(String urlString,Class<T> responseType,int timeout) throws IOException{
-        return get(urlString,responseType,null,timeout);
+    default  ResponseProxy get(String urlString,int timeout) throws IOException{
+        return get(urlString,null,timeout);
     }
 
 
@@ -47,13 +43,11 @@ public interface HttpRequestProxy {
      *  get 请求
      *
      * @param urlString    url字符串
-     * @param responseType 响应类型
      * @param headers 请求头
      * @param timeout 超时毫秒
-     * @return {@link T}
      * @throws IOException exception
      */
-    <T> ResponseProxy<T> get(String urlString,Class<T> responseType,Headers headers,int timeout) throws IOException;
+     ResponseProxy get(String urlString,Headers headers,int timeout) throws IOException;
 
 
 
@@ -65,11 +59,10 @@ public interface HttpRequestProxy {
      *
      * @param url     url
      * @param param   参数
-     * @return {@link T}
      * @throws IOException exception
      */
-    default <T> ResponseProxy<T> post(String url, Map<String,String> param,Class<T> responseType) throws IOException{
-        return post(url,param,responseType,-1);
+    default  ResponseProxy post(String url, Map<String,String> param) throws IOException{
+        return post(url,param,-1);
     };
 
 
@@ -79,11 +72,10 @@ public interface HttpRequestProxy {
      * @param url     url
      * @param param   参数
      * @param timeout 超时
-     * @return {@link T}
      * @throws IOException exception
      */
-    default <T> ResponseProxy<T> post(String url, Map<String,String> param,Class<T> responseType, int timeout) throws IOException {
-        return post(url,param,null,responseType,timeout);
+    default  ResponseProxy post(String url, Map<String,String> param, int timeout) throws IOException {
+        return post(url,param,null,timeout);
     }
 
 
@@ -94,10 +86,9 @@ public interface HttpRequestProxy {
      * @param url     url
      * @param param   参数
      * @param timeout 超时
-     * @return {@link T}
      * @throws IOException exception
      */
-    <T> ResponseProxy<T> post(String url, Map<String,String> param,Headers headers,Class<T> responseType, int timeout) throws IOException;
+     ResponseProxy post(String url, Map<String,String> param,Headers headers, int timeout) throws IOException;
 
 
 
@@ -108,11 +99,10 @@ public interface HttpRequestProxy {
      *
      * @param url     url
      * @param body 请求参数
-     * @return {@link T}
      * @throws IOException exception
      */
-    default <T> ResponseProxy<T> post(String url,String body,Class<T> responseType) throws IOException {
-        return post(url,body,responseType,-1);
+    default  ResponseProxy post(String url,String body) throws IOException {
+        return post(url,body,-1);
     }
 
 
@@ -122,11 +112,10 @@ public interface HttpRequestProxy {
      * @param url     url
      * @param body 请求参数
      * @param timeout 超时
-     * @return {@link T}
      * @throws IOException exception
      */
-    default <T> ResponseProxy<T> post(String url,String body ,Class<T> responseType,int timeout) throws IOException {
-        return post(url,body,null,responseType,timeout);
+    default  ResponseProxy post(String url,String body ,int timeout) throws IOException {
+        return post(url,body,null,timeout);
     }
 
 
@@ -137,11 +126,9 @@ public interface HttpRequestProxy {
      * @param body         请求参数
      * @param headers      请求头
      * @param timeout      超时
-     * @param responseType 响应类型
-     * @return {@link T}
      * @throws IOException exception
      */
-    <T> ResponseProxy<T> post(String url,String body ,Headers headers,Class<T> responseType,int timeout) throws IOException;
+     ResponseProxy post(String url,String body ,Headers headers,int timeout) throws IOException;
 
 
 
@@ -152,7 +139,7 @@ public interface HttpRequestProxy {
      * @param file 下载到文件
      * @return {@link ResponseProxy<File>}
      */
-    default ResponseProxy<File> downloadGet(String url,File file) throws IOException {
+    default ResponseProxy downloadGet(String url,File file) throws IOException {
         return this.downloadGet(url,null,file,-1);
     }
 
@@ -167,7 +154,7 @@ public interface HttpRequestProxy {
      * @param timeout      超时
      * @return {@link ResponseProxy<File>}
      */
-     ResponseProxy<File> downloadGet(String url,Headers headers,File file, int timeout) throws IOException;
+     ResponseProxy downloadGet(String url,Headers headers,File file, int timeout) throws IOException;
 
 
 
@@ -178,7 +165,7 @@ public interface HttpRequestProxy {
      * @param param        参数
      * @return {@link ResponseProxy<File>}
      */
-    default ResponseProxy<File> downloadPost(String url,Map<String,String> param,File file) throws IOException {
+    default ResponseProxy downloadPost(String url,Map<String,String> param,File file) throws IOException {
        return this.downloadPost(url,param,null,file,-1);
     }
 
@@ -193,5 +180,5 @@ public interface HttpRequestProxy {
      * @param param        参数
      * @return {@link ResponseProxy<File>}
      */
-     ResponseProxy<File> downloadPost(String url,Map<String,String> param,Headers headers,File file, int timeout) throws IOException;
+     ResponseProxy downloadPost(String url,Map<String,String> param,Headers headers,File file, int timeout) throws IOException;
 }

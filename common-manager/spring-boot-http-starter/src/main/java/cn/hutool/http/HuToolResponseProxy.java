@@ -1,6 +1,5 @@
 package cn.hutool.http;
 
-import cn.hutool.core.lang.Assert;
 import cn.hutool.json.JSONUtil;
 import org.hehh.utils.http.response.ResponseProxy;
 
@@ -15,11 +14,12 @@ import java.util.Map;
  * @date: 2020-08-09 19:04
  * @description: hutool响应代理
  */
-public class HuToolResponseProxy<T>  implements ResponseProxy<T> {
+public class HuToolResponseProxy  implements ResponseProxy {
 
-    private Class<T> responseType;
 
-    private T data;
+    private Object data;
+
+    private String body;
 
     private final HttpResponse proxy;
 
@@ -32,8 +32,8 @@ public class HuToolResponseProxy<T>  implements ResponseProxy<T> {
      * @param isIgnoreBody   是否忽略读取响应体
      * @since 3.1.2
      */
-    public HuToolResponseProxy(HttpConnection httpConnection, Charset charset, boolean isAsync, boolean isIgnoreBody,Class<T> responseType) {
-        this(new HttpResponse(httpConnection, charset, isAsync, isIgnoreBody),responseType);
+    public HuToolResponseProxy(HttpConnection httpConnection, Charset charset, boolean isAsync, boolean isIgnoreBody) {
+        this(new HttpResponse(httpConnection, charset, isAsync, isIgnoreBody));
 
     }
 
@@ -42,26 +42,17 @@ public class HuToolResponseProxy<T>  implements ResponseProxy<T> {
      * 胡工具响应代理
      *
      * @param response     响应
-     * @param responseType 响应类型
      */
-    public HuToolResponseProxy(HttpResponse response,Class<T> responseType){
+    public HuToolResponseProxy(HttpResponse response){
         proxy = response;
-        this.responseType = responseType;
     }
 
 
-    public void setData(T data) {
+    public void setData(Object data) {
         this.data = data;
     }
 
-    /**
-     * 设置响应类型
-     *
-     * @param responseType 响应类型
-     */
-    public void setResponseType(Class<T> responseType) {
-        this.responseType = responseType;
-    }
+
 
 
     /**
@@ -90,44 +81,45 @@ public class HuToolResponseProxy<T>  implements ResponseProxy<T> {
      * @return {@link T}
      */
     @Override
-    public T getData() throws IOException {
-        if(this.data != null){
-            return this.data;
-        }
-
-        if(isOk()){
-            if(responseType == null){
-                Assert.notNull(responseType,"responseType not set value");
-            }
-            if(List.class.isAssignableFrom(responseType)){
-                getData(Object.class);
-            }else{
-                this.data = JSONUtil.toBean(proxy.body(),responseType);
+    public <T> T getData(Class<T> tClass) throws IOException {
+        if(this.data == null){
+            if(isOk()){
+                this.data = JSONUtil.toBean(body(),tClass);
             }
         }
-
-        return this.data;
+        return (T) this.data;
     }
-
 
     /**
-     * 获取数据
-     *
-     * @param elementClass 元素类
-     * @return {@link List<E>}* @throws IOException ioexception
+     * 主体数据 json/body
      */
     @Override
-    public <E> List<E> getData(Class<E> elementClass) throws IOException {
-        if(!List.class.isAssignableFrom(responseType)){
-            return null;
+    public String body() throws IOException {
+        if(this.body == null){
+            this.body = proxy.body();
         }
-
-        if(this.data == null){
-            this.data = (T) JSONUtil.toList(JSONUtil.parseArray(proxy.body()), elementClass);
-        }
-
-        return (List<E>)this.data;
+        return this.body;
     }
+
+
+    //    /**
+//     * 获取数据
+//     *
+//     * @param elementClass 元素类
+//     * @return {@link List<E>}* @throws IOException ioexception
+//     */
+//    @Override
+//    public <E> List<E> getData(Class<E> elementClass) throws IOException {
+//        if(!List.class.isAssignableFrom(responseType)){
+//            return null;
+//        }
+//
+//        if(this.data == null){
+//            this.data = (T) JSONUtil.toList(JSONUtil.parseArray(proxy.body()), elementClass);
+//        }
+//
+//        return (List<E>)this.data;
+//    }
 
     /**
      * 得到响应头

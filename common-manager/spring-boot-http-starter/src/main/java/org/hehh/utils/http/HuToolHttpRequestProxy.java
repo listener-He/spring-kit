@@ -22,19 +22,17 @@ public class HuToolHttpRequestProxy implements HttpRequestProxy {
      * get 请求
      *
      * @param urlString    url字符串
-     * @param responseType 响应类型
      * @param headers      请求头
      * @param timeout      超时毫秒
-     * @return {@link T}
      */
     @Override
-    public <T> ResponseProxy<T> get(String urlString, Class<T> responseType, Headers headers, int timeout) {
+    public  ResponseProxy get(String urlString,  Headers headers, int timeout) {
         cn.hutool.http.HttpRequest request = HttpUtil.createGet(urlString);
         if(headers != null){
             request.headerMap(headers,true);
         }
         request.setReadTimeout(timeout);
-        return new HuToolResponseProxy<>(request.execute(),responseType);
+        return new HuToolResponseProxy(request.execute());
     }
 
 
@@ -47,12 +45,10 @@ public class HuToolHttpRequestProxy implements HttpRequestProxy {
      * @param url          url
      * @param param        参数
      * @param headers
-     * @param responseType
      * @param timeout      超时
-     * @return {@link T}
      */
     @Override
-    public <T> ResponseProxy<T> post(String url, Map<String, String> param, Headers headers, Class<T> responseType, int timeout) {
+    public  ResponseProxy post(String url, Map<String, String> param, Headers headers,  int timeout) {
         cn.hutool.http.HttpRequest request = HttpUtil.createPost(url);
 
         if(headers != null){
@@ -64,7 +60,7 @@ public class HuToolHttpRequestProxy implements HttpRequestProxy {
 
 
 
-        return new HuToolResponseProxy<>(request.execute(),responseType);
+        return new HuToolResponseProxy(request.execute());
     }
 
 
@@ -76,12 +72,10 @@ public class HuToolHttpRequestProxy implements HttpRequestProxy {
      * @param url          url
      * @param body         请求参数
      * @param headers      请求头
-     * @param responseType
      * @param timeout      超时
-     * @return {@link T}
      */
     @Override
-    public <T> ResponseProxy<T> post(String url, String body, Headers headers, Class<T> responseType, int timeout) {
+    public  ResponseProxy post(String url, String body, Headers headers,  int timeout) {
         cn.hutool.http.HttpRequest request = HttpUtil.createPost(url);
 
         if(headers != null){
@@ -89,7 +83,7 @@ public class HuToolHttpRequestProxy implements HttpRequestProxy {
         }
         request.body(body);
         request.setReadTimeout(timeout);
-        return new HuToolResponseProxy<>(request.execute(),responseType);
+        return new HuToolResponseProxy(request.execute());
     }
 
 
@@ -105,7 +99,7 @@ public class HuToolHttpRequestProxy implements HttpRequestProxy {
      * @return {@link ResponseProxy<File>}
      */
     @Override
-    public ResponseProxy<File> downloadGet(String url, Headers headers, File file, int timeout) {
+    public ResponseProxy downloadGet(String url, Headers headers, File file, int timeout) {
         cn.hutool.http.HttpRequest request = HttpUtil.createGet(url);
 
         if(headers != null){
@@ -128,7 +122,7 @@ public class HuToolHttpRequestProxy implements HttpRequestProxy {
      * @return {@link ResponseProxy<File>}
      */
     @Override
-    public ResponseProxy<File> downloadPost(String url, Map<String, String> param, Headers headers, File file, int timeout) {
+    public ResponseProxy downloadPost(String url, Map<String, String> param, Headers headers, File file, int timeout) {
         cn.hutool.http.HttpRequest request = HttpUtil.createPost(url);
 
         if(headers != null){
@@ -152,10 +146,10 @@ public class HuToolHttpRequestProxy implements HttpRequestProxy {
      * @param request 请求
      * @return {@link ResponseProxy<File>}
      */
-    private ResponseProxy<File> download(File file, HttpRequest request) {
+    private ResponseProxy download(File file, HttpRequest request) {
         HttpResponse execute = request.execute();
         execute.writeBody(file);
-        HuToolResponseProxy<File> proxy = new HuToolResponseProxy(execute, File.class);
+        HuToolResponseProxy proxy = new HuToolResponseProxy(execute);
         proxy.setData(file);
         return proxy;
     }

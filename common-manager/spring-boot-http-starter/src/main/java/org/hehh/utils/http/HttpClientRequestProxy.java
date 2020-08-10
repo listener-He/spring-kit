@@ -168,13 +168,11 @@ public class HttpClientRequestProxy  implements HttpRequestProxy, InitializingBe
      * get 请求
      *
      * @param urlString    url字符串
-     * @param responseType 响应类型
      * @param headers      请求头
      * @param timeout      超时毫秒
-     * @return {@link T}
      */
     @Override
-    public <T> ResponseProxy<T> get(String urlString, Class<T> responseType, Headers headers, int timeout) throws IOException {
+    public  ResponseProxy get(String urlString,  Headers headers, int timeout) throws IOException {
         HttpGet get = new HttpGet(urlString);
         if(!CollectionUtils.isEmpty(headers)){
             headers.forEach((k,v)->{
@@ -189,7 +187,7 @@ public class HttpClientRequestProxy  implements HttpRequestProxy, InitializingBe
         }
 
 
-        return new HttpClientResponseProxy(client.execute(get),responseType);
+        return new HttpClientResponseProxy(client.execute(get));
     }
 
 
@@ -200,12 +198,10 @@ public class HttpClientRequestProxy  implements HttpRequestProxy, InitializingBe
      * @param url          url
      * @param param        参数
      * @param headers
-     * @param responseType
      * @param timeout      超时
-     * @return {@link T}
      */
     @Override
-    public <T> ResponseProxy<T> post(String url, Map<String, String> param, Headers headers, Class<T> responseType, int timeout) throws IOException {
+    public  ResponseProxy post(String url, Map<String, String> param, Headers headers,  int timeout) throws IOException {
         HttpPost post = new HttpPost(url);
         if(!CollectionUtils.isEmpty(headers)){
             headers.forEach((k,v)->{
@@ -223,7 +219,7 @@ public class HttpClientRequestProxy  implements HttpRequestProxy, InitializingBe
              post.setEntity(new UrlEncodedFormEntity(NameValuePairBuild.processor(param), Charset.defaultCharset()));
         }
 
-        return new HttpClientResponseProxy(client.execute(post),responseType);
+        return new HttpClientResponseProxy(client.execute(post));
     }
 
 
@@ -234,12 +230,10 @@ public class HttpClientRequestProxy  implements HttpRequestProxy, InitializingBe
      * @param url          url
      * @param body         请求参数
      * @param headers      请求头
-     * @param responseType
      * @param timeout      超时
-     * @return {@link T}
      */
     @Override
-    public <T> ResponseProxy<T> post(String url, String body, Headers headers, Class<T> responseType, int timeout) throws IOException {
+    public  ResponseProxy post(String url, String body, Headers headers,  int timeout) throws IOException {
         HttpPost post = new HttpPost(url);
         if(!CollectionUtils.isEmpty(headers)){
             headers.forEach((k,v)->{
@@ -257,7 +251,7 @@ public class HttpClientRequestProxy  implements HttpRequestProxy, InitializingBe
             post.setEntity(new StringEntity(body, Charset.defaultCharset()));
         }
 
-        return new HttpClientResponseProxy(client.execute(post),responseType);
+        return new HttpClientResponseProxy(client.execute(post));
     }
 
 
@@ -272,7 +266,7 @@ public class HttpClientRequestProxy  implements HttpRequestProxy, InitializingBe
      * @return {@link ResponseProxy< File >}
      */
     @Override
-    public ResponseProxy<File> downloadGet(String url, Headers headers, File file, int timeout) throws IOException {
+    public ResponseProxy downloadGet(String url, Headers headers, File file, int timeout) throws IOException {
         HttpGet get = new HttpGet(url);
         if(!CollectionUtils.isEmpty(headers)){
             headers.forEach((k,v)->{
@@ -303,10 +297,10 @@ public class HttpClientRequestProxy  implements HttpRequestProxy, InitializingBe
      * @param headers 头
      * @param file    下载到文档
      * @param timeout 超时
-     * @return {@link ResponseProxy<File>}
+     * @return {@link ResponseProxy}
      */
     @Override
-    public ResponseProxy<File> downloadPost(String url, Map<String, String> param, Headers headers, File file, int timeout) throws IOException {
+    public ResponseProxy downloadPost(String url, Map<String, String> param, Headers headers, File file, int timeout) throws IOException {
         HttpPost post = new HttpPost(url);
         if(!CollectionUtils.isEmpty(headers)){
             headers.forEach((k,v)->{
@@ -338,10 +332,10 @@ public class HttpClientRequestProxy  implements HttpRequestProxy, InitializingBe
      * @param execute 执行
      * @return {@link ResponseProxy<File>}* @throws IOException ioexception
      */
-    private ResponseProxy<File> download(File file, HttpResponse execute,String path) throws IOException {
+    private ResponseProxy download(File file, HttpResponse execute,String path) throws IOException {
         HttpEntity entity = execute.getEntity();
 
-        HttpClientResponseProxy<File> responseProxy = new HttpClientResponseProxy<>(execute, File.class);
+        HttpClientResponseProxy responseProxy = new HttpClientResponseProxy(execute);
 
         if (file.isDirectory()) {
             file = FileUtil.file(file, getFileNameFromDisposition(responseProxy.getHeaders(),path));
