@@ -1,11 +1,9 @@
 package org.hehh.wechat.config;
 
 import org.hehh.utils.http.HttpRequestProxy;
-import org.hehh.utils.http.HuToolHttpRequestProxy;
 import org.hehh.weChat.AuthStorage;
 import org.hehh.weChat.RequestAuth;
 import org.hehh.weChat.RequestAuthImpl;
-import org.hehh.weChat.WxHttpProxy;
 import org.hehh.wechat.RedisAuthStorage;
 import org.hehh.wechat.WxConfigurationMoreParameter;
 import org.springframework.beans.factory.annotation.Autowired;

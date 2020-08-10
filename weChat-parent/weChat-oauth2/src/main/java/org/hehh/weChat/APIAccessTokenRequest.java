@@ -47,7 +47,7 @@ public class APIAccessTokenRequest extends AbstractWxRequest {
         return tokenStorage.getToken(key).orElseGet( ()->{
             APITokenResult result = null;
             try {
-                result = getHttpProxy().get(String.format(Oauth2API.accessToken, appId, appSecret), APITokenResult.class).getData();
+                result = getHttpProxy().get(String.format(Oauth2API.accessToken, appId, appSecret)).getData(APITokenResult.class);
             } catch (IOException e) {
                 result = null;
             }

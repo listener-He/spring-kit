@@ -44,7 +44,7 @@ public class UserInfoRequest extends AbstractAuthAPIRequest {
         }
 
         try {
-            return  getHttpProxy().get(String.format(Oauth2API.userInfo, optional.get(), param.getOpenId()),UserDetailsResult.class,0).getData();
+            return  getHttpProxy().get(String.format(Oauth2API.userInfo, optional.get(), param.getOpenId()),0).getData(UserDetailsResult.class);
         } catch (IOException e) {
         }
         return new UserDetailsResult("500","请求异常" );
@@ -61,7 +61,7 @@ public class UserInfoRequest extends AbstractAuthAPIRequest {
      */
     public UserOauth2Result oauth2(UserOauth2Param param){
         try {
-            return getHttpProxy().get(String.format(Oauth2API.oauth2, param.getAppId(), param.getSecret(),param.getCode()),UserOauth2Result.class,0).getData();
+            return getHttpProxy().get(String.format(Oauth2API.oauth2, param.getAppId(), param.getSecret(),param.getCode()),0).getData(UserOauth2Result.class);
         } catch (IOException e) {
         }
         UserOauth2Result result = new UserOauth2Result();
