@@ -19,8 +19,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.File;
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -35,9 +33,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class OkHttpRequestProxy implements HttpRequestProxy {
 
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private static final MediaType FORM = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
-    private static final MediaType XML = MediaType.parse("application/xml; charset=utf-8");
+    private static final MediaType JSON = MediaType.parse(Headers.JSON);
+    private static final MediaType FORM = MediaType.parse(Headers.DEFAULT);
+    private static final MediaType XML = MediaType.parse(Headers.XML);
 
     private  OkHttpClient proxy;
 
