@@ -10,6 +10,7 @@
     <version>2.3.2.RELEASE</version>
     <modules>
         <module>mail-parent</module>
+        <module>sms-parent</module>
     </modules>
 
     <parent>
