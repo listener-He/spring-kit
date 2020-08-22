@@ -24,7 +24,8 @@ public class QiniuyunConfigurationParameters {
     /**
      * 区
      */
-    private  String zone;
+    private  String zone = "";
+
 
     /**
      *  分片存储地址

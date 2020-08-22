@@ -3,7 +3,6 @@ package org.hehh.utils.file.qiniu;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
-import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.FetchRet;
 import com.qiniu.util.Auth;
@@ -11,10 +10,7 @@ import com.qiniu.util.StringMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
 
 /**
@@ -49,8 +45,11 @@ public class QiNiuFileUploadImpl implements QiNiuFileUpload {
 
     private final Bucket defaultBucket;
 
+
+
+
     /**
-     * 气妞妞文件上传impl
+     * 七牛文件上传impl
      * @param uploadManager 上传管理
      * @param bucketManager 桶经理
      * @param auth 授权
@@ -107,6 +106,9 @@ public class QiNiuFileUploadImpl implements QiNiuFileUpload {
     @Override
     public String upload(File file, String filename, Bucket bucket) throws FileNotFoundException {
         try {
+            if(bucket == null){
+                bucket = defaultBucket;
+            }
             Response response = this.uploadManager.put(file, filename, uploadToken(filename, 3600, bucket));
             if(response.isOK()){
                 return bucket.getDomain() + "/" + response.jsonToMap().get("key").toString();
@@ -147,7 +149,7 @@ public class QiNiuFileUploadImpl implements QiNiuFileUpload {
         if(bucket == null){
             bucket = defaultBucket;
         }
-        String key = StringUtils.replace(url, bucket.getDomain(), "");
+        String key = StringUtils.replace(url, bucket.getDomain()+"/", "");
         return bucketManager.delete(bucket.getName(),key);
     }
 
@@ -164,7 +166,7 @@ public class QiNiuFileUploadImpl implements QiNiuFileUpload {
         if(bucket == null){
             bucket = defaultBucket;
         }
-        String key = StringUtils.replace(url, bucket.getDomain(), "");
+        String key = StringUtils.replace(url, bucket.getDomain()+"/", "");
 
         return bucketManager.deleteAfterDays(bucket.getName(),key,days);
     }
@@ -201,7 +203,7 @@ public class QiNiuFileUploadImpl implements QiNiuFileUpload {
         if(bucket == null){
             bucket = defaultBucket;
         }
-        String key = StringUtils.replace(url, bucket.getDomain(), "");
+        String key = StringUtils.replace(url, bucket.getDomain()+"/", "");
         try {
             encodedFileName = URLEncoder.encode(key, "utf-8").replace("+", "%20");
         } catch (UnsupportedEncodingException e) {
@@ -210,6 +212,8 @@ public class QiNiuFileUploadImpl implements QiNiuFileUpload {
         String publicUrl = String.format("%s/%s", bucket.getDomain(), encodedFileName);
         return auth.privateDownloadUrl(publicUrl, expireInSeconds);
     }
+
+
 
 
 }
