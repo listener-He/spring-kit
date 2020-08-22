@@ -11,8 +11,6 @@
 
     <artifactId>spring-boot-sms-starter</artifactId>
     <properties>
-        <aliyun.sms.version>1.1.0</aliyun.sms.version>
-        <aliyun.core.version>4.2.2</aliyun.core.version>
     </properties>
 
     <dependencies>
@@ -27,15 +25,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
-            <version>${aliyun.sms.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>${aliyun.core.version}</version>
+            <groupId>org.hehh.aliyun</groupId>
+            <artifactId>aliyun-sms</artifactId>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>

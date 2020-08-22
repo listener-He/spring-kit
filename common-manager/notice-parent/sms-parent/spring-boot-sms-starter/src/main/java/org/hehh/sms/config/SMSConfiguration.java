@@ -1,7 +1,7 @@
 package org.hehh.sms.config;
 
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
-import org.hehh.sms.AliyunSMSSend;
+import org.hehh.aliyun.sms.AliyunSMSSend;
 import org.hehh.sms.SMSSend;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
