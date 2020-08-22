@@ -24,6 +24,7 @@
         <module>smooth-read</module>
         <module>spring-boot-http-starter</module>
         <module>sitemap-parent</module>
+        <module>spring-boot-file-tool</module>
     </modules>
 
 
