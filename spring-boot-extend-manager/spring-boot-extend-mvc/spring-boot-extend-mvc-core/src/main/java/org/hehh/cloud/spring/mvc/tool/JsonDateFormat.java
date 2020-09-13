@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.util;
+package org.hehh.cloud.spring.mvc.tool;
 
 import com.fasterxml.jackson.core.io.NumberInput;
 import com.fasterxml.jackson.databind.util.StdDateFormat;

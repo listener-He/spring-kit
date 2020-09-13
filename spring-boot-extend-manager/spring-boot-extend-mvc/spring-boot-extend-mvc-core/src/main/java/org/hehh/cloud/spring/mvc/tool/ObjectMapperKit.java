@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.util;
+package org.hehh.cloud.spring.mvc.tool;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
