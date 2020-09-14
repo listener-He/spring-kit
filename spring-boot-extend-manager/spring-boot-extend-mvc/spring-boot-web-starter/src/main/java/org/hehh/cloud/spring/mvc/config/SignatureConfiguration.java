@@ -19,7 +19,6 @@ import java.util.List;
  * @create: 2020-09-14 01:02
  * @description: 签名配置
  **/
-@Configuration
 @AutoConfigureAfter(CryptoConfigurerComposite.class)
 @ConditionalOnProperty(prefix = "spring.request.signature",name = "enable",havingValue = "true")
 @EnableConfigurationProperties(SignatureParameter.class)

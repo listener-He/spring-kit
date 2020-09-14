@@ -132,7 +132,7 @@ public  class SignAdapter implements IHandlerMethodAdapter {
         Signature signature = handlerMethod.getMethodAnnotation(Signature.class);
         assert signature != null : "Illegal call";
         SignRequest signRequest = verifyHeader(request, signature);
-        if (signRequest != null) {
+        if (signRequest == null) {
             throw new SignException("请求头非法");
         }
 

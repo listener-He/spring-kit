@@ -17,7 +17,6 @@ import java.util.List;
  * @create: 2020-03-23 01:18
  * @description: 加解密配置
  **/
-@Configuration
 @AutoConfigureAfter(RequestAutoConfiguration.class)
 public class CryptoConfigurerComposite implements CryptoConfiguration {
 

@@ -25,7 +25,6 @@ import java.util.List;
  * @create: 2020-03-22 00:39
  * @description: 配置类
  **/
-@Configuration
 @AutoConfigureAfter(CoreConfiguration.class)
 public class RequestAutoConfiguration {
 
