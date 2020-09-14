@@ -8,6 +8,7 @@ import org.hehh.cloud.spring.exception.SignException;
 import org.hehh.cloud.spring.mvc.request.ReplaceInputStreamHttpServletRequest;
 import org.hehh.cloud.spring.mvc.request.method.IHandlerMethodAdapter;
 import org.hehh.utils.StrKit;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -236,7 +237,16 @@ public  class SignAdapter implements IHandlerMethodAdapter {
      */
     protected  HttpServletRequest verify(Signature signature, SignRequest signRequest, HttpServletRequest request, HandlerMethod handlerMethod){
         try {
-            String body = IoUtil.read(request.getInputStream(), StandardCharsets.UTF_8);
+            String content_type = request.getHeader(HttpHeaders.CONTENT_TYPE);
+            MediaType mediaType = (StringUtils.hasLength(content_type) ? MediaType.parseMediaType(content_type) : null);
+            String body = null;
+            /**
+             *  判断是json才读取，否则这里也会读取到from的参数
+             */
+            if(mediaType != null && mediaType.includes(MediaType.APPLICATION_JSON)){
+                body = IoUtil.read(request.getInputStream(), StandardCharsets.UTF_8);
+            }
+
             Map<String, String[]> paramMap = request.getParameterMap();
 
             if(StringUtils.hasText(body) || !CollectionUtils.isEmpty(paramMap)){
