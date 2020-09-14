@@ -148,7 +148,6 @@ public  class SignAdapter implements IHandlerMethodAdapter {
          }*/
 
 
-        Map<String, String[]> param = request.getParameterMap();
 
         return verify(signature, signRequest, request, handlerMethod);
     }
@@ -187,7 +186,7 @@ public  class SignAdapter implements IHandlerMethodAdapter {
             return null;
         }
 
-        if ((System.currentTimeMillis() - NumberUtils.parseNumber(timestamp, Long.class)) < (signature.overdue() > 0 ? signature.overdue() : overdueTime)) {
+        if ((System.currentTimeMillis() - NumberUtils.parseNumber(timestamp, Long.class)) > (signature.overdue() > 0 ? signature.overdue() : overdueTime)) {
             log.error("Timestamp overdue");
             return null;
         }
