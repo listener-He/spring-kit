@@ -16,6 +16,60 @@ public interface SignVerify {
 
 
     /**
+     *  签名
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param paths     路径
+     * @return {@link String}
+     */
+    default String signFrom(String body, Map<String, String[]> params,long timestamp, String... paths) throws SignatureException {
+        return this.signFrom(body,params,timestamp,null,paths);
+    }
+
+
+    /**
+     *  签名
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param secretKey 加密密钥(加密盐)，为防止被穷举。为空则不加密
+     * @param paths     路径
+     * @return {@link String}
+     */
+    default String signFrom(String body, Map<String, String[]> params,long timestamp,String secretKey, String... paths) throws SignatureException {
+        return this.sign(body,SignUtil.toVerifyMap(params,false),timestamp,secretKey,paths);
+    }
+
+    /**
+     *  签名
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param paths     路径
+     * @return {@link String}
+     */
+    default String sign(String body, Map<String, String> params,long timestamp, String... paths) throws SignatureException {
+        return this.sign(body,params,timestamp,null,paths);
+    }
+
+
+    /**
+     *  签名
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param secretKey 加密密钥(加密盐)，为防止被穷举。为空则不加密
+     * @param paths     路径
+     * @return {@link String}
+     */
+    String sign(String body, Map<String, String> params,long timestamp,String secretKey, String... paths) throws SignatureException;
+
+    /**
      * 标志
      * 签名
      *
@@ -64,8 +118,37 @@ public interface SignVerify {
      * @param timestamp 时间戳
      * @return {@link String}
      */
-    String sign(Map<String,String> param,String secretKey,long timestamp) throws SignatureException;
+    default String sign(Map<String,String> param,String secretKey,long timestamp) throws SignatureException{
+       return this.sign(null,param,timestamp,secretKey,null);
+    }
 
+
+    /**
+     * 标志
+     * 签名
+     *
+     * @param body     参数
+     * @param timestamp 时间戳
+     * @return {@link String}
+     */
+    default String sign(String body,long timestamp) throws SignatureException{
+        return this.sign(body,null,timestamp);
+    }
+
+
+
+    /**
+     * 标志
+     * 签名
+     *
+     * @param body body参数
+     * @param secretKey 加密密钥(加密盐)，为防止被穷举。为空则不加密
+     * @param timestamp 时间戳
+     * @return {@link String}
+     */
+    default String sign(String body,String secretKey,long timestamp) throws SignatureException{
+        return this.sign(body,null,timestamp,secretKey,null);
+    }
 
     /**
      * 验证表单
@@ -118,12 +201,94 @@ public interface SignVerify {
      * @return boolean
      */
     default boolean verify(Map<String,String> param,String secretKey,long timestamp,String sign) throws SignatureException {
-        Assert.hasText(sign,"Sign value not empty!");
-        String digest = sign(param, secretKey, timestamp);
-        return StringUtils.hasText(digest) && digest.equals(sign);
+        return this.verify(null,param,timestamp,secretKey,null);
+    }
+
+
+    /**
+     * 验证
+     *
+     * @param body     body参数
+     * @param timestamp 时间戳
+     * @param sign      标志
+     * @return boolean
+     */
+    default boolean verify(String body,long timestamp,String sign) throws SignatureException{
+        return this.verify(body,null,timestamp,sign);
     }
 
 
 
+    /**
+     * 验证
+     *
+     * @param body     body参数
+     * @param secretKey 加密密钥(加密盐)，为防止被穷举。为空则不加密
+     * @param timestamp 时间戳
+     * @param sign      标志
+     * @return boolean
+     */
+    default boolean verify(String body,String secretKey,long timestamp,String sign) throws SignatureException {
+        return this.verify(body,null,timestamp,secretKey,null);
+    }
+
+
+    /**
+     *  验签
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param paths     路径
+     * @return {@link String}
+     */
+    default boolean verifyFrom(String body, Map<String, String[]> params,long timestamp,String sign, String... paths) throws SignatureException {
+        return this.verifyFrom(body,params,timestamp,null,sign,paths);
+    }
+
+
+    /**
+     *  验签
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param secretKey 加密密钥(加密盐)，为防止被穷举。为空则不加密
+     * @param paths     路径
+     * @return {@link String}
+     */
+    default boolean verifyFrom(String body, Map<String, String[]> params,long timestamp,String secretKey,String sign, String... paths) throws SignatureException {
+        return this.verify(body,SignUtil.toVerifyMap(params,false),timestamp,secretKey,sign,paths);
+    }
+
+    /**
+     *  验签
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param paths     路径
+     * @return {@link String}
+     */
+    default boolean verify(String body, Map<String, String> params,long timestamp,String sign, String... paths) throws SignatureException {
+        return this.verify(body,params,timestamp,null,sign,paths);
+    }
+
+
+    /**
+     *  验签
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param secretKey 加密密钥(加密盐)，为防止被穷举。为空则不加密
+     * @param paths     路径
+     * @return {@link String}
+     */
+    default boolean verify(String body, Map<String, String> params,long timestamp,String secretKey,String sign, String... paths) throws SignatureException {
+        Assert.hasText(sign,"Sign value not empty!");
+        String digest = sign(body,params, timestamp, secretKey,paths);
+        return StringUtils.hasText(digest) && digest.equals(sign);
+    }
 
 }

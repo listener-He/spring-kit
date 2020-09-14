@@ -6,7 +6,6 @@ import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.SignatureException;
-import java.util.Map;
 
 /**
  * @author: HeHui
@@ -26,30 +25,6 @@ public class Md5SignVerify extends AbstractSignVerify  {
     }
 
 
-    /**
-     * 标志
-     * 签名
-     *
-     * @param param     参数
-     * @param secretKey 加密密钥(加密盐)，为防止被穷举。为空则不加密
-     * @param timestamp 时间戳
-     * @return {@link String}
-     */
-    @Override
-    public String sign(Map<String, String> param, String secretKey, long timestamp) {
-
-        try {
-            StringBuilder key = new StringBuilder(filter(param,false));
-            if(StringUtils.hasText(secretKey)){
-                key.append(secretKey);
-            }
-            String digest = DigestUtils.md5DigestAsHex(key.toString().getBytes(SignUtil.INPUT_CHARSET))+timestamp+"";
-            return SignUtil.encodeBase64Str(digest.getBytes(SignUtil.INPUT_CHARSET));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
 
     /**

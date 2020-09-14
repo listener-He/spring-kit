@@ -5,8 +5,12 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 /**
@@ -27,6 +31,7 @@ public class SignUtil {
      * 超时时间
      */
     private final static int TIME_OUT = 5 * 60 * 1000;
+
 
 
     /**
@@ -167,13 +172,7 @@ public class SignUtil {
      * @return {@link String}
      */
     public static String encodeBase64Str(byte[] str) {
-        try {
-            String result = new String(Base64.getEncoder().encode(str), INPUT_CHARSET);
-            return result;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return Base64.getEncoder().encodeToString(str);
     }
 
 
@@ -185,12 +184,17 @@ public class SignUtil {
      */
     public static byte[] decodeBase64(String str) {
         try {
-            byte[] result = Base64.getDecoder().decode(str.getBytes(INPUT_CHARSET));
-            return result;
+
+            return Base64.getDecoder().decode(str.getBytes(INPUT_CHARSET));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return null;
     }
+
+
+
+
+
 
 }
