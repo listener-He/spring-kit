@@ -270,12 +270,7 @@ public class ObjectMapperKit {
     }
 
 
-    public static void main(String[] args) {
 
-
-
-
-    }
 
 
 

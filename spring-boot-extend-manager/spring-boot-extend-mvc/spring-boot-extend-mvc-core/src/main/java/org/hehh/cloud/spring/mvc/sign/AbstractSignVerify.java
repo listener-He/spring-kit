@@ -143,32 +143,5 @@ public abstract class AbstractSignVerify implements SignVerify {
     protected abstract String digest(String param, String secretKey, long timestamp) throws SignatureException;
 
 
-    public static void main(String[] args) throws SignatureException {
-        SignVerify sign = new Sha256SignVerify();
 
-        Map<String,String> param = new HashMap<>();
-        param.put("A1", "1");
-        param.put("A2", "2");
-        param.put("A3", "3");
-        param.put("A5",null);
-
-        String body = "{\"B\":\"1\"}";
-
-        String[] path = {"31","24","32"};
-
-
-        String key = "123456";
-        long millis = System.currentTimeMillis();
-
-        String s = sign.sign(body, param, key, millis,path);
-
-        System.out.println("签名:"+s);
-
-//        boolean verify = sign.verify(body, param, key,s, path,millis);
-//
-//        System.out.println(verify);
-//        System.out.println("耗时"+(System.currentTimeMillis() - millis));
-
-
-    }
 }
