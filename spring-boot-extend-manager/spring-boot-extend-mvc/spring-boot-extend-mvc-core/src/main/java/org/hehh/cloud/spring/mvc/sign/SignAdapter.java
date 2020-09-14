@@ -1,6 +1,7 @@
 package org.hehh.cloud.spring.mvc.sign;
 
 import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.NumberUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.spring.exception.SignException;
@@ -18,8 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.SignatureException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *  从抽象改为不抽象，嗯... 先这样试试看吧
@@ -237,6 +241,13 @@ public  class SignAdapter implements IHandlerMethodAdapter {
             Map<String, String[]> paramMap = request.getParameterMap();
 
             if(StringUtils.hasText(body) || !CollectionUtils.isEmpty(paramMap)){
+                /**
+                 *  过滤忽略参数
+                 */
+                if(paramMap != null && ArrayUtil.isNotEmpty(signature.ignore())){
+                    List<String> ignore = Arrays.stream(signature.ignore()).collect(Collectors.toList());
+                    paramMap = paramMap.entrySet().stream().filter(v-> !ignore.contains(v.getKey()) ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                }
                 if(!signVerify.verifyForm(body,paramMap,signRequest.getSecret(),signRequest.getSign(),signRequest.getTimestamp())){
                     throw new SignException("签名不通过!");
                 }
