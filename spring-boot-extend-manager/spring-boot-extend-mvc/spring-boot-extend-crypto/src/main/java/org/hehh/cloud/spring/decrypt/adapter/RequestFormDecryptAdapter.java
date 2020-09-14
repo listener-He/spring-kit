@@ -39,7 +39,7 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
 
 
     public RequestFormDecryptAdapter(DecryptManager decryptManager, DecryptParameter decryptParameter) {
-        super(decryptManager, decryptParameter.isScanAnnotation(), decryptParameter.isValueModel(), decryptParameter.getAnnotation());
+        super(decryptManager, decryptParameter.isValueModel(), decryptParameter.isScanAnnotation(), decryptParameter.getAnnotation());
     }
 
 
