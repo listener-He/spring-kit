@@ -119,7 +119,7 @@ public interface SignVerify {
      * @return {@link String}
      */
     default String sign(Map<String,String> param,String secretKey,long timestamp) throws SignatureException{
-       return this.sign(null,param,timestamp,secretKey,null);
+       return this.sign(null,param,secretKey,timestamp,null);
     }
 
 

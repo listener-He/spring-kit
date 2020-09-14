@@ -111,11 +111,10 @@ public abstract class AbstractSignVerify implements SignVerify {
          *  拼接path上的参数
          */
         if (ArrayUtil.isNotEmpty(paths)) {
-            String pathValues = String.join(",", Arrays.stream(paths).sorted().toArray(String[]::new));
+            String pathValues = Arrays.stream(paths).sorted().collect(Collectors.joining(","));
             if(sb.length() > 0){
                 sb.append("&");
             }
-
             sb.append(pathValues);
         }
 
