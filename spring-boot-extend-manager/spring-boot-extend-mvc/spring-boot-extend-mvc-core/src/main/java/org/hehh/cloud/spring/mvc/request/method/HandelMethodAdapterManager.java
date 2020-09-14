@@ -26,8 +26,8 @@ public  class HandelMethodAdapterManager {
      */
     private final List<IHandlerMethodAdapter> customAdapter = new LinkedList<>();
 
-    private final Map<HandlerMethod, IHandlerMethodAdapter> argumentResolverCache =
-            new ConcurrentHashMap<>(256);
+//    private final Map<HandlerMethod, IHandlerMethodAdapter> argumentResolverCache =
+//            new ConcurrentHashMap<>(256);
 
 
     /**
@@ -90,10 +90,16 @@ public  class HandelMethodAdapterManager {
         String content_type = request.getHeader(HttpHeaders.CONTENT_TYPE);
         MediaType mediaType = (StringUtils.hasLength(content_type) ? MediaType.parseMediaType(content_type) : null);
 
-        IHandlerMethodAdapter resolver = getResolver(handlerMethod, mediaType);
-        if(resolver != null){
-           return resolver.beforeResolver(request,handlerMethod);
+        for (IHandlerMethodAdapter resolver : this.customAdapter) {
+            if (resolver.supportsMethod(handlerMethod,mediaType)) {
+                request =  resolver.beforeResolver(request,handlerMethod);
+            }
         }
+
+//        IHandlerMethodAdapter resolver = getResolver(handlerMethod, mediaType);
+//        if(resolver != null){
+//           return resolver.beforeResolver(request,handlerMethod);
+//        }
 
         return request;
     }
@@ -104,20 +110,20 @@ public  class HandelMethodAdapterManager {
      * Find a registered {@link IHandlerMethodAdapter} that supports
      * the given method .
      */
-    @Nullable
-    private IHandlerMethodAdapter getResolver(HandlerMethod method, MediaType mediaType) {
-        IHandlerMethodAdapter result = this.argumentResolverCache.get(method);
-        if (result == null) {
-            for (IHandlerMethodAdapter resolver : this.customAdapter) {
-                if (resolver.supportsMethod(method,mediaType)) {
-                    result = resolver;
-                    this.argumentResolverCache.put(method, result);
-                    break;
-                }
-            }
-        }
-        return result;
-    }
+//    @Nullable
+//    private IHandlerMethodAdapter getResolver(HandlerMethod method, MediaType mediaType) {
+//        IHandlerMethodAdapter result = this.argumentResolverCache.get(method);
+//        if (result == null) {
+//            for (IHandlerMethodAdapter resolver : this.customAdapter) {
+//                if (resolver.supportsMethod(method,mediaType)) {
+//                    result = resolver;
+//                    this.argumentResolverCache.put(method, result);
+//                    break;
+//                }
+//            }
+//        }
+//        return result;
+//    }
 
 
 
