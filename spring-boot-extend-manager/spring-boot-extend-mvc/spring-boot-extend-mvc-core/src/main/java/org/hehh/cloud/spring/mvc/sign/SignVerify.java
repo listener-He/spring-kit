@@ -24,8 +24,8 @@ public interface SignVerify {
      * @param paths     路径
      * @return {@link String}
      */
-    default String signFrom(String body, Map<String, String[]> params,long timestamp, String... paths) throws SignatureException {
-        return this.signFrom(body,params,timestamp,null,paths);
+    default String signForm(String body, Map<String, String[]> params,long timestamp, String... paths) throws SignatureException {
+        return this.signForm(body,params,null,timestamp,paths);
     }
 
 
@@ -39,8 +39,8 @@ public interface SignVerify {
      * @param paths     路径
      * @return {@link String}
      */
-    default String signFrom(String body, Map<String, String[]> params,long timestamp,String secretKey, String... paths) throws SignatureException {
-        return this.sign(body,SignUtil.toVerifyMap(params,false),timestamp,secretKey,paths);
+    default String signForm(String body, Map<String, String[]> params,String secretKey, long timestamp,String... paths) throws SignatureException {
+        return this.sign(body,SignUtil.toVerifyMap(params,false),secretKey,timestamp,paths);
     }
 
     /**
@@ -53,7 +53,7 @@ public interface SignVerify {
      * @return {@link String}
      */
     default String sign(String body, Map<String, String> params,long timestamp, String... paths) throws SignatureException {
-        return this.sign(body,params,timestamp,null,paths);
+        return this.sign(body,params,null,timestamp,paths);
     }
 
 
@@ -67,7 +67,7 @@ public interface SignVerify {
      * @param paths     路径
      * @return {@link String}
      */
-    String sign(String body, Map<String, String> params,long timestamp,String secretKey, String... paths) throws SignatureException;
+    String sign(String body, Map<String, String> params,String secretKey, long timestamp,String... paths) throws SignatureException;
 
     /**
      * 标志
@@ -77,8 +77,8 @@ public interface SignVerify {
      * @param timestamp 时间戳
      * @return {@link String}
      */
-    default String signFrom(Map<String,String[]> param,long timestamp) throws SignatureException{
-        return this.signFrom(param,null,timestamp);
+    default String signForm(Map<String,String[]> param,long timestamp) throws SignatureException{
+        return this.signForm(param,timestamp,null);
     }
 
 
@@ -91,7 +91,7 @@ public interface SignVerify {
      * @param timestamp 时间戳
      * @return {@link String}
      */
-    default String signFrom(Map<String,String[]> param,String secretKey,long timestamp) throws SignatureException{
+    default String signForm(Map<String,String[]> param,long timestamp,String secretKey) throws SignatureException{
         return this.sign(SignUtil.toVerifyMap(param, true),secretKey,timestamp);
     }
 
@@ -158,8 +158,8 @@ public interface SignVerify {
      * @param sign      标志
      * @return boolean
      */
-    default boolean verifyForm(Map<String,String[]> param,long timestamp,String sign) throws SignatureException{
-        return this.verifyForm(param,null,timestamp,sign);
+    default boolean verifyForm(Map<String,String[]> param,String sign,long timestamp) throws SignatureException{
+        return this.verifyForm(param,null,sign,timestamp);
     }
 
     /**
@@ -171,8 +171,8 @@ public interface SignVerify {
      * @param sign      标志
      * @return boolean
      */
-    default boolean verifyForm(Map<String,String[]> param,String secretKey,long timestamp,String sign) throws SignatureException{
-       return this.verify(SignUtil.toVerifyMap(param,true),secretKey,timestamp,sign);
+    default boolean verifyForm(Map<String,String[]> param,String secretKey,String sign,long timestamp) throws SignatureException{
+       return this.verify(SignUtil.toVerifyMap(param,true),secretKey,sign,timestamp);
     }
 
 
@@ -185,8 +185,8 @@ public interface SignVerify {
      * @param sign      标志
      * @return boolean
      */
-    default boolean verify(Map<String,String> param,long timestamp,String sign) throws SignatureException{
-        return this.verify(param,null,timestamp,sign);
+    default boolean verify(Map<String,String> param,String sign,long timestamp) throws SignatureException{
+        return this.verify(param,null,sign,timestamp);
     }
 
 
@@ -200,8 +200,8 @@ public interface SignVerify {
      * @param sign      标志
      * @return boolean
      */
-    default boolean verify(Map<String,String> param,String secretKey,long timestamp,String sign) throws SignatureException {
-        return this.verify(null,param,timestamp,secretKey,null);
+    default boolean verify(Map<String,String> param,String secretKey,String sign,long timestamp) throws SignatureException {
+        return this.verify(null,param,secretKey,null,timestamp);
     }
 
 
@@ -214,7 +214,7 @@ public interface SignVerify {
      * @return boolean
      */
     default boolean verify(String body,long timestamp,String sign) throws SignatureException{
-        return this.verify(body,null,timestamp,sign);
+        return this.verify(body,null,sign,timestamp);
     }
 
 
@@ -229,7 +229,7 @@ public interface SignVerify {
      * @return boolean
      */
     default boolean verify(String body,String secretKey,long timestamp,String sign) throws SignatureException {
-        return this.verify(body,null,timestamp,secretKey,null);
+        return this.verify(body,null,secretKey,sign,timestamp);
     }
 
 
@@ -242,36 +242,8 @@ public interface SignVerify {
      * @param paths     路径
      * @return {@link String}
      */
-    default boolean verifyFrom(String body, Map<String, String[]> params,long timestamp,String sign, String... paths) throws SignatureException {
-        return this.verifyFrom(body,params,timestamp,null,sign,paths);
-    }
-
-
-    /**
-     *  验签
-     *
-     * @param body      body参数
-     * @param params    参数个数
-     * @param timestamp 时间戳
-     * @param secretKey 加密密钥(加密盐)，为防止被穷举。为空则不加密
-     * @param paths     路径
-     * @return {@link String}
-     */
-    default boolean verifyFrom(String body, Map<String, String[]> params,long timestamp,String secretKey,String sign, String... paths) throws SignatureException {
-        return this.verify(body,SignUtil.toVerifyMap(params,false),timestamp,secretKey,sign,paths);
-    }
-
-    /**
-     *  验签
-     *
-     * @param body      body参数
-     * @param params    参数个数
-     * @param timestamp 时间戳
-     * @param paths     路径
-     * @return {@link String}
-     */
-    default boolean verify(String body, Map<String, String> params,long timestamp,String sign, String... paths) throws SignatureException {
-        return this.verify(body,params,timestamp,null,sign,paths);
+    default boolean verifyForm(String body, Map<String, String[]> params,String sign,long timestamp, String... paths) throws SignatureException {
+        return this.verifyForm(body,params,null,sign,timestamp,paths);
     }
 
 
@@ -285,9 +257,37 @@ public interface SignVerify {
      * @param paths     路径
      * @return {@link String}
      */
-    default boolean verify(String body, Map<String, String> params,long timestamp,String secretKey,String sign, String... paths) throws SignatureException {
+    default boolean verifyForm(String body, Map<String, String[]> params,String secretKey,String sign, long timestamp,String... paths) throws SignatureException {
+        return this.verify(body,SignUtil.toVerifyMap(params,false),secretKey,sign,timestamp,paths);
+    }
+
+    /**
+     *  验签
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param paths     路径
+     * @return {@link String}
+     */
+    default boolean verify(String body, Map<String, String> params,String sign,long timestamp, String... paths) throws SignatureException {
+        return this.verify(body,params,null,sign,timestamp,paths);
+    }
+
+
+    /**
+     *  验签
+     *
+     * @param body      body参数
+     * @param params    参数个数
+     * @param timestamp 时间戳
+     * @param secretKey 加密密钥(加密盐)，为防止被穷举。为空则不加密
+     * @param paths     路径
+     * @return {@link String}
+     */
+    default boolean verify(String body, Map<String, String> params,String secretKey,String sign,long timestamp, String... paths) throws SignatureException {
         Assert.hasText(sign,"Sign value not empty!");
-        String digest = sign(body,params, timestamp, secretKey,paths);
+        String digest = sign(body,params, secretKey,timestamp,paths);
         return StringUtils.hasText(digest) && digest.equals(sign);
     }
 

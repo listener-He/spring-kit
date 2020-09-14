@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author: HeHui
@@ -54,13 +55,11 @@ public class SignUtil {
             String valueStr = null;
 
             if(values != null && values.length > 0){
-                for (int i = 0; i < values.length; i++) {
-                    valueStr = (i == values.length - 1) ? valueStr + values[i] : (valueStr + values[i] + ",");
-                }
+                valueStr = Arrays.stream(values).collect(Collectors.joining(","));
             }
 
             /**
-             * 乱码解决，这段代码在出现乱码时使用。如果mysign和sign不相等也可以使用这段代码转化
+             * 乱码解决，这段代码在出现乱码时使用。如果sign和sign不相等也可以使用这段代码转化
              */
             if (charset && valueStr != null) {
                 valueStr = getContentString(valueStr, INPUT_CHARSET);

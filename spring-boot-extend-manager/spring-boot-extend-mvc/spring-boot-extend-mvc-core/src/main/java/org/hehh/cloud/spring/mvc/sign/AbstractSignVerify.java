@@ -2,7 +2,6 @@ package org.hehh.cloud.spring.mvc.sign;
 
 import cn.hutool.core.util.ArrayUtil;
 import org.hehh.cloud.spring.tool.SignUtil;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -50,7 +49,7 @@ public abstract class AbstractSignVerify implements SignVerify {
      * @return {@link String}
      */
     @Override
-    public String sign(String body, Map<String, String> params, long timestamp, String secretKey, String... paths) throws SignatureException {
+    public String sign(String body, Map<String, String> params, String secretKey,long timestamp, String... paths) throws SignatureException {
 
         if(StringUtils.isEmpty(body) && CollectionUtils.isEmpty(params) && ArrayUtil.isEmpty(paths)){
             throw new IllegalStateException("Param: [body form paths] It can't all be empty");
@@ -162,14 +161,14 @@ public abstract class AbstractSignVerify implements SignVerify {
         String key = "123456";
         long millis = System.currentTimeMillis();
 
-        String s = sign.sign(body, param, millis, key, path);
+        String s = sign.sign(body, param, key, millis,path);
 
         System.out.println("签名:"+s);
 
-        boolean verify = sign.verify(body, param, millis, key,s, path);
-
-        System.out.println(verify);
-        System.out.println("耗时"+(System.currentTimeMillis() - millis));
+//        boolean verify = sign.verify(body, param, key,s, path,millis);
+//
+//        System.out.println(verify);
+//        System.out.println("耗时"+(System.currentTimeMillis() - millis));
 
 
     }
