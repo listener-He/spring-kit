@@ -1,49 +1,24 @@
 package org.hehh.cloud.auth.token.core;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.hehh.cloud.auth.bean.login.LoginUser;
 import org.hehh.cloud.auth.token.TokenManager;
 import org.hehh.cloud.auth.token.impl.jwt.JwtTokenManager;
-import org.hehh.cloud.auth.token.impl.redis.RedisJwtTokenManager;
 import org.hehh.cloud.auth.token.impl.redis.RedisTokenBeanFactory;
-import org.hehh.cloud.auth.token.impl.redis.RedisTokenManager;
 import org.hehh.cloud.auth.token.impl.redis.SimpRedisTokenBeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.RedisPassword;
-import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.util.Assert;
-
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
 
 /**
  * @author: HeHui
  * @create: 2020-03-15 23:56
  * @description: token 配置
  **/
-@Configuration
 @EnableConfigurationProperties(TokenParameter.class)
 public class TokenConfiguration {
 
@@ -119,7 +94,7 @@ public class TokenConfiguration {
         @Bean
         @ConditionalOnMissingBean(TokenManager.class)
         @ConditionalOnProperty(name = "token.manager",havingValue = "redis-jwt")
-        public TokenManager redisJwtTokenManager(RedisTokenBeanFactory redisTokenBeanFactory){
+        public TokenManager<LoginUser> redisJwtTokenManager(RedisTokenBeanFactory redisTokenBeanFactory){
            return redisTokenBeanFactory.build(LoginUser.class,tokenParameter.getSecret());
         }
     }

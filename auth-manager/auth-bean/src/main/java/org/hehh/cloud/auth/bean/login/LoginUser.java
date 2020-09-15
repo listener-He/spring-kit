@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author : HeHui
@@ -70,4 +71,46 @@ public class LoginUser implements java.io.Serializable {
         return null;
     }
 
+
+    /**
+     *  是否相等
+     *
+     * @param obj obj
+     * @return boolean
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj){
+            return true;
+        }
+
+        if(this == obj){
+            return true;
+        }
+
+        if(obj == null){
+            return false;
+        }
+
+        if(obj instanceof LoginUser){
+            LoginUser other = (LoginUser) obj;
+            if((other.getToken() != null && !other.getToken().isEmpty())
+                && (this.getToken() != null && !this.getToken().isEmpty())
+                && this.getToken().equals(other.getToken())){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 散列码
+     *
+     * @return int
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(token);
+    }
 }
