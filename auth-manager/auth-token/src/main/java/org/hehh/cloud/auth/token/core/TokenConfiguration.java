@@ -47,7 +47,7 @@ public class TokenConfiguration {
     @Configuration
     @ConditionalOnClass({RedisTemplate.class})
     @EnableConfigurationProperties(TokenParameter.class)
-    static class RedisTokenConfiguration{
+    public static class RedisTokenConfiguration{
 
         private TokenParameter tokenParameter;
 

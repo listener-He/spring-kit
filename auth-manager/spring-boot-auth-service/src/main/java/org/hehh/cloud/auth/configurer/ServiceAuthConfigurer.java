@@ -12,7 +12,6 @@ import org.hehh.cloud.auth.token.core.TokenConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,10 +51,8 @@ public class ServiceAuthConfigurer  {
      * @date 2020/09/16
      */
     @Configuration
-    @ConditionalOnWebApplication
     @AutoConfigureAfter(ServiceAuthConfigurer.class)
     @EnableConfigurationProperties(LoginUserParsingParameter.class)
-    @ConditionalOnBean(TokenManager.class)
     static class ServiceAuthWebConfigurer implements WebMvcConfigurer{
 
         /**
