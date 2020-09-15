@@ -147,7 +147,7 @@ public interface SignVerify {
      * @return {@link String}
      */
     default String sign(String body,String secretKey,long timestamp) throws SignatureException{
-        return this.sign(body,null,timestamp,secretKey,null);
+        return this.sign(body,null,secretKey,timestamp,null);
     }
 
     /**

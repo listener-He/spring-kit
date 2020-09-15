@@ -163,7 +163,7 @@ public class RequestBodyDecryptAdapter extends IDecryptAdapter {
                 }
             }
 
-            return new ReplaceInputStreamHttpServletRequest(request, StrKit.hex2Byte(ObjectMapperKit.toJsonStr(jsonMap)));
+            return new ReplaceInputStreamHttpServletRequest(request, StrUtil.bytes(ObjectMapperKit.toJsonStr(jsonMap),StandardCharsets.UTF_8));
         } catch (Exception e) {
             log.error("解密body,json TO map时异常:{}", e);
         }

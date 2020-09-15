@@ -3,6 +3,7 @@ package org.hehh.cloud.spring.mvc.sign;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.spring.exception.SignException;
 import org.hehh.cloud.spring.mvc.request.ReplaceInputStreamHttpServletRequest;
@@ -262,7 +263,7 @@ public  class SignAdapter implements IHandlerMethodAdapter {
                 }
 
                 if(StringUtils.hasText(body)){
-                    return new ReplaceInputStreamHttpServletRequest(request, StrKit.hex2Byte(body));
+                    return new ReplaceInputStreamHttpServletRequest(request, StrUtil.bytes(body,StandardCharsets.UTF_8));
                 }
             }
             return request;
