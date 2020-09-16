@@ -10,7 +10,6 @@ import org.hehh.cloud.auth.resolver.UserResolver;
 import org.hehh.cloud.auth.token.TokenManager;
 import org.hehh.cloud.auth.token.core.TokenConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
