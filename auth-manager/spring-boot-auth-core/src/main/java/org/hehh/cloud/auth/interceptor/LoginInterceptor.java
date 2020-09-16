@@ -1,10 +1,10 @@
 package org.hehh.cloud.auth.interceptor;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.cloud.auth.annotation.Login;
 import org.hehh.cloud.auth.bean.login.LoginUser;
 import org.hehh.cloud.auth.holder.UserHolder;
-import org.hehh.cloud.auth.holder.UserThreadLocalHolder;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -24,7 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class LoginInterceptor<T extends LoginUser> implements HandlerInterceptor {
 
-    private final Map<HandlerMethod,Login> methodLoginMap = new ConcurrentHashMap<>(128);
+    private final Map<HandlerMethod,ModelLogin> methodLoginMap = new ConcurrentHashMap<>(128);
+    private final ModelLogin notLogin = new ModelLogin();
 
     private final UserHolder<T> userHolder;
 
@@ -54,7 +55,7 @@ public class LoginInterceptor<T extends LoginUser> implements HandlerInterceptor
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Login login = hasPermission(handler);
+        ModelLogin login = hasPermission(handler);
         boolean isMustLogin = null != login && login.isMust();
         if(!isMustLogin){ return true;}
 
@@ -63,7 +64,7 @@ public class LoginInterceptor<T extends LoginUser> implements HandlerInterceptor
             throw new LoginException("请先登录");
         }
 
-        int[] userTypes = login.userType();
+        int[] userTypes = login.getUserType();
         if(userTypes == null || userTypes.length < 1){
             return true;
         }
@@ -82,17 +83,22 @@ public class LoginInterceptor<T extends LoginUser> implements HandlerInterceptor
      * @param handler
      * @return
      */
-    private Login hasPermission(Object handler) {
+    private ModelLogin hasPermission(Object handler) {
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
-            Login limitRequest = methodLoginMap.get(handlerMethod);
+            ModelLogin limitRequest = methodLoginMap.get(handlerMethod);
 
             if(null == limitRequest){
                 /**获取方法上的注解*/
-                handlerMethod.getMethodAnnotation(Login.class);
+                Login login = handlerMethod.getMethodAnnotation(Login.class);
                 /**如果方法上的注解为空 则获取类的注解*/
-                if (null == limitRequest) {
-                    limitRequest = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Login.class);
+                if (null == login) {
+                    login = handlerMethod.getMethod().getDeclaringClass().getAnnotation(Login.class);
+                }
+                if(login != null){
+                    limitRequest = new ModelLogin(login);
+                }else{
+                    limitRequest = notLogin;
                 }
                 methodLoginMap.put(handlerMethod,limitRequest);
             }
@@ -100,5 +106,35 @@ public class LoginInterceptor<T extends LoginUser> implements HandlerInterceptor
 
         }
         return null;
+    }
+
+
+    /**
+     * 模式登录
+     *
+     * @author hehui
+     * @date 2020/09/16
+     */
+    @Data
+    static class ModelLogin {
+
+
+        /**
+         *  是否必须登陆
+         * @return
+         */
+        private boolean must = false;
+
+        /**
+         *  用户类型
+         * @return
+         */
+        private int[] userType;
+
+        public ModelLogin(){}
+        public ModelLogin(Login login){
+           this.must = (login.isMust());
+            this.userType = (login.userType());
+        }
     }
 }
