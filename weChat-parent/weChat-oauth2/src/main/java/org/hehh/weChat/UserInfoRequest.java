@@ -26,7 +26,7 @@ public class UserInfoRequest extends AbstractAuthAPIRequest {
      * @param httpProxy http代理
      * @param auth      接口授权
      */
-    protected UserInfoRequest(HttpRequestProxy httpProxy, RequestAuth auth) {
+    public UserInfoRequest(HttpRequestProxy httpProxy, RequestAuth auth) {
         super(httpProxy, auth);
     }
 

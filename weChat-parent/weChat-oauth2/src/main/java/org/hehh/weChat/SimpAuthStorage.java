@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SimpAuthStorage implements AuthStorage {
 
 
-    private final Map<String,APITokenResult> storage = new ConcurrentHashMap<>(2);
+    private final Map<String,APITokenResult> storage = new ConcurrentHashMap<>(4);
 
 
     /**

@@ -4,6 +4,7 @@ import org.hehh.utils.http.HttpRequestProxy;
 import org.hehh.weChat.AuthStorage;
 import org.hehh.weChat.RequestAuth;
 import org.hehh.weChat.RequestAuthImpl;
+import org.hehh.weChat.SimpAuthStorage;
 import org.hehh.wechat.RedisAuthStorage;
 import org.hehh.wechat.WxConfigurationMoreParameter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,32 @@ public class WxOauth2Configuration {
     }
 
 
-
+    /**
+     * 请求身份验证
+     *
+     * @param httpProxy    http代理
+     * @param tokenStorage 令牌存储
+     * @param parameter    参数
+     * @return {@link RequestAuth}
+     */
     @Bean
     @ConditionalOnMissingBean(RequestAuth.class)
     public RequestAuth requestAuth(@Autowired HttpRequestProxy httpProxy, AuthStorage tokenStorage, WxConfigurationMoreParameter parameter){
         return new RequestAuthImpl(httpProxy,tokenStorage,parameter.getApps());
     }
+
+
+    /**
+     * 简单身份验证存储
+     *
+     * @return {@link AuthStorage}
+     */
+    @Bean
+    @ConditionalOnMissingBean(AuthStorage.class)
+    public AuthStorage simpAuthStorage(){
+        return new SimpAuthStorage();
+    }
+
 
 
     /**
