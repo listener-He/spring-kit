@@ -12,7 +12,7 @@ public class WxRequestParam implements java.io.Serializable {
 
     /**
      * <pre>
-     * 字段名：公众账号ID.
+     * 字段名：应用ID.
      * 变量名：appid
      * 是否必填：是
      * 类型：String(32)
