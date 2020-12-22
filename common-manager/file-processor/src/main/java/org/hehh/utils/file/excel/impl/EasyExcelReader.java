@@ -126,8 +126,8 @@ public class EasyExcelReader<T> implements ExcelListenerReader<T> {
         public void invoke(T data, AnalysisContext context) {
             if (data != null) {
                 if (Map.class.isAssignableFrom(data.getClass())) {
-                    Map tempMap = ((Map) data);
-                    data = ((T) tempMap.values().stream().collect(Collectors.toList()));
+                    Map tempMap = (Map) data;
+                    data = (T) tempMap.values().stream().collect(Collectors.toList());
                 }
 
                 at.incrementAndGet();

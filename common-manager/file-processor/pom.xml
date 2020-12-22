@@ -23,6 +23,10 @@
             <version>${easyexcel.version}</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>common-core</artifactId>
+        </dependency>
     </dependencies>
 
 
