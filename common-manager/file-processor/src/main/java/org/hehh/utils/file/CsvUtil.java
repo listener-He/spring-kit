@@ -33,7 +33,7 @@ public class CsvUtil {
         try {
             write(data.parallelStream()
                 .filter(row -> !CollectionUtil.isEmpty(row))
-                .map(row -> CollectionUtil.join(row, CSV_DELIMITER))
+                .map(row -> row.stream().collect(Collectors.joining(CSV_DELIMITER)))
                 .collect(Collectors.toList()), new BufferedWriter(new OutputStreamWriter(output)));
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -70,7 +70,7 @@ public class CsvUtil {
         try {
             write(data.parallelStream()
                 .filter(row -> !CollectionUtil.isEmpty(row))
-                .map(row -> CollectionUtil.join(row, CSV_DELIMITER))
+                .map(row -> row.stream().collect(Collectors.joining(CSV_DELIMITER)))
                 .collect(Collectors.toList()), new BufferedWriter(new FileWriter(file, true)));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -215,29 +215,19 @@ public class CsvUtil {
         ByteOutputStream zip = new ByteOutputStream();
 
         /**
-         *  输出流压缩
+         *  输出流压缩 加密
          */
         InputStreamFile inputStreamFile =
             new InputStreamFile(new ByteArrayInputStream(outputStream.getBytes()), "比如你说的标题.csv");
-        ZipUtil.zip(zip, inputStreamFile);
+        ZipUtil.compressEncryption(zip, "123456",inputStreamFile);
 
-        /**
-         *  压缩包输出流 加密
-         */
-//        ByteOutputStream encryptZip = new ByteOutputStream();
-//        org.hehh.utils.file.FileUtil.encrypt(new ByteArrayInputStream(zip.getBytes()),encryptZip,"123");
-//
-//        FileUtil.writeFromStream(
-//                    new ByteArrayInputStream(encryptZip.getBytes()),
-//                "/Users/hehui/dev/file/1.zip");
 
-//        ByteOutputStream decryptZip = new ByteOutputStream();
-//        org.hehh.utils.file.FileUtil.decrypt("/Users/hehui/dev/file/1.zip", decryptZip, "123");
-//
-//        FileUtil.writeFromStream(
-//            new ByteArrayInputStream(decryptZip.getBytes()),
-//            "/Users/hehui/dev/file/12.zip");
-       // System.out.println("ss");
+        FileUtil.writeFromStream(
+                    new ByteArrayInputStream(zip.getBytes()),
+                "/Users/hehui/dev/file/1.zip");
+
+
+        System.out.println("ss");
 
     }
 }
