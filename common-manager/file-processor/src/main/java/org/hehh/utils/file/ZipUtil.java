@@ -2,7 +2,6 @@ package org.hehh.utils.file;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import net.lingala.zip4j.model.LocalFileHeader;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.AesKeyStrength;
@@ -18,7 +17,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
@@ -418,6 +416,10 @@ public class ZipUtil extends cn.hutool.core.util.ZipUtil {
     }
 
 
+
+
+
+
     /**
      * 解压缩
      *
@@ -433,7 +435,7 @@ public class ZipUtil extends cn.hutool.core.util.ZipUtil {
             return streamFiles.stream().filter(v -> v.getSize() > 0 && v.getStream() != null && v.getStream().size() > 0).map(f -> {
                 File file = new File(unpackDirectory, f.getName());
                 FileUtil.touch(file);
-                FileUtil.writeFromStream(new ByteArrayInputStream(f.getStream().toByteArray()),file);
+                FileUtil.writeFromStream(new ByteArrayInputStream(f.getStream().toByteArray()), file);
                 return file;
             }).collect(Collectors.toList());
         }
@@ -535,7 +537,7 @@ public class ZipUtil extends cn.hutool.core.util.ZipUtil {
         //ZipUtil.zip("/Users/hehui/dev/file/order/has_password.zip", "123456",a);
 
         //List<OutputStreamFile> unzip = ZipUtil.unzip(new FileInputStream(new File("/Users/hehui/dev/file/order/not_password.zip")));
-        List<OutputStreamFile> unzip2 = ZipUtil.unzip(new FileInputStream(new File("/Users/hehui/dev/file/order/has_password.zip")), "12345");
+        List<File> unzip2 = ZipUtil.unzip(new FileInputStream(new File("/Users/hehui/dev/file/order/has_password.zip")), "123456","/Users/hehui/dev/file/order");
 
         System.out.println("123");
     }
