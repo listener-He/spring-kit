@@ -1,20 +1,25 @@
 package org.hehh.utils.file;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.model.FileHeader;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+import net.lingala.zip4j.model.LocalFileHeader;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.AesKeyStrength;
 import net.lingala.zip4j.model.enums.CompressionLevel;
 import net.lingala.zip4j.model.enums.CompressionMethod;
 import net.lingala.zip4j.model.enums.EncryptionMethod;
 import org.hehh.utils.file.pojo.InputStreamFile;
+import org.hehh.utils.file.pojo.OutputStreamFile;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -22,8 +27,97 @@ import java.util.zip.ZipOutputStream;
  * @date: 2020-12-22 19:31
  * @description: zip工具类
  */
-public class ZipUtil {
+public class ZipUtil extends cn.hutool.core.util.ZipUtil {
 
+    /**
+     * Default buff byte size
+     */
+    private static final int DEFAULT_BUFF_SIZE = 1024;
+
+    /**
+     * Default basedir value
+     */
+    private static final boolean DEFAULT_DIR = false;
+
+    /**
+     * 初始化文件
+     *
+     * @param file 文件
+     */
+    private static void initFile(File file) {
+        assert FileUtil.isFile(file);
+        if (!FileUtil.exist(file)) {
+            FileUtil.touch(file);
+        }
+    }
+
+    /**
+     * 压缩
+     *
+     * @param zipFile zip文件
+     * @param files   文件
+     *
+     * @return boolean
+     */
+    public static boolean zip(String zipFile, String... files) {
+        return zip(new File(zipFile), Arrays.stream(files).map(v -> new File(v)).toArray(File[]::new));
+    }
+
+    /**
+     * 压缩
+     *
+     * @param zipFile zip文件
+     * @param inputs  输入
+     *
+     * @return boolean
+     */
+    public static boolean zip(String zipFile, InputStreamFile... inputs) {
+        return zip(new File(zipFile), inputs);
+    }
+
+
+    /**
+     * 压缩
+     *
+     * @param zipFile zip文件
+     * @param files   文件
+     *
+     * @return boolean
+     */
+    public static boolean zip(String zipFile, File... files) {
+        return zip(new File(zipFile), files);
+    }
+
+    /**
+     * 压缩
+     *
+     * @param zipFile zip文件
+     * @param files   文件
+     *
+     * @return boolean
+     */
+    public static boolean zip(File zipFile, File... files) {
+        return zip(zipFile, Arrays.stream(files).map(f -> new InputStreamFile(FileUtil.getInputStream(f), f.getName())).toArray(InputStreamFile[]::new));
+    }
+
+
+    /**
+     * 压缩
+     *
+     * @param zipFile zip文件
+     * @param inputs  输入
+     *
+     * @return boolean
+     */
+    public static boolean zip(File zipFile, InputStreamFile... inputs) {
+        try {
+            initFile(zipFile);
+            return zip(new FileOutputStream(zipFile), inputs);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
     /**
@@ -34,9 +128,9 @@ public class ZipUtil {
      *
      * @return boolean
      */
-    public static boolean compress(OutputStream output, InputStreamFile... inputs) {
+    public static boolean zip(OutputStream output, InputStreamFile... inputs) {
         ZipOutputStream out = new ZipOutputStream(output);
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[DEFAULT_BUFF_SIZE];
         try {
             for (int i = 0; i < inputs.length; i++) {
                 try {
@@ -82,7 +176,85 @@ public class ZipUtil {
 
 
     /**
-     * 压缩aes加密
+     * 压缩加密
+     * 压缩
+     *
+     * @param zipFile  zip文件
+     * @param files    文件
+     * @param password 密码
+     *
+     * @return boolean
+     */
+    public static boolean zip(String zipFile, String password, String... files) {
+        return zip(new File(zipFile), password, Arrays.stream(files).map(v -> new File(v)).toArray(File[]::new));
+    }
+
+    /**
+     * 压缩加密
+     * 压缩
+     *
+     * @param zipFile  zip文件
+     * @param inputs   输入
+     * @param password 密码
+     *
+     * @return boolean
+     */
+    public static boolean zip(String zipFile, String password, InputStreamFile... inputs) {
+        return zip(new File(zipFile), password, inputs);
+    }
+
+
+    /**
+     * 压缩加密
+     * 压缩
+     *
+     * @param zipFile  zip文件
+     * @param files    文件
+     * @param password 密码
+     *
+     * @return boolean
+     */
+    public static boolean zip(String zipFile, String password, File... files) {
+        return zip(new File(zipFile), password, files);
+    }
+
+    /**
+     * 压缩加密
+     * 压缩
+     *
+     * @param zipFile  zip文件
+     * @param files    文件
+     * @param password 密码
+     *
+     * @return boolean
+     */
+    public static boolean zip(File zipFile, String password, File... files) {
+        return zip(zipFile, password, Arrays.stream(files).map(f -> new InputStreamFile(FileUtil.getInputStream(f), f.getName())).toArray(InputStreamFile[]::new));
+    }
+
+
+    /**
+     * 压缩加密
+     * 压缩
+     *
+     * @param zipFile  zip文件
+     * @param inputs   输入
+     * @param password 密码
+     *
+     * @return boolean
+     */
+    public static boolean zip(File zipFile, String password, InputStreamFile... inputs) {
+        try {
+            initFile(zipFile);
+            return zip(new FileOutputStream(zipFile), password, inputs);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 压缩zip标准加密
      *
      * @param output   输出
      * @param password 密码
@@ -90,14 +262,29 @@ public class ZipUtil {
      *
      * @return boolean
      */
-    public static boolean compressEncryption(OutputStream output, String password, InputStreamFile... inputs) {
+    public static boolean zip(OutputStream output, String password, InputStreamFile... inputs) {
+        return zip(output, password, EncryptionMethod.ZIP_STANDARD, inputs);
+    }
+
+
+    /**
+     * 压缩加密
+     *
+     * @param output           输出
+     * @param password         密码
+     * @param inputs           输入
+     * @param encryptionMethod 加密方法
+     *
+     * @return boolean
+     */
+    public static boolean zip(OutputStream output, String password, EncryptionMethod encryptionMethod, InputStreamFile... inputs) {
         assert output != null;
         assert StrUtil.isNotBlank(password);
 
         net.lingala.zip4j.io.outputstream.ZipOutputStream out = null;
         try {
-             out = new net.lingala.zip4j.io.outputstream.ZipOutputStream(output, password.toCharArray());
-            byte[] buffer = new byte[1024];
+            out = new net.lingala.zip4j.io.outputstream.ZipOutputStream(output, password.toCharArray());
+            byte[] buffer = new byte[DEFAULT_BUFF_SIZE];
 
             for (int i = 0; i < inputs.length; i++) {
                 try {
@@ -125,7 +312,7 @@ public class ZipUtil {
                     /**
                      * 设置加密方法 这里的配置要注意，配置不对将在LINUX下无法解压 AES -->  ZIP_STANDARD
                      */
-                    entry.setEncryptionMethod(EncryptionMethod.ZIP_STANDARD);
+                    entry.setEncryptionMethod(encryptionMethod);
                     entry.setFileNameInZip(inputs[i].getName());
                     out.putNextEntry(entry);
 
@@ -160,5 +347,196 @@ public class ZipUtil {
             }
         }
         return true;
+    }
+
+
+    /**
+     * 解压
+     *
+     * @param input 输入
+     *
+     * @return {@link List<OutputStreamFile>}
+     */
+    public static List<OutputStreamFile> unzip(InputStream input) {
+        ZipInputStream zin = new ZipInputStream(input);
+        List<OutputStreamFile> outputStreamFiles = new ArrayList<>();
+        try {
+            while (true) {
+                ZipEntry entry = null;
+                try {
+                    /**
+                     *  获取下一个要解压的文件
+                     */
+                    entry = zin.getNextEntry();
+                    if (entry == null) {
+                        break;
+                    } else {
+                        OutputStreamFile streamFile = new OutputStreamFile(new ByteArrayOutputStream(), entry.getName());
+                        unZipWrite(streamFile.getStream(), zin);
+                        streamFile.setDirectory(entry.isDirectory());
+                        streamFile.setSize(entry.getSize());
+
+                        if (entry.getLastAccessTime() != null) {
+                            streamFile.setLastAccessTime(entry.getLastAccessTime().toMillis());
+                        }
+                        if (entry.getCreationTime() != null) {
+                            streamFile.setCreationTime(entry.getCreationTime().toMillis());
+                        }
+                        if (entry.getLastModifiedTime() != null) {
+                            streamFile.setLastModifiedTime(entry.getLastModifiedTime().toMillis());
+                        }
+                        outputStreamFiles.add(streamFile);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (entry != null) {
+                        /**
+                         *  关闭已读取文件
+                         */
+                        try {
+                            zin.closeEntry();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                zin.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        return outputStreamFiles;
+    }
+
+
+    /**
+     * 解压缩
+     *
+     * @param input           输入
+     * @param password        密码
+     * @param unpackDirectory 解压缩目录
+     *
+     * @return {@link List<File>}
+     */
+    public static List<File> unzip(InputStream input, String password, String unpackDirectory) {
+        List<OutputStreamFile> streamFiles = unzip(input, password);
+        if (CollUtil.isNotEmpty(streamFiles)) {
+            return streamFiles.stream().filter(v -> v.getSize() > 0 && v.getStream() != null && v.getStream().size() > 0).map(f -> {
+                File file = new File(unpackDirectory, f.getName());
+                FileUtil.touch(file);
+                FileUtil.writeFromStream(new ByteArrayInputStream(f.getStream().toByteArray()),file);
+                return file;
+            }).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    /**
+     * 解压
+     *
+     * @param input 输入
+     *
+     * @return {@link List<OutputStreamFile>}
+     */
+    public static List<OutputStreamFile> unzip(InputStream input, String password) {
+        net.lingala.zip4j.io.inputstream.ZipInputStream zin = new net.lingala.zip4j.io.inputstream.ZipInputStream(input, password.toCharArray());
+
+        List<OutputStreamFile> outputStreamFiles = new ArrayList<>();
+        try {
+            while (true) {
+                LocalFileHeader entry = null;
+                try {
+                    /**
+                     *  获取下一个要解压的文件
+                     */
+                    try {
+                        entry = zin.getNextEntry();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        break;
+                    }
+
+                    if (entry == null) {
+                        break;
+                    } else {
+                        OutputStreamFile streamFile = new OutputStreamFile(new ByteArrayOutputStream(), entry.getFileName());
+                        unZipWrite(streamFile.getStream(), zin);
+                        streamFile.setDirectory(entry.isDirectory());
+                        streamFile.setSize(entry.getCompressedSize());
+                        streamFile.setLastModifiedTime(entry.getLastModifiedTime());
+                        outputStreamFiles.add(streamFile);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (entry != null) {
+                        /**
+                         *  关闭已读取文件
+                         */
+//                        try {
+//                            zin.getNextEntry();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                zin.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        return outputStreamFiles;
+    }
+
+    /**
+     * 解压读取
+     *
+     * @param output 输出
+     * @param zis    子
+     *
+     * @throws Exception 异常
+     */
+    private static void unZipWrite(ByteArrayOutputStream output, InputStream zis) throws Exception {
+        int len;
+        byte[] buff = new byte[DEFAULT_BUFF_SIZE];
+        try {
+            while ((len = zis.read(buff, 0, DEFAULT_BUFF_SIZE)) != -1) {
+                output.write(buff, 0, len);
+            }
+        } finally {
+            output.close();
+        }
+
+
+    }
+
+
+    public static void main(String[] args) throws FileNotFoundException {
+        String[] a = {"/Users/hehui/dev/file/order/goods-activity-库存.lua", "/Users/hehui/dev/file/order/goods-库存.lua"};
+        //ZipUtil.zip("/Users/hehui/dev/file/order/not_password.zip", a);
+
+        //ZipUtil.zip("/Users/hehui/dev/file/order/has_password.zip", "123456",a);
+
+        //List<OutputStreamFile> unzip = ZipUtil.unzip(new FileInputStream(new File("/Users/hehui/dev/file/order/not_password.zip")));
+        List<OutputStreamFile> unzip2 = ZipUtil.unzip(new FileInputStream(new File("/Users/hehui/dev/file/order/has_password.zip")), "12345");
+
+        System.out.println("123");
     }
 }

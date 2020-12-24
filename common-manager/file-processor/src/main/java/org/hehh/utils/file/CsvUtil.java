@@ -1,12 +1,12 @@
 package org.hehh.utils.file;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.io.FileUtil;
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.hehh.utils.file.pojo.InputStreamFile;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,7 +43,7 @@ public class CsvUtil {
     /**
      * 将多行记录，写入到流后面
      *
-     * @param data 多行记录
+     * @param data   多行记录
      * @param output 输出流
      */
     public static void appendToOutputForArray(List<String[]> data, OutputStream output) {
@@ -117,6 +117,7 @@ public class CsvUtil {
      * 读文件
      *
      * @param file 文件
+     *
      * @return {@link List<String[]>}
      */
     public static List<String[]> readFile(File file) {
@@ -130,10 +131,29 @@ public class CsvUtil {
         }
     }
 
+
+    /**
+     * 读文件
+     *
+     * @param file 文件
+     *
+     * @return {@link List<String[]>}
+     */
+    public static List<List<String>> readFileToList(File file) {
+        List<String[]> readList = readFile(file);
+        if(CollectionUtil.isEmpty(readList)){
+            return Collections.emptyList();
+        }
+
+        return readList.stream().map(row -> Arrays.asList(row)).collect(Collectors.toList());
+    }
+
+
     /**
      * 读
      *
      * @param inputStream 输入流
+     *
      * @return {@link List<String>}
      */
     private static List<String> read(InputStream inputStream) {
@@ -184,8 +204,6 @@ public class CsvUtil {
     }
 
 
-
-
     public static void main(String[] args) {
         ByteOutputStream outputStream = new ByteOutputStream();
         List<String> t = new ArrayList<>();
@@ -219,12 +237,12 @@ public class CsvUtil {
          */
         InputStreamFile inputStreamFile =
             new InputStreamFile(new ByteArrayInputStream(outputStream.getBytes()), "比如你说的标题.csv");
-        ZipUtil.compressEncryption(zip, "123456",inputStreamFile);
+        ZipUtil.zip(zip, "123456", inputStreamFile);
 
 
         FileUtil.writeFromStream(
-                    new ByteArrayInputStream(zip.getBytes()),
-                "/Users/hehui/dev/file/1.zip");
+            new ByteArrayInputStream(zip.getBytes()),
+            "/Users/hehui/dev/file/1.zip");
 
 
         System.out.println("ss");

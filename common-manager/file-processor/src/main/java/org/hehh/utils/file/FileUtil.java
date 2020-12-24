@@ -17,7 +17,7 @@ import java.security.SecureRandom;
  * @date: 2020-08-22 15:49
  * @description: 文件工具
  */
-public class FileUtil {
+public class FileUtil extends cn.hutool.core.io.FileUtil {
 
 
     /**
@@ -138,69 +138,71 @@ public class FileUtil {
     }
 
 
-    /**
-     * 加密文件流
-     *
-     * @param input      输入
-     * @param output     输出
-     * @param privateKey 私钥
-     */
-    public static void encrypt(InputStream input, OutputStream output, String privateKey) {
-        try {
-            Key key = getKey(privateKey);
-            Cipher cipher = Cipher.getInstance(AES_TYPE + "/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            crypt(input, output, cipher);
-        } catch (Exception e) {
-        } finally {
-            try {
-                input.close();
-                output.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//    /**
+//     * 加密文件流
+//     *
+//     * @param input      输入
+//     * @param output     输出
+//     * @param privateKey 私钥
+//     */
+//    public static void encrypt(InputStream input, OutputStream output, String privateKey) {
+//        try {
+//            Key key = getKey(privateKey);
+//            Cipher cipher = Cipher.getInstance(AES_TYPE + "/ECB/PKCS5Padding");
+//            cipher.init(Cipher.ENCRYPT_MODE, key);
+//            crypt(input, output, cipher);
+//        } catch (Exception e) {
+//        } finally {
+//            try {
+//                input.close();
+//                output.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//    }
 
-    }
-
-    /**
-     * 解密
-     *
-     * @param output      输出
-     * @param privateKey  私钥
-     * @param encryptFile 加密文件
-     */
-    public static void decrypt(String encryptFile, OutputStream output, String privateKey) {
-        try {
-            decrypt(new FileInputStream(encryptFile), output, privateKey);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 解密
-     *
-     * @param input      输入
-     * @param output     输出
-     * @param privateKey 私钥
-     */
-    public static void decrypt(InputStream input, OutputStream output, String privateKey) {
-        try {
-            Key key = getKey(privateKey);
-            Cipher cipher = Cipher.getInstance(AES_TYPE + "/ECB/PKCS5Padding");
-            cipher.init(Cipher.DECRYPT_MODE, key);
-            crypt(input, output, cipher);
-        } catch (Exception e) {
-        } finally {
-            try {
-                input.close();
-                output.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    /**
+//     * 解密
+//     *
+//     * @param output      输出
+//     * @param privateKey  私钥
+//     * @param encryptFile 加密文件
+//     */
+//    @Deprecated
+//    public static void decrypt(String encryptFile, OutputStream output, String privateKey) {
+//        try {
+//            decrypt(new FileInputStream(encryptFile), output, privateKey);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    /**
+//     * 解密
+//     *
+//     * @param input      输入
+//     * @param output     输出
+//     * @param privateKey 私钥
+//     */
+//    @Deprecated
+//    public static void decrypt(InputStream input, OutputStream output, String privateKey) {
+//        try {
+//            Key key = getKey(privateKey);
+//            Cipher cipher = Cipher.getInstance(AES_TYPE + "/ECB/PKCS5Padding");
+//            cipher.init(Cipher.DECRYPT_MODE, key);
+//            crypt(input, output, cipher);
+//        } catch (Exception e) {
+//        } finally {
+//            try {
+//                input.close();
+//                output.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     /**
      * 生成指定字符串的密钥
