@@ -2,6 +2,8 @@ package org.hehh.utils.file;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.LocalFileHeader;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.AesKeyStrength;
@@ -415,9 +417,89 @@ public class ZipUtil extends cn.hutool.core.util.ZipUtil {
         return outputStreamFiles;
     }
 
+    /**
+     * 解压缩
+     *
+     * @param zip             压缩包
+     * @param password        密码
+     * @param unpackDirectory 解压缩目录
+     *
+     * @return boolean
+     */
+    public static boolean unzip(String zip, String password, String unpackDirectory) {
+        return unzip(new File(zip), password, unpackDirectory);
+    }
 
+    /**
+     * 解压缩
+     *
+     * @param zip             压缩包
+     * @param password        密码
+     * @param unpackDirectory 解压缩目录
+     *
+     * @return boolean
+     */
+    public static boolean unzip(File zip, String password, String unpackDirectory) {
+        assert FileUtil.exist(zip);
+        assert FileUtil.isDirectory(unpackDirectory);
+        FileUtil.mkdir(unpackDirectory);
+        ZipFile zipFile = new ZipFile(zip, password.toCharArray());
+        try {
+            zipFile.extractAll(unpackDirectory);
+            return true;
+        } catch (ZipException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
+    /**
+     * 解压缩
+     *
+     * @param zip      压缩包
+     * @param password 密码
+     *
+     * @return {@link List<OutputStreamFile>}
+     */
+    public static List<OutputStreamFile> unzip(File zip, String password) {
+        ZipFile zipFile = new ZipFile(zip, password.toCharArray());
+        try {
+            return zipFile.getFileHeaders().stream().map(v -> {
+                net.lingala.zip4j.io.inputstream.ZipInputStream inputStream = null;
+                try {
+                    inputStream = zipFile.getInputStream(v);
 
+                    /**
+                     *  组装返回类
+                     */
+                    OutputStreamFile streamFile = new OutputStreamFile(new ByteArrayOutputStream(), v.getFileName());
+                    streamFile.setDirectory(v.isDirectory());
+                    streamFile.setSize(v.getCompressedSize());
+                    streamFile.setLastModifiedTime(v.getLastModifiedTime());
+
+                    unZipWrite(streamFile.getStream(), inputStream);
+
+                    return streamFile;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if (inputStream != null) {
+                        try {
+                            inputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                return null;
+            }).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+
+        }
+        return null;
+    }
 
 
     /**
@@ -525,20 +607,6 @@ public class ZipUtil extends cn.hutool.core.util.ZipUtil {
         } finally {
             output.close();
         }
-
-
     }
 
-
-    public static void main(String[] args) throws FileNotFoundException {
-        String[] a = {"/Users/hehui/dev/file/order/goods-activity-库存.lua", "/Users/hehui/dev/file/order/goods-库存.lua"};
-        //ZipUtil.zip("/Users/hehui/dev/file/order/not_password.zip", a);
-
-        //ZipUtil.zip("/Users/hehui/dev/file/order/has_password.zip", "123456",a);
-
-        //List<OutputStreamFile> unzip = ZipUtil.unzip(new FileInputStream(new File("/Users/hehui/dev/file/order/not_password.zip")));
-        List<File> unzip2 = ZipUtil.unzip(new FileInputStream(new File("/Users/hehui/dev/file/order/has_password.zip")), "123456","/Users/hehui/dev/file/order");
-
-        System.out.println("123");
-    }
 }
