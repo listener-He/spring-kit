@@ -1,8 +1,6 @@
 package org.hehh.utils.file;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
-import org.hehh.utils.file.pojo.InputStreamFile;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -141,7 +139,7 @@ public class CsvUtil {
      */
     public static List<List<String>> readFileToList(File file) {
         List<String[]> readList = readFile(file);
-        if(CollectionUtil.isEmpty(readList)){
+        if (CollectionUtil.isEmpty(readList)) {
             return Collections.emptyList();
         }
 
@@ -203,49 +201,4 @@ public class CsvUtil {
         }
     }
 
-
-    public static void main(String[] args) {
-        ByteOutputStream outputStream = new ByteOutputStream();
-        List<String> t = new ArrayList<>();
-        t.add("标题1");
-        t.add("标题2");
-        t.add("标题3");
-        List<String> a = new ArrayList<>();
-        a.add("哈哈");
-        a.add("1");
-        a.add("就是把咖啡");
-
-        List<List<String>> list = new ArrayList<>();
-        list.add(t);
-        list.add(a);
-        list.add(a);
-        list.add(a);
-        list.add(a);
-        list.add(a);
-        list.add(a);
-        list.add(a);
-
-        /**
-         * 把数据写入输出流
-         */
-        appendToOutputForList(list, outputStream);
-
-        ByteOutputStream zip = new ByteOutputStream();
-
-        /**
-         *  输出流压缩 加密
-         */
-        InputStreamFile inputStreamFile =
-            new InputStreamFile(new ByteArrayInputStream(outputStream.getBytes()), "比如你说的标题.csv");
-        ZipUtil.zip(zip, "123456", inputStreamFile);
-
-
-        FileUtil.writeFromStream(
-            new ByteArrayInputStream(zip.getBytes()),
-            "/Users/hehui/dev/file/1.zip");
-
-
-        System.out.println("ss");
-
-    }
 }
