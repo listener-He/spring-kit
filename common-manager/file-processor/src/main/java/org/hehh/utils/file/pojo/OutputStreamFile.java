@@ -2,10 +2,7 @@ package org.hehh.utils.file.pojo;
 
 import lombok.Data;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.nio.file.attribute.FileTime;
 
 /**
  * @author: HeHui
