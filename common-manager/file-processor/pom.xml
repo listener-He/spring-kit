@@ -15,6 +15,7 @@
     <properties>
         <easyexcel.version>2.2.6</easyexcel.version>
         <zip4j.version>2.6.4</zip4j.version>
+        <html2pdf.version>3.0.1</html2pdf.version>
     </properties>
 
     <dependencies>
@@ -33,6 +34,13 @@
             <groupId>net.lingala.zip4j</groupId>
             <artifactId>zip4j</artifactId>
             <version>${zip4j.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>html2pdf</artifactId>
+            <version>${html2pdf.version}</version>
             <optional>true</optional>
         </dependency>
 
