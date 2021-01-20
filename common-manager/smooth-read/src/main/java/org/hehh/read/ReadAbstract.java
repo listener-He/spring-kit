@@ -5,14 +5,13 @@ import java.util.Optional;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author: HeHui
  * @date: 2020-07-20 14:44
  * @description: 抽象阅读
  */
-public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
+public abstract class ReadAbstract<T extends Number, ID> implements Read<T, ID> {
 
 
     /**
@@ -27,16 +26,9 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
 
 
     /**
-     *  阅读数存储
+     * 阅读数存储
      */
-    protected final ReadStorage<T,ID> readStorage;
-
-
-    /**
-     *  是否有过读取（决定是否处理任务）
-     */
-    private final AtomicInteger isRead = new AtomicInteger(0);
-
+    protected final ReadStorage<T, ID> readStorage;
 
 
     /**
@@ -48,9 +40,9 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      */
     protected ReadAbstract(T maxRead, int jobSeconds, ReadStorage<T, ID> readStorage) {
         assert readStorage != null : "ReadStorage不能位空";
-        assert maxRead != null  : "最大阅读数不能位空";
-        assert maxRead.doubleValue() > 0.01D  : "最大阅读数不能小于0.01";
-        assert jobSeconds > 60  : "定时秒不能小于60";
+        assert maxRead != null : "最大阅读数不能位空";
+        assert maxRead.doubleValue() > 0.01D : "最大阅读数不能小于0.01";
+        assert jobSeconds > 60 : "定时秒不能小于60";
 
         this.maxRead = maxRead;
         this.jobSeconds = jobSeconds;
@@ -61,34 +53,23 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
 
 
     /**
-     *  初始化job
+     * 初始化job
      */
-    private void initJob(){
+    private void initJob() {
         ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
-        scheduledExecutorService.scheduleWithFixedDelay(this::perform,0,jobSeconds, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleWithFixedDelay(this::perform, 0, jobSeconds, TimeUnit.SECONDS);
     }
-
-
 
 
     /**
-     *  执行
+     * 执行
      */
-    protected void perform(){
-        if (isRead.updateAndGet(r -> {
-            return r > 0 ? -1 : 0;
-        }) == -1) {
-            this.getAll().ifPresent(data -> {
-                readStorage.increase(data);
-                this.clear();
-            });
-        }
-
+    protected void perform() {
+        this.getAll().ifPresent(data -> {
+            readStorage.increase(data);
+            this.clear();
+        });
     }
-
-
-
-
 
 
     /**
@@ -101,26 +82,21 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
     @Override
     public void read(ID key, T n, String clientID) {
         //TODO if clientID not null ?
-        isRead.updateAndGet(r -> {
-            return r == -1 ? 1 : (r + 1);
-        });
 
         this.increase(key, n).ifPresent(d -> {
             /**
              *  达到最大数条件
              */
-            if(d.doubleValue() >= maxRead.doubleValue()){
-                readStorage.increase(key,d);
+            if (d.doubleValue() >= maxRead.doubleValue()) {
+                readStorage.increase(key, d);
                 /**
                  *  缓存中马上减少对应数
                  */
-                this.reduce(key,d);
+                this.reduce(key, d);
             }
         });
 
     }
-
-
 
 
     /**
@@ -128,10 +104,10 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      *
      * @param key 关键
      * @param n   阅读数
+     *
      * @return {@link T} 返回阅读数
      */
     protected abstract Optional<T> increase(ID key, T n);
-
 
 
     /**
@@ -140,7 +116,7 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      * @param key 关键
      * @param n   阅读数
      */
-    protected abstract void reduce(ID key,T n);
+    protected abstract void reduce(ID key, T n);
 
 
     /**
@@ -148,7 +124,7 @@ public abstract class ReadAbstract<T extends Number,ID>  implements Read<T,ID> {
      *
      * @return {@link Map<ID, T>}
      */
-    protected abstract Optional<Map<ID,T>> getAll();
+    protected abstract Optional<Map<ID, T>> getAll();
 
 
     /**

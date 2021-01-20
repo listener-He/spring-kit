@@ -17,62 +17,62 @@ import java.util.concurrent.TimeUnit;
  * @date: 2020-07-20 15:16
  * @description: redis缓存阅读
  */
-public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
+public class RedisCacheRead<ID> extends ReadAbstract<Double, ID> {
 
 
     /**
-     *  redis操作类
+     * redis操作类
      */
-    private final RedisOperations<String,Double> redisOperations;
+    private final RedisOperations<String, Double> redisOperations;
 
 
     /**
-     *  redis hash操作
+     * redis hash操作
      */
     private final BoundHashOperations<String, ID, Double> hash;
 
 
     /**
-     *  缓存前缀
+     * 缓存前缀
      */
     private final String cacheKey;
 
 
     /**
-     *  搜索key拼接符
+     * 搜索key拼接符
      */
-    private final String SCAN_KEY_PREFIX = "^";
-    private final String SCAN_KEY_SUFFIX = "$";
-    private final String SCAN_KEY_JOIN = "|";
+    private final String scanKeyPrefix = "^";
+    private final String scanKeySuffix = "$";
+    private final String scanKeyJoin = "|";
 
     private final String value = "0";
 
-
+    private final String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
 
 
     /**
      * 阅读文摘
-     *  @param maxRead     最大阅读数
-     * @param jobSeconds  定时秒
-     * @param readStorage 读取存储
+     *
+     * @param maxRead         最大阅读数
+     * @param jobSeconds      定时秒
+     * @param readStorage     读取存储
      * @param redisOperations redis操作类
      */
     protected RedisCacheRead(double maxRead, int jobSeconds, ReadStorage<Double, ID> readStorage, RedisOperations<String, Double> redisOperations) {
-       this(maxRead,jobSeconds,readStorage,redisOperations,"read:cache:");
+        this(maxRead, jobSeconds, readStorage, redisOperations, "read:cache:");
     }
-
-
 
 
     /**
      * 阅读文摘
-     *  @param maxRead     最大阅读数
-     * @param jobSeconds  定时秒
-     * @param readStorage 读取存储
+     *
+     * @param maxRead         最大阅读数
+     * @param jobSeconds      定时秒
+     * @param readStorage     读取存储
      * @param redisOperations redis操作类
-     * @param cacheKey 缓存key
+     * @param cacheKey        缓存key
      */
-    protected RedisCacheRead(double maxRead, int jobSeconds, ReadStorage<Double, ID> readStorage, RedisOperations<String, Double> redisOperations,String cacheKey) {
+    protected RedisCacheRead(double maxRead, int jobSeconds, ReadStorage<Double, ID> readStorage, RedisOperations<String, Double> redisOperations, String cacheKey) {
         super(maxRead, jobSeconds, readStorage);
         assert readStorage != null : "redis操作类不能为空";
         this.redisOperations = redisOperations;
@@ -86,15 +86,16 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
      */
     @Override
     protected void perform() {
-        if(this.getLock(cacheKey+":perform_job", (jobSeconds / 2) < 5 ? 5 : (jobSeconds / 2) ,TimeUnit.SECONDS)){
+        if (this.getLock(cacheKey + ":perform_job", (jobSeconds / 2) < 5 ? 5 : (jobSeconds / 2), TimeUnit.SECONDS)) {
             super.perform();
             /**
              *  释放锁
              */
-            this.unLock(cacheKey+":perform_job");
+            this.unLock(cacheKey + ":perform_job");
         }
 
     }
+
 
 
 
@@ -103,20 +104,13 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
      *
      * @param key 关键
      * @param n   阅读数
+     *
      * @return {@link Double} 返回阅读数
      */
     @Override
     protected Optional<Double> increase(ID key, Double n) {
-        return Optional.ofNullable(hash.increment(key,n));
+        return Optional.ofNullable(hash.increment(key, n));
     }
-
-
-
-
-
-
-
-
 
 
     /**
@@ -127,7 +121,7 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
      */
     @Override
     protected void reduce(ID key, Double n) {
-        hash.increment(key,-n);
+        hash.increment(key, -n);
     }
 
     /**
@@ -136,10 +130,9 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
      * @return {@link Map <ID, T>}
      */
     @Override
-    protected Optional<Map<ID,Double>> getAll() {
+    protected Optional<Map<ID, Double>> getAll() {
         return Optional.ofNullable(hash.entries());
     }
-
 
 
     /**
@@ -151,11 +144,11 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
     }
 
 
-
     /**
      * 查询指定key的阅读数
      *
      * @param key 阅读key
+     *
      * @return {@link Optional<Double>}
      */
     @Override
@@ -164,11 +157,11 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
     }
 
 
-
     /**
      * 查询多个key的阅读数
      *
      * @param keys 阅读keys
+     *
      * @return {@link Optional<Map<ID,Double>>}
      */
     @Override
@@ -182,10 +175,10 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
         /**
          *  拼接成正则
          */
-        keys.forEach(v->{
-            sb.append(SCAN_KEY_PREFIX).append(v.toString()).append(SCAN_KEY_SUFFIX);
-            if(keys.indexOf(v) < (keys.size() -1)){
-                sb.append(SCAN_KEY_JOIN);
+        keys.forEach(v -> {
+            sb.append(scanKeyPrefix).append(v.toString()).append(scanKeySuffix);
+            if (keys.indexOf(v) < (keys.size() - 1)) {
+                sb.append(scanKeyJoin);
             }
         });
 
@@ -205,27 +198,21 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
     }
 
 
-
-
-
-
-
-
-
-
     /**
-     *  获取锁
+     * 获取锁
+     *
      * @param key
      * @param timeout
      * @param timeUnit
+     *
      * @return
      */
     private boolean getLock(String key, long timeout, TimeUnit timeUnit) {
         try {
 
-            return redisOperations.execute((RedisCallback< Boolean>) connection ->
-                    connection.set(key.getBytes(Charset.forName("UTF-8")), value.getBytes(Charset.forName("UTF-8")),
-                            Expiration.from(timeout, timeUnit), RedisStringCommands.SetOption.SET_IF_ABSENT));
+            return redisOperations.execute((RedisCallback<Boolean>) connection ->
+                connection.set(key.getBytes(Charset.forName("UTF-8")), value.getBytes(Charset.forName("UTF-8")),
+                    Expiration.from(timeout, timeUnit), RedisStringCommands.SetOption.SET_IF_ABSENT));
 
         } catch (Exception e) {
             return false;
@@ -233,18 +220,17 @@ public class RedisCacheRead<ID> extends ReadAbstract<Double,ID> {
     }
 
 
-
-
     /**
-     *  释放锁
+     * 释放锁
+     *
      * @param key
      */
     private void unLock(String key) {
         try {
-            String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
-            Boolean unLockStat = redisOperations.execute((RedisCallback<Boolean>)connection ->
-                    connection.eval(script.getBytes(), ReturnType.BOOLEAN, 1,
-                            key.getBytes(Charset.forName("UTF-8")), value.getBytes(Charset.forName("UTF-8"))));
+
+            Boolean unLockStat = redisOperations.execute((RedisCallback<Boolean>) connection ->
+                connection.eval(script.getBytes(), ReturnType.BOOLEAN, 1,
+                    key.getBytes(Charset.forName("UTF-8")), value.getBytes(Charset.forName("UTF-8"))));
             if (!unLockStat) {
             }
         } catch (Exception e) {
