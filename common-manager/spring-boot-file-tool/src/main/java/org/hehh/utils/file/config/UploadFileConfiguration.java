@@ -29,7 +29,7 @@ public class UploadFileConfiguration {
      */
     @Bean
     @ConfigurationProperties("upload.file.local")
-    public LocalUploadParameters localUploadParameters(){
+    public LocalUploadParameters localUploadParameters() {
         return new LocalUploadParameters();
     }
 
@@ -38,14 +38,14 @@ public class UploadFileConfiguration {
      * 本地上传文件存储
      *
      * @param parameters 参数
+     *
      * @return {@link UploadFileStorage}
      */
     @Bean
     @Primary
-    public UploadFileStorage localUploadFileStorage(LocalUploadParameters parameters){
-        return new UploadFileLocalStorage(parameters.getDomain(),parameters.getDirectory());
+    public UploadFileStorage localUploadFileStorage(LocalUploadParameters parameters) {
+        return new UploadFileLocalStorage(parameters.getDomain(), parameters.getDirectory());
     }
-
 
 
     /**
@@ -56,7 +56,7 @@ public class UploadFileConfiguration {
      */
     @Configuration
     @ConditionalOnClass(UploadManager.class)
-    static class QiNiuUploadFileConfiguration{
+    static class QiNiuUploadFileConfiguration {
 
         /**
          * 七牛云配置参数
@@ -65,7 +65,7 @@ public class UploadFileConfiguration {
          */
         @Bean
         @ConfigurationProperties("upload.file.qiniu")
-        public QiniuyunConfigurationParameters qiniuyunConfigurationParameters(){
+        public QiniuyunConfigurationParameters qiniuyunConfigurationParameters() {
             return new QiniuyunConfigurationParameters();
         }
 
@@ -74,7 +74,9 @@ public class UploadFileConfiguration {
          * 七牛云文件上传
          *
          * @param parameters 参数
+         *
          * @return {@link UploadFileStorage}
+         *
          * @throws IOException ioexception
          */
         @Bean

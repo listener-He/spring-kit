@@ -32,7 +32,7 @@ public class PdfGeneratorIText implements PdfGenerator {
      */
     private FontProvider fontProvider;
 
-    private volatile static PdfGeneratorIText instance;
+    private volatile static PdfGeneratorIText INSTANCE;
 
 
     /**
@@ -57,16 +57,16 @@ public class PdfGeneratorIText implements PdfGenerator {
      * @return {@link PdfGenerator}
      */
     public static PdfGenerator getInstance() {
-        if (instance == null) {
+        if (INSTANCE == null) {
             synchronized (PdfGeneratorIText.class) {
-                if (instance == null) {
-                    instance = new PdfGeneratorIText();
-                    instance.initFont();
+                if (INSTANCE == null) {
+                    INSTANCE = new PdfGeneratorIText();
+                    INSTANCE.initFont();
                 }
             }
         }
 
-        return instance;
+        return INSTANCE;
     }
 
     /**

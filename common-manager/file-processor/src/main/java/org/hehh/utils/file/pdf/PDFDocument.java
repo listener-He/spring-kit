@@ -16,10 +16,9 @@ public abstract class PDFDocument {
      *
      * @param pdfPath pdf文件路径
      */
-    void writer(String pdfPath){
+    void writer(String pdfPath) {
         this.writer(new File(pdfPath));
     }
-
 
 
     /**

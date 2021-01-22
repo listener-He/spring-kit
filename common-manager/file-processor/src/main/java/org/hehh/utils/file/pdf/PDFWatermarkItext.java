@@ -1,16 +1,16 @@
 package org.hehh.utils.file.pdf;
 
 import cn.hutool.core.io.FileUtil;
-import com.itextpdf.kernel.pdf.PdfReader;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.utils.file.watermar.WatermarkMode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @author: HeHui
@@ -19,6 +19,7 @@ import java.io.IOException;
  */
 @Slf4j
 public class PDFWatermarkItext implements PDFWatermark {
+
 
 
     /**
@@ -325,10 +326,4 @@ public class PDFWatermarkItext implements PDFWatermark {
     }
 
 
-//    public static void main(String[] args) throws IOException {
-//        long millis = System.currentTimeMillis();
-//        PDFWatermark pdfWatermark = new PDFWatermarkItext();
-//        pdfWatermark.tiledImage("/Users/hehui/dev/git/new_pc_2/page/万科/外贸汇/进出口税则.pdf", "/Users/hehui/dev/git/new_pc_2/page/万科/外贸汇/进出口税则1.pdf", "/Users/hehui/Documents/2.jpg",  0.99f,45);
-//        System.out.println(System.currentTimeMillis() - millis);
-//    }
 }

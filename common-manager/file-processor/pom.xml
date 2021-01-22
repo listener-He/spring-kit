@@ -16,6 +16,7 @@
         <easyexcel.version>2.2.6</easyexcel.version>
         <zip4j.version>2.6.4</zip4j.version>
         <html2pdf.version>3.0.1</html2pdf.version>
+        <itext.version>2.1.7</itext.version>
     </properties>
 
     <dependencies>
@@ -43,6 +44,13 @@
             <version>${html2pdf.version}</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>${itext.version}</version>
+            <optional>true</optional>
+        </dependency>
+
 
     </dependencies>
 

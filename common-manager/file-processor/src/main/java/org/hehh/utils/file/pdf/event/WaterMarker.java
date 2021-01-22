@@ -1,7 +1,5 @@
 package org.hehh.utils.file.pdf.event;
 
-import com.blh.common.tool.extra.spring.file.WatermarkMode;
-import com.blh.common.tool.extra.spring.file.WatermarkParam;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.DeviceRgb;
@@ -17,6 +15,8 @@ import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
+import org.hehh.utils.file.watermar.WatermarkMode;
+import org.hehh.utils.file.watermar.WatermarkParam;
 
 import javax.swing.*;
 import java.util.Arrays;
