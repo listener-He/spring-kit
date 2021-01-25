@@ -3,6 +3,7 @@ package org.hehh.utils.file;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * @author: HeHui
@@ -10,6 +11,13 @@ import java.io.FileNotFoundException;
  * @description: 上传文件存储
  */
 public interface UploadFileStorage {
+
+
+    default void verifyType(MultipartFile file, String type) throws IOException {
+        if (file != null && !file.isEmpty()) {
+
+        }
+    }
 
 
     /**
@@ -66,6 +74,7 @@ public interface UploadFileStorage {
      * @return {@link String}* @throws FileNotFoundException 文件未发现异常
      */
     String upload(MultipartFile file, String filename, String directory) throws FileNotFoundException;
+
 
 
 }

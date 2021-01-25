@@ -20,12 +20,13 @@ public class QiniuBuild {
      * 构建
      *
      * @param parameters 参数
+     *
      * @return {@link QiNiuFileUploadImpl}* @throws IOException ioexception
      */
     public static QiNiuFileUploadImpl build(QiniuyunConfigurationParameters parameters) throws IOException {
         com.qiniu.storage.Configuration configuration = qiniuConfig(parameters);
         Auth auth = auth(parameters);
-       return new QiNiuFileUploadImpl(uploadManager(configuration,parameters),new BucketManager(auth,configuration),auth,parameters.getDefaultBucket());
+        return new QiNiuFileUploadImpl(uploadManager(configuration, parameters), new BucketManager(auth, configuration), auth, parameters.getDefaultBucket());
     }
 
 
@@ -33,9 +34,10 @@ public class QiniuBuild {
      * 构建
      *
      * @param zone 区
+     *
      * @return {@link Region}
      */
-    public static Region buildRegion(String zone){
+    public static Region buildRegion(String zone) {
         Region region;
         switch (zone) {
             case "z0":
@@ -72,13 +74,13 @@ public class QiniuBuild {
      * 构建一个七牛上传工具实例
      */
     public static UploadManager uploadManager(com.qiniu.storage.Configuration configuration, QiniuyunConfigurationParameters parameters) throws IOException {
-        return new UploadManager(configuration,new FileRecorder(parameters.getBlockDirectory()));
+        return new UploadManager(configuration, new FileRecorder(parameters.getBlockDirectory()));
     }
-
 
 
     /**
      * 认证信息实例
+     *
      * @return
      */
     public static Auth auth(QiniuyunConfigurationParameters parameters) {

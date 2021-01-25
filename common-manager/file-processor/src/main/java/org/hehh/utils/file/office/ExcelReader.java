@@ -1,4 +1,4 @@
-package org.hehh.utils.file.excel;
+package org.hehh.utils.file.office;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,7 @@ public interface ExcelReader<T> {
      *
      * @return {@link Optional<List<T>>}
      */
-    default Optional<List<T>> read(){
+    default Optional<List<T>> read() {
         return this.read(0);
     }
 
@@ -25,12 +25,12 @@ public interface ExcelReader<T> {
      * 读取指定工作薄，从第一行开始读取
      *
      * @param sheetIndex 表索引
+     *
      * @return {@link Optional<List<T>>}
      */
-    default Optional<List<T>> read(int sheetIndex){
-        return this.read(sheetIndex,0);
+    default Optional<List<T>> read(int sheetIndex) {
+        return this.read(sheetIndex, 0);
     }
-
 
 
     /**
@@ -38,10 +38,10 @@ public interface ExcelReader<T> {
      *
      * @param sheetIndex 表索引
      * @param startIndex 开始指数
+     *
      * @return {@link Optional<List<T>>}
      */
-    Optional<List<T>> read(int sheetIndex,int startIndex);
-
+    Optional<List<T>> read(int sheetIndex, int startIndex);
 
 
 }

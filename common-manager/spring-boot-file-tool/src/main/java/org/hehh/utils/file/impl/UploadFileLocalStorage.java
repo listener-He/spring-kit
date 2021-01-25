@@ -3,6 +3,7 @@ package org.hehh.utils.file.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.hehh.utils.file.FileUtil;
 import org.hehh.utils.file.UploadFileStorage;
+import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,7 +73,7 @@ public class UploadFileLocalStorage implements UploadFileStorage {
             }
             String fileLocalUrl = fileDirectory.endsWith("/") ? fileDirectory + filename : fileDirectory + "/" + filename;
 
-            File fileStorageLocal = new File(fileLocalUrl);
+            File fileStorageLocal = ResourceUtils.getFile(fileLocalUrl);
 
 
             /***
@@ -126,8 +127,9 @@ public class UploadFileLocalStorage implements UploadFileStorage {
     private String getDirectory(String directory) {
         String newDirectory = this.directory;
         if (StringUtils.hasText(directory)) {
-            newDirectory = this.directory + "/" + directory;
+            directory = StringUtils.replace(directory, "//", "/");
+            newDirectory = this.directory + (directory.startsWith("/") ? directory : ("/" + directory));
         }
-        return StringUtils.replace(newDirectory, "//", "/");
+        return newDirectory;
     }
 }

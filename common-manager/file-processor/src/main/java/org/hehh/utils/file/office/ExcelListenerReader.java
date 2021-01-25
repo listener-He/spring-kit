@@ -1,8 +1,7 @@
-package org.hehh.utils.file.excel;
+package org.hehh.utils.file.office;
 
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author: HeHui
@@ -22,8 +21,8 @@ public interface ExcelListenerReader<T> extends ExcelReader<T> {
      *
      * @param callback 回调
      */
-    default void readCallback(ListenerCallback<T> callback){
-        this.readCallback(0,callback);
+    default void readCallback(ListenerCallback<T> callback) {
+        this.readCallback(0, callback);
     }
 
 
@@ -33,8 +32,8 @@ public interface ExcelListenerReader<T> extends ExcelReader<T> {
      * @param sheetIndex 表索引
      * @param callback   回调
      */
-    default void  readCallback(int sheetIndex,ListenerCallback<T> callback){
-        this.readCallback(sheetIndex,0,callback);
+    default void readCallback(int sheetIndex, ListenerCallback<T> callback) {
+        this.readCallback(sheetIndex, 0, callback);
     }
 
 
@@ -45,7 +44,7 @@ public interface ExcelListenerReader<T> extends ExcelReader<T> {
      * @param startIndex 开始指数
      * @param callback   回调
      */
-    void  readCallback(int sheetIndex,int startIndex,ListenerCallback<T> callback);
+    void readCallback(int sheetIndex, int startIndex, ListenerCallback<T> callback);
 
 
     /**
@@ -53,37 +52,37 @@ public interface ExcelListenerReader<T> extends ExcelReader<T> {
      *
      * @param sheetIndex 表索引
      * @param startIndex 开始指数
+     *
      * @return {@link Optional < Collection <T>>}
      */
     @Override
-    default Optional<List<T>> read(int sheetIndex, int startIndex){
+    default Optional<List<T>> read(int sheetIndex, int startIndex) {
 
         List<List<T>> results = new ArrayList<>();
         final List<T>[] temp = new List[] {new ArrayList<>(1024)};
 
 
-        this.readCallback(sheetIndex,startIndex,(data,index)->{
-            if(null != data){
+        this.readCallback(sheetIndex, startIndex, (data, index) -> {
+            if (null != data) {
                 temp[0].add(data);
-                if(index > 0 && index % max_element == 0){
+                if (index > 0 && index % max_element == 0) {
                     results.add(temp[0]);
                     temp[0] = new ArrayList<>(1024);
                 }
             }
         });
 
-       if(results.isEmpty()){
-           return Optional.empty();
-       }
+        if (results.isEmpty()) {
+            return Optional.empty();
+        }
 
-       List<T> result = new ArrayList<>(results.size() * max_element);
+        List<T> result = new ArrayList<>(results.size() * max_element);
         for (List<T> v : results) {
             result.addAll(v);
         }
         results.clear();
-       return Optional.of(result);
+        return Optional.of(result);
     }
-
 
 
 }
