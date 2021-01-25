@@ -19,17 +19,15 @@ import java.io.IOException;
 public class UploadFileLocalStorage implements UploadFileStorage {
 
 
-
     /**
-     *  访问域名
+     * 访问域名
      */
     private final String accessDomain;
 
     /**
-     *  文件存储目录
+     * 文件存储目录
      */
     private final String directory;
-
 
 
     /**
@@ -47,72 +45,68 @@ public class UploadFileLocalStorage implements UploadFileStorage {
     }
 
 
-
-
-
-
     /**
      * 上传
      *
      * @param file      文件
      * @param filename  文件名
      * @param directory 目录
+     *
      * @return {@link String}* @throws FileNotFoundException 文件未发现异常
      */
     @Override
     public String upload(MultipartFile file, String filename, String directory) throws FileNotFoundException {
-        check(file,directory);
+        check(file, directory);
         String fileDirectory = getDirectory(directory);
 
 
-            try {
-                if(StringUtils.isEmpty(filename)){
-                  filename = FileUtil.md5(file.getInputStream());
-                }
-                /**
-                 *  防止文件没有后缀
-                 */
-                if(!filename.contains(".")){
-                    filename = filename + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-                }
-                String fileLocalUrl = fileDirectory.endsWith("/") ? fileDirectory + filename : fileDirectory + "/" + filename;
-
-                File fileStorageLocal = new File(fileLocalUrl);
-
-
-                /***
-                 * 检测是否存在目录
-                 */
-                if (!fileStorageLocal.getParentFile().exists()) {
-                    fileStorageLocal.getParentFile().mkdirs();
-                }
-
-                /**
-                 *  输出到文件
-                 */
-                file.transferTo(fileStorageLocal);
-                if(log.isDebugEnabled()){
-                    log.debug("Upload file storage to local,originalFilename:{},directory:{} ",file.getOriginalFilename(),fileLocalUrl);
-                }
-
-                return this.accessDomain + "/" + StringUtils.replace(fileLocalUrl, this.directory, "");
-
-
-            } catch (IOException e) {
-                log.error("Upload file storage to local error:",e);
+        try {
+            if (StringUtils.isEmpty(filename)) {
+                filename = FileUtil.md5(file.getInputStream());
             }
+            /**
+             *  防止文件没有后缀
+             */
+            if (!filename.contains(".")) {
+                filename = filename + file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
+            }
+            String fileLocalUrl = fileDirectory.endsWith("/") ? fileDirectory + filename : fileDirectory + "/" + filename;
+
+            File fileStorageLocal = new File(fileLocalUrl);
+
+
+            /***
+             * 检测是否存在目录
+             */
+            if (!fileStorageLocal.getParentFile().exists()) {
+                fileStorageLocal.getParentFile().mkdirs();
+            }
+
+            /**
+             *  输出到文件
+             */
+            file.transferTo(fileStorageLocal);
+            if (log.isDebugEnabled()) {
+                log.debug("Upload file storage to local,originalFilename:{},directory:{} ", file.getOriginalFilename(), fileLocalUrl);
+            }
+
+            return this.accessDomain + "/" + StringUtils.replace(fileLocalUrl, this.directory, "");
+
+
+        } catch (IOException e) {
+            log.error("Upload file storage to local error:", e);
+        }
 
         return null;
     }
 
 
-
-
-
     /**
-     *  验证
+     * 验证
+     *
      * @param file
      * @param directory
+     *
      * @throws FileNotFoundException
      */
     private void check(MultipartFile file, String directory) throws FileNotFoundException {
@@ -122,16 +116,17 @@ public class UploadFileLocalStorage implements UploadFileStorage {
     }
 
 
-
     /**
-     *  格式化目录
+     * 格式化目录
+     *
      * @param directory
+     *
      * @return
      */
     private String getDirectory(String directory) {
         String newDirectory = this.directory;
-        if (StringUtils.hasText(directory)){
-            newDirectory =  this.directory + "/" + directory;
+        if (StringUtils.hasText(directory)) {
+            newDirectory = this.directory + "/" + directory;
         }
         return StringUtils.replace(newDirectory, "//", "/");
     }

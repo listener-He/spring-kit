@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author: HeHui
  * @date: 2021-01-21 10:56
- * @description: ftl生成pdf处理器
+ * @description: ftl生成html处理器
  */
 public interface GeneratorHtmlHandler {
 

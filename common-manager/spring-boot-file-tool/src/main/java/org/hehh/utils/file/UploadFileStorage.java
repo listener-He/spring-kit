@@ -12,19 +12,19 @@ import java.io.FileNotFoundException;
 public interface UploadFileStorage {
 
 
-
     /**
      * 上传
      * 文件名默认hash
      *
      * @param file 文件
+     *
      * @return {@link String}
+     *
      * @throws FileNotFoundException 文件未发现异常
      */
-    default String upload(MultipartFile file) throws FileNotFoundException{
-        return this.upload(file,null);
+    default String upload(MultipartFile file) throws FileNotFoundException {
+        return this.upload(file, null);
     }
-
 
 
     /**
@@ -32,27 +32,28 @@ public interface UploadFileStorage {
      *
      * @param file     文件
      * @param filename 文件名
+     *
      * @return {@link String}* @throws FileNotFoundException 文件未发现异常
      */
-    default String upload(MultipartFile file,String filename) throws FileNotFoundException{
-        return this.upload(file,filename,null);
+    default String upload(MultipartFile file, String filename) throws FileNotFoundException {
+        return this.upload(file, filename, null);
     }
 
 
     /**
      * 上传指定目录
-     *  文件名默认hash
+     * 文件名默认hash
+     *
      * @param file      文件
      * @param directory 目录
+     *
      * @return {@link String}
+     *
      * @throws FileNotFoundException 文件未发现异常
      */
-    default String uploadDirectory(MultipartFile file,String directory) throws FileNotFoundException{
-        return upload(file,null,directory);
+    default String uploadDirectory(MultipartFile file, String directory) throws FileNotFoundException {
+        return upload(file, null, directory);
     }
-
-
-
 
 
     /**
@@ -61,12 +62,10 @@ public interface UploadFileStorage {
      * @param file      文件
      * @param filename  文件名
      * @param directory 目录
+     *
      * @return {@link String}* @throws FileNotFoundException 文件未发现异常
      */
-    String upload(MultipartFile file,String filename,String directory) throws FileNotFoundException;
-
-
-
+    String upload(MultipartFile file, String filename, String directory) throws FileNotFoundException;
 
 
 }
