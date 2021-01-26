@@ -61,7 +61,7 @@ public class FileMedia {
      *
      * @return {@link String}
      */
-    private String getType(File file) {
+    public static String getType(File file) {
         return FileUtil.getType(file);
     }
 
@@ -72,7 +72,7 @@ public class FileMedia {
      *
      * @return {@link String}
      */
-    private String getType(InputStream stream) {
+    public static String getType(InputStream stream) {
         return FileTypeUtil.getType(stream);
 //        String header = getHeader(stream);
 //        if (StrUtil.isNotBlank(header)) {
