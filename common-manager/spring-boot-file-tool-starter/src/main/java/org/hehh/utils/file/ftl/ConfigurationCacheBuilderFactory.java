@@ -26,6 +26,22 @@ public class ConfigurationCacheBuilderFactory implements ConfigurationBuilderFac
 
     private final Map<TemplateLoader, Configuration> cache = new ConcurrentHashMap<>();
 
+    /**
+     * 配置缓存构建器工厂
+     */
+    public ConfigurationCacheBuilderFactory() {
+    }
+
+    /**
+     * 配置缓存构建器工厂
+     *
+     * @param configurations 配置
+     */
+    public ConfigurationCacheBuilderFactory(Configuration... configurations) {
+        for (Configuration configuration : configurations) {
+            cache.put(configuration.getTemplateLoader(), configuration);
+        }
+    }
 
     /**
      * 获取缓存
