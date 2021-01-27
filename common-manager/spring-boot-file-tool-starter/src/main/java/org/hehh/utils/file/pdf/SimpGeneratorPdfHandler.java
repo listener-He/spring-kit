@@ -34,7 +34,8 @@ public class SimpGeneratorPdfHandler implements GeneratorPdfHandler {
          */
         if (StringUtils.hasText(content)) {
             PdfGenerator pdfGenerator = PdfGeneratorIText.getInstance();
-            if (!FileUtil.getType(file).equalsIgnoreCase("pdf")) {
+            if (file.exists() && !FileUtil.getType(file).equalsIgnoreCase("pdf")
+                || (!file.getName().endsWith(".pdf"))) {
                 return ErrorResult.error("文件类型非法");
             }
             try {
@@ -46,4 +47,7 @@ public class SimpGeneratorPdfHandler implements GeneratorPdfHandler {
         }
         return ErrorResult.error("生成pdf失败，无内容");
     }
+
+
+
 }

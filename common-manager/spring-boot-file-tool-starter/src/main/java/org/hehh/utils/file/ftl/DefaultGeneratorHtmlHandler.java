@@ -30,8 +30,8 @@ public class DefaultGeneratorHtmlHandler implements GeneratorHtmlHandler {
      *
      * @param configurationBuilderFactory 配置构建器工厂
      */
-    public DefaultGeneratorHtmlHandler(ConfigurationBuilderFactory configurationBuilderFactory) {
-        this(configurationBuilderFactory,"template");
+    public DefaultGeneratorHtmlHandler(ConfigurationBuilderFactory configurationBuilderFactory) throws IOException {
+        this(configurationBuilderFactory,"classpath:/template");
     }
 
     /**
@@ -40,8 +40,8 @@ public class DefaultGeneratorHtmlHandler implements GeneratorHtmlHandler {
      * @param configurationBuilderFactory 配置构建器工厂
      * @param classLoadTemp               类加载模板目录
      */
-    public DefaultGeneratorHtmlHandler(ConfigurationBuilderFactory configurationBuilderFactory,String classLoadTemp) {
-        this(configurationBuilderFactory,classLoadTemp,Configuration.VERSION_2_3_0);
+    public DefaultGeneratorHtmlHandler(ConfigurationBuilderFactory configurationBuilderFactory,String classLoadTemp) throws IOException {
+        this(configurationBuilderFactory,classLoadTemp,Configuration.VERSION_2_3_28);
     }
 
     /**
@@ -50,8 +50,8 @@ public class DefaultGeneratorHtmlHandler implements GeneratorHtmlHandler {
      * @param configurationBuilderFactory 配置构建器工厂
      * @param defaultVersion              默认的版本
      */
-    public DefaultGeneratorHtmlHandler(ConfigurationBuilderFactory configurationBuilderFactory,Version defaultVersion) {
-        this(configurationBuilderFactory,"template",defaultVersion);
+    public DefaultGeneratorHtmlHandler(ConfigurationBuilderFactory configurationBuilderFactory,Version defaultVersion) throws IOException {
+        this(configurationBuilderFactory,"classpath:/template",defaultVersion);
     }
 
     /**
@@ -61,10 +61,10 @@ public class DefaultGeneratorHtmlHandler implements GeneratorHtmlHandler {
      * @param classLoadTemp               类加载模板目录
      * @param defaultVersion              默认的版本
      */
-    public DefaultGeneratorHtmlHandler(ConfigurationBuilderFactory configurationBuilderFactory,String classLoadTemp,Version defaultVersion) {
+    public DefaultGeneratorHtmlHandler(ConfigurationBuilderFactory configurationBuilderFactory,String classLoadTemp,Version defaultVersion) throws IOException {
         this.configurationBuilderFactory = configurationBuilderFactory;
         this.defaultVersion = defaultVersion;
-        this.defaultConfiguration = configurationBuilderFactory.builder(this.getClass(), classLoadTemp, defaultVersion);
+        this.defaultConfiguration = configurationBuilderFactory.builder(classLoadTemp, defaultVersion);
     }
 
     /**
