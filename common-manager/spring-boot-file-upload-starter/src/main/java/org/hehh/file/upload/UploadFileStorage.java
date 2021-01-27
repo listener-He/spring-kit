@@ -13,9 +13,6 @@ import java.io.IOException;
 public interface UploadFileStorage {
 
 
-
-
-
     /**
      * 上传
      * 文件名默认hash
@@ -40,11 +37,11 @@ public interface UploadFileStorage {
      * @return {@link String}* @throws FileNotFoundException 文件未发现异常
      */
     default String upload(MultipartFile file, String filename) throws IOException {
-        return this.upload(file, filename, null,null);
+        return this.upload(file, filename, null, null);
     }
 
-    default String upload(MultipartFile file, String filename,String... types) throws IOException {
-        return upload(file,filename,null,types);
+    default String upload(MultipartFile file, String filename, String... types) throws IOException {
+        return upload(file, filename, null, types);
     }
 
 
@@ -79,7 +76,6 @@ public interface UploadFileStorage {
     }
 
 
-
     /**
      * 上传
      *
@@ -92,22 +88,50 @@ public interface UploadFileStorage {
      *
      * @throws IOException 文件未发现异常
      */
-    String upload(MultipartFile file, String filename, String directory, String... types) throws IOException;
-
-
+    default String upload(MultipartFile file, String filename, String directory, String... types) throws IOException {
+        UploadMultipartFileReq req = UploadMultipartFileReq.build(file).name(filename);
+        return upload(file,directory,types);
+    }
 
 
     /**
-     * 上传 (核心方法，所有上传基于这个方法)
+     * 上传
      *
      * @param file      文件
      * @param filename  文件名
      * @param directory 目录
      *
      * @return {@link String}
+     *
      * @throws IOException 文件未发现异常
      */
-    String upload(MultipartFile file, String filename, String directory) throws IOException;
+    default String upload(MultipartFile file, String filename, String directory) throws IOException {
+        return upload(file, filename, directory, null);
+    }
+
+
+    /**
+     * 上传
+     *
+     * @param req   请求参数
+     * @param types 类型
+     *
+     * @return {@link String}
+     */
+    default String upload(UploadMultipartFileReq req, String... types) throws IOException {
+        return upload(req, null, types);
+    }
+
+    /**
+     * 上传 (核心方法，所有上传基于这个方法)
+     *
+     * @param req       请求参数
+     * @param directory 目录
+     * @param types     类型
+     *
+     * @return {@link String}
+     */
+    String upload(UploadMultipartFileReq req, String directory, String... types) throws IOException;
 
 
 }
