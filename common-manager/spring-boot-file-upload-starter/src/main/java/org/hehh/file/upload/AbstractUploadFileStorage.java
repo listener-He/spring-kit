@@ -1,15 +1,11 @@
 package org.hehh.file.upload;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hehh.file.upload.event.UploadMultipartFileEvent;
-import org.hehh.file.upload.event.UploadMultipartFileEventPublisher;
+import org.hehh.file.upload.event.UploadEvent;
+import org.hehh.file.upload.event.UploadMultipartFile;
 import org.hehh.file.upload.exception.UploadFileException;
 import org.hehh.utils.file.FileUtil;
 import org.hehh.utils.file.pojo.FileMedia;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanInitializationException;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.*;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,11 +19,11 @@ import java.util.Arrays;
  * @description: 抽象上传文件存储（事件驱动）
  */
 @Slf4j
-public abstract class AbstractUploadFileStorage implements UploadFileStorage, ApplicationContextAware {
+public abstract class AbstractUploadFileStorage implements UploadFileStorage {
 
     private final String[] defaultTypes;
 
-    private UploadMultipartFileEventPublisher eventPublisher;
+    private UploadInterceptor uploadInterceptor;
 
     /**
      * 抽象上传文件存储
@@ -39,24 +35,24 @@ public abstract class AbstractUploadFileStorage implements UploadFileStorage, Ap
     }
 
     /**
-     * 抽象上传文件存储
+     * 摘要上传文件存储
      *
-     * @param eventPublisher 事件发布者
-     * @param defaultTypes   默认类型
+     * @param defaultTypes      默认类型
+     * @param uploadInterceptor 上传拦截器
      */
-    public AbstractUploadFileStorage(UploadMultipartFileEventPublisher eventPublisher, String... defaultTypes) {
+    public AbstractUploadFileStorage(UploadInterceptor uploadInterceptor, String... defaultTypes) {
         this.defaultTypes = defaultTypes;
-        this.eventPublisher = eventPublisher;
+        this.uploadInterceptor = uploadInterceptor;
     }
 
     /**
-     * 抽象上传文件存储
+     * 摘要上传文件存储
      *
-     * @param eventPublisher 事件发布者
+     * @param uploadInterceptor 上传拦截器
      */
-    public AbstractUploadFileStorage(UploadMultipartFileEventPublisher eventPublisher) {
+    public AbstractUploadFileStorage(UploadInterceptor uploadInterceptor) {
         this();
-        this.eventPublisher = eventPublisher;
+        this.uploadInterceptor = uploadInterceptor;
     }
 
 
@@ -141,53 +137,43 @@ public abstract class AbstractUploadFileStorage implements UploadFileStorage, Ap
             log.warn("保存文件类型与上传的源文件类型不一致, 上传类型:{},命名类型:{}", type, uploadNamedType);
         }
 
+        UploadMultipartFile upload = new UploadMultipartFile();
+        upload.settingUploadUser(req);
+        upload.setKey(fileId);
+        upload.setType(type);
+        upload.setSize(file.getSize());
+
+
+        UploadEvent event = new UploadEvent(upload);
+
         /**
          *  直接执行
          */
-        if (eventPublisher == null) {
+        if (uploadInterceptor == null || uploadInterceptor.supports(event)) {
             return upload(fileId, file, filename, directory);
         }
 
-        UploadMultipartFileEvent uploadEvent = new UploadMultipartFileEvent();
-        uploadEvent.settingUploadUser(req);
-        uploadEvent.setKey(fileId);
-        uploadEvent.setType(type);
-        uploadEvent.setSize(file.getSize());
 
-        eventPublisher.before(uploadEvent);
+        boolean before = uploadInterceptor.before(event);
+        if (!before) {
+            return event.getUpload(UploadMultipartFile.class).getUrl();
+        }
 
         try {
             String url = upload(fileId, file, filename, directory);
-            eventPublisher.after(uploadEvent, url);
+            uploadInterceptor.after(event, url);
             return url;
         } catch (Exception e) {
-            eventPublisher.error(uploadEvent, e);
+            uploadInterceptor.error(event, e);
+            String url = event.getUpload(UploadMultipartFile.class).getUrl();
+            if (!StringUtils.isEmpty(url)) {
+                return url;
+            }
             throw e;
         }
     }
 
 
-    /**
-     * Set the ApplicationContext that this object runs in.
-     * Normally this call will be used to initialize the object.
-     * <p>Invoked after population of normal bean properties but before an init callback such
-     * as {@link InitializingBean#afterPropertiesSet()}
-     * or a custom init-method. Invoked after {@link ResourceLoaderAware#setResourceLoader},
-     * {@link ApplicationEventPublisherAware#setApplicationEventPublisher} and
-     * {@link MessageSourceAware}, if applicable.
-     *
-     * @param applicationContext the ApplicationContext object to be used by this object
-     *
-     * @throws ApplicationContextException in case of context initialization errors
-     * @throws BeansException              if thrown by application context methods
-     * @see BeanInitializationException
-     */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        if (eventPublisher == null) {
-            applicationContext.getBean(UploadMultipartFileEventPublisher.class);
-        }
-    }
 
 
 

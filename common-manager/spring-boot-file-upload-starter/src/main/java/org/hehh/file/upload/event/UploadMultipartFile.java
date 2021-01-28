@@ -3,9 +3,9 @@ package org.hehh.file.upload.event;
 /**
  * @author: HeHui
  * @date: 2021-01-27 16:45
- * @description: 上传单个文件事件
+ * @description: 上传单个文件
  */
-public class UploadMultipartFileEvent extends UploadEvent {
+public class UploadMultipartFile extends UploadBase {
 
 
     private static final long serialVersionUID = -7140740649554880284L;

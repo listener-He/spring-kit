@@ -12,6 +12,7 @@ import java.io.IOException;
  */
 public interface UploadFileStorage {
 
+    
 
     /**
      * 上传

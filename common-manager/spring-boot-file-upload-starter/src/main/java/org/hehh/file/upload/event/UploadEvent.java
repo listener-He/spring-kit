@@ -1,67 +1,38 @@
 package org.hehh.file.upload.event;
 
-import org.hehh.file.upload.UploadFileReq;
-
 /**
  * @author: HeHui
- * @date: 2021-01-27 15:45
+ * @date: 2021-01-28 13:44
  * @description: 上传事件
  */
-public class UploadEvent implements java.io.Serializable {
+public class UploadEvent {
 
+    private Object upload;
 
-    private static final long serialVersionUID = -29201897261693493L;
-    /**
-     * 用户
-     */
-    private String user;
-
-    /**
-     * 用户身份
-     */
-    private String userIdentity;
-
-    /**
-     * 源
-     */
-    private String source;
-
-
-
-
-    public String getUser() {
-        return user;
+    public UploadEvent() {
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public <T extends UploadBase> UploadEvent(T upload) {
+        this.upload = upload;
     }
 
-    public String getUserIdentity() {
-        return userIdentity;
+    public <T extends UploadBase> T getUpload(Class<T> tClass) {
+        return (T) upload;
     }
 
-    public void setUserIdentity(String userIdentity) {
-        this.userIdentity = userIdentity;
+    public <T extends UploadBase> void setUpload(T upload) {
+        this.upload = upload;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
+    public <T extends UploadBase> UploadEvent upload(T upload) {
+        this.upload = upload;
+        return this;
     }
 
 
-    /**
-     * 设置上传用户
-     *
-     * @param req 要求的事情
-     */
-    public void settingUploadUser(UploadFileReq req) {
-        this.source = req.getSource();
-        this.user = req.getUser();
-        this.userIdentity = req.getUserIdentity();
+    public <T extends UploadBase> boolean uploadClass(Class<T> tClass) {
+        return this.upload.getClass().isAssignableFrom(tClass);
     }
+
+
 }
