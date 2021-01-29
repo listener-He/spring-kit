@@ -11,9 +11,9 @@ import java.io.InputStream;
 /**
  * @author: HeHui
  * @date: 2020-08-22 16:52
- * @description: 七牛文件上传
+ * @description: 七牛文件存储
  */
-public interface QiNiuFileUpload extends UploadFileStorage {
+public interface QiNiuFileStorage extends UploadFileStorage {
 
 
     /**
@@ -80,26 +80,6 @@ public interface QiNiuFileUpload extends UploadFileStorage {
     String upload(InputStream inputStream, String filename, String directory, Bucket bucket) throws FileNotFoundException;
 
 
-//    /**
-//     * 上传
-//     *
-//     * @param file      文件
-//     * @param filename  文件名
-//     * @param directory 目录
-//     *
-//     * @return {@link String}
-//     *
-//     * @throws IOException 文件未发现异常
-//     */
-//    @Override
-//    default String upload(MultipartFile file, String filename, String directory) throws IOException {
-//        try {
-//            return this.upload(file.getInputStream(), filename, directory, null);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
 
 
     /**

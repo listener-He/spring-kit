@@ -8,7 +8,7 @@ import com.qiniu.storage.model.FetchRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 import lombok.extern.slf4j.Slf4j;
-import org.hehh.file.upload.AbstractUploadFileStorage;
+import org.hehh.file.upload.event.AbstractUploadFileStorage;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,7 +21,7 @@ import java.net.URLEncoder;
  * @description: 七牛云文件上传实现类
  */
 @Slf4j
-public class QiNiuFileUploadImpl extends AbstractUploadFileStorage implements QiNiuFileUpload {
+public class QiNiuFileUploadImpl extends AbstractUploadFileStorage implements QiNiuFileStorage {
 
     /**
      * 上传管理

@@ -1,4 +1,4 @@
-package org.hehh.file.upload;
+package org.hehh.file.upload.req;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date: 2021-01-27 15:14
  * @description: 上传单个文件请求
  */
-public class UploadMultipartFileReq extends UploadFileReq {
+public class UploadMultipartFile extends UploadBase {
 
     /**
      * 文件
@@ -61,9 +61,9 @@ public class UploadMultipartFileReq extends UploadFileReq {
      *
      * @param filename 文件名
      *
-     * @return {@link UploadMultipartFileReq}
+     * @return {@link UploadMultipartFile}
      */
-    public UploadMultipartFileReq name(String filename) {
+    public UploadMultipartFile name(String filename) {
         setFilename(filename);
         return this;
     }
@@ -73,10 +73,10 @@ public class UploadMultipartFileReq extends UploadFileReq {
      *
      * @param file 文件
      *
-     * @return {@link UploadMultipartFileReq}
+     * @return {@link UploadMultipartFile}
      */
-    public static UploadMultipartFileReq build(MultipartFile file) {
-        UploadMultipartFileReq req = new UploadMultipartFileReq();
+    public static UploadMultipartFile build(MultipartFile file) {
+        UploadMultipartFile req = new UploadMultipartFile();
         req.setFile(file);
         return req;
     }

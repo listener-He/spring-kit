@@ -1,9 +1,10 @@
-package org.hehh.file.upload;
+package org.hehh.file.upload.event;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hehh.file.upload.event.UploadEvent;
-import org.hehh.file.upload.event.UploadMultipartFile;
+import org.hehh.file.upload.UploadFileStorage;
 import org.hehh.file.upload.exception.UploadFileException;
+import org.hehh.file.upload.req.UploadMultipartFile;
+import org.hehh.file.upload.res.UploadResult;
 import org.hehh.utils.file.FileUtil;
 import org.hehh.utils.file.pojo.FileMedia;
 import org.springframework.util.StringUtils;
@@ -23,7 +24,7 @@ public abstract class AbstractUploadFileStorage implements UploadFileStorage {
 
     private final String[] defaultTypes;
 
-    private UploadInterceptor uploadInterceptor;
+    private UploadFilterChain uploadFilterChain;
 
     /**
      * 抽象上传文件存储
@@ -38,21 +39,21 @@ public abstract class AbstractUploadFileStorage implements UploadFileStorage {
      * 摘要上传文件存储
      *
      * @param defaultTypes      默认类型
-     * @param uploadInterceptor 上传拦截器
+     * @param uploadFilterChain 上传过滤器链
      */
-    public AbstractUploadFileStorage(UploadInterceptor uploadInterceptor, String... defaultTypes) {
+    public AbstractUploadFileStorage(UploadFilterChain uploadFilterChain, String... defaultTypes) {
         this.defaultTypes = defaultTypes;
-        this.uploadInterceptor = uploadInterceptor;
+        this.uploadFilterChain = uploadFilterChain;
     }
 
     /**
      * 摘要上传文件存储
      *
-     * @param uploadInterceptor 上传拦截器
+     * @param uploadFilterChain 上传过滤器链
      */
-    public AbstractUploadFileStorage(UploadInterceptor uploadInterceptor) {
+    public AbstractUploadFileStorage(UploadFilterChain uploadFilterChain) {
         this();
-        this.uploadInterceptor = uploadInterceptor;
+        this.uploadFilterChain = uploadFilterChain;
     }
 
 
@@ -82,10 +83,10 @@ public abstract class AbstractUploadFileStorage implements UploadFileStorage {
      * @param directory 目录
      * @param types     类型
      *
-     * @return {@link String}
+     * @return {@link UploadResult<String>}
      */
     @Override
-    public String upload(UploadMultipartFileReq req, String directory, String... types) throws IOException {
+    public UploadResult<String> upload(UploadMultipartFile req, String directory, String... types) throws IOException {
         MultipartFile file = req.getFile();
 
         if (file == null || file.isEmpty()) {
@@ -137,44 +138,52 @@ public abstract class AbstractUploadFileStorage implements UploadFileStorage {
             log.warn("保存文件类型与上传的源文件类型不一致, 上传类型:{},命名类型:{}", type, uploadNamedType);
         }
 
-        UploadMultipartFile upload = new UploadMultipartFile();
-        upload.settingUploadUser(req);
+        UploadFile upload = new UploadFile(req);
         upload.setKey(fileId);
         upload.setType(type);
         upload.setSize(file.getSize());
 
 
-        UploadEvent event = new UploadEvent(upload);
+        UploadEvent event = new UploadEvent(upload,req);
 
-        /**
-         *  直接执行
-         */
-        if (uploadInterceptor == null || uploadInterceptor.supports(event)) {
-            return upload(fileId, file, filename, directory);
-        }
+//        /**
+//         *  直接执行
+//         */
+//        if (uploadFilterChain == null) {
+//            return UploadResult.result(upload(fileId, file, filename, directory));
+//        }
 
+        String finalFilename = filename;
+        return uploadFilterChain.doFilter(event,() -> {
+            return UploadResult.result(upload(fileId, file, finalFilename, directory));
+        });
 
-        boolean before = uploadInterceptor.before(event);
-        if (!before) {
-            return event.getUpload(UploadMultipartFile.class).getUrl();
-        }
-
-        try {
-            String url = upload(fileId, file, filename, directory);
-            uploadInterceptor.after(event, url);
-            return url;
-        } catch (Exception e) {
-            uploadInterceptor.error(event, e);
-            String url = event.getUpload(UploadMultipartFile.class).getUrl();
-            if (!StringUtils.isEmpty(url)) {
-                return url;
-            }
-            throw e;
-        }
+//        uploadFilterChain.before(event);
+//        if (event.getCompleted()) {
+//            return UploadResult.result(event.getUpload(UploadFile.class).getUrl());
+//        }
+//
+//
+//        String url = null;
+//        try {
+//            url = upload(fileId, file, filename, directory);
+//            event.setCompleted(true);
+//            uploadFilterChain.after(event, url);
+//            return UploadResult.result(url);
+//        } catch (Exception e) {
+//            if (!StringUtils.isEmpty(url)) {
+//                event.completed(true);
+//            }
+//            uploadFilterChain.error(event, e);
+//
+//            url = event.getUpload(UploadFile.class).getUrl();
+//
+//            if (!StringUtils.isEmpty(url)) {
+//                return UploadResult.result(url);
+//            }
+//            throw e;
+//        }
     }
-
-
-
 
 
     /**

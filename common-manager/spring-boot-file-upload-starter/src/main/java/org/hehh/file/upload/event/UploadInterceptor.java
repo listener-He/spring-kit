@@ -1,7 +1,7 @@
-package org.hehh.file.upload;
+package org.hehh.file.upload.event;
 
 
-import org.hehh.file.upload.event.*;
+import org.hehh.file.upload.req.UploadBase;
 import org.springframework.core.Ordered;
 
 /**
@@ -24,29 +24,31 @@ public interface UploadInterceptor<T extends UploadBase> extends Ordered {
 
 
     /**
-     * 之前
      * 保存前
      *
-     * @param event 事件
+     * @param event       事件
+     * @param filterChain 过滤器链
      */
-    boolean before(UploadEvent event);
+    void before(UploadEvent event,UploadFilterChain filterChain);
 
     /**
      * 错误
      * 异常
      *
-     * @param exception 异常
-     * @param event     事件
+     * @param exception   异常
+     * @param event       事件
+     * @param filterChain 过滤器链
      */
-    void error(UploadEvent event, Exception exception);
+    void error(UploadEvent event, Exception exception,UploadFilterChain filterChain);
 
     /**
      * 后
      *
-     * @param url   url
-     * @param event 事件
+     * @param url         url
+     * @param event       事件
+     * @param filterChain 过滤器链
      */
-    void after(UploadEvent event, String url);
+    void after(UploadEvent event, String url,UploadFilterChain filterChain);
 
 
     /**

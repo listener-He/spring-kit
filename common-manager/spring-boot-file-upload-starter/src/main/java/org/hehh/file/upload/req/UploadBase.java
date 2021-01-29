@@ -1,6 +1,5 @@
-package org.hehh.file.upload.event;
+package org.hehh.file.upload.req;
 
-import org.hehh.file.upload.UploadFileReq;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -29,9 +28,15 @@ public class UploadBase implements java.io.Serializable {
 
 
     /**
-     *  业务赋予url
+     * 业务赋予url
      */
     private String url;
+
+    public UploadBase(){}
+    public UploadBase(UploadBase upload) {
+        this();
+        BeanUtils.copyProperties(upload, this);
+    }
 
     public String getUrl() {
         return url;
@@ -66,15 +71,4 @@ public class UploadBase implements java.io.Serializable {
     }
 
 
-    /**
-     * 设置上传用户
-     *
-     * @param req 要求的事情
-     */
-    public void settingUploadUser(UploadFileReq req) {
-//        this.source = req.getSource();
-//        this.user = req.getUser();
-//        this.userIdentity = req.getUserIdentity();
-        BeanUtils.copyProperties(req,this);
-    }
 }
