@@ -2,23 +2,17 @@ package org.hehh.cloud.validator;
 
 import org.hehh.cloud.validator.annotation.PropertyScriptAssert;
 import org.hibernate.validator.internal.util.Contracts;
-import org.hibernate.validator.internal.util.logging.Log;
-import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.hibernate.validator.internal.util.logging.Messages;
-import org.hibernate.validator.spi.scripting.ScriptEvaluator;
-import org.hibernate.validator.spi.scripting.ScriptEvaluatorFactory;
 
-import javax.script.ScriptException;
-import javax.validation.ConstraintDeclarationException;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
  * @author: HeHui
  * @create: 2020-03-21 02:49
- * @description: 脚本验证起
+ * @description: 脚本验证器
  **/
-public class PropertyScriptAssertValidator  implements ConstraintValidator<PropertyScriptAssert, Object> {
+public class PropertyScriptAssertValidator implements ConstraintValidator<PropertyScriptAssert, Object> {
 
 
     private String script;
@@ -26,7 +20,6 @@ public class PropertyScriptAssertValidator  implements ConstraintValidator<Prope
     private String alias;
     private String property;
     private String message;
-
 
 
     public void initialize(PropertyScriptAssert constraintAnnotation) {
