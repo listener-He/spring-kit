@@ -83,10 +83,11 @@ public abstract class AbstractUploadShardFileStorage implements UploadShardFileS
 //            return UploadShardFileResult.existing(event.getEvent(UploadBase.class).getUrl());
 //        }
 
-        return uploadFilterChain.doFilter(event, () -> {
-            return UploadShardFileResult.result();
-        });
-
+        uploadFilterChain.doFilter(event);
+        if (event.getCompleted()) {
+            //TODO 如果终结了
+        }
+        return UploadShardFileResult.result();
 
 //        String url = null;
 //        try {

@@ -1,7 +1,5 @@
 package org.hehh.file.upload.event;
 
-import org.hehh.file.upload.UploadSupplier;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
@@ -36,20 +34,17 @@ public class UploadInterceptorChain implements UploadFilterChain {
      * 过滤器
      *
      * @param event 事件
-     * @param other 其他
-     *
-     * @return {@link T}
      */
     @Override
-    public <T> T doFilter(UploadEvent event, UploadSupplier<T> other) throws IOException {
+    public void doFilter(UploadEvent event) throws IOException {
         UploadInterceptor[] array = interceptors.stream().filter(v -> v.supports(event)).toArray(UploadInterceptor[]::new);
         if (array == null || array.length < 1) {
-            return other.upload();
+            return;
         }
 
+        //TODO 没想好怎么做...
 
 
-        return null;
     }
 
 

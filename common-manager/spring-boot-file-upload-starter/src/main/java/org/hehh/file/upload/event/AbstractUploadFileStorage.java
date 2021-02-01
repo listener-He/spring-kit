@@ -144,7 +144,7 @@ public abstract class AbstractUploadFileStorage implements UploadFileStorage {
         upload.setSize(file.getSize());
 
 
-        UploadEvent event = new UploadEvent(upload,req);
+        UploadEvent event = new UploadEvent(upload, req);
 
 //        /**
 //         *  直接执行
@@ -154,9 +154,11 @@ public abstract class AbstractUploadFileStorage implements UploadFileStorage {
 //        }
 
         String finalFilename = filename;
-        return uploadFilterChain.doFilter(event,() -> {
-            return UploadResult.result(upload(fileId, file, finalFilename, directory));
-        });
+        uploadFilterChain.doFilter(event);
+        if (event.getCompleted()) {
+            //TODO 如果终结了
+        }
+        return UploadResult.result(upload(fileId, file, finalFilename, directory));
 
 //        uploadFilterChain.before(event);
 //        if (event.getCompleted()) {
