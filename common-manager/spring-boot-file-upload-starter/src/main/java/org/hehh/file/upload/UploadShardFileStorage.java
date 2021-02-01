@@ -4,6 +4,7 @@ import org.hehh.file.upload.req.UploadShardFile;
 import org.hehh.file.upload.res.UploadShardFileResult;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * @author: HeHui
@@ -19,7 +20,7 @@ public interface UploadShardFileStorage {
      * @param shardFile 碎片文件
      * @param directory 目录
      */
-    UploadShardFileResult upload(UploadShardFile shardFile, String directory) throws FileNotFoundException;
+    UploadShardFileResult upload(UploadShardFile shardFile, String directory) throws IOException;
 
 
     /**

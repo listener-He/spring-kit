@@ -1,13 +1,12 @@
 package org.hehh.file.upload.event;
 
 import org.hehh.file.upload.UploadShardFileStorage;
-import org.hehh.file.upload.req.UploadBase;
 import org.hehh.file.upload.req.UploadShardFile;
 import org.hehh.file.upload.res.UploadShardFileResult;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * @author: HeHui
@@ -65,7 +64,7 @@ public abstract class AbstractUploadShardFileStorage implements UploadShardFileS
      * @param directory 目录
      */
     @Override
-    public UploadShardFileResult upload(UploadShardFile shardFile, String directory) throws FileNotFoundException {
+    public UploadShardFileResult upload(UploadShardFile shardFile, String directory) throws IOException {
         MultipartFile file = shardFile.getFile();
 
         if (file == null || file.isEmpty()) {
@@ -76,33 +75,37 @@ public abstract class AbstractUploadShardFileStorage implements UploadShardFileS
 
         if (uploadFilterChain == null) {
             //TODO 执行保存操作
-            return null;
-        }
-
-        uploadFilterChain.before(event);
-        if (event.getCompleted()) {
-            return UploadShardFileResult.existing(event.getEvent(UploadBase.class).getUrl());
-        }
-
-
-        String url = null;
-        try {
-            //TODO 执行保存操作
-            url = null;
-            uploadFilterChain.after(event, url);
             return UploadShardFileResult.result();
-        } catch (Exception e) {
-            if (!StringUtils.isEmpty(url)) {
-                event.setCompleted(true);
-            }
-            uploadFilterChain.error(event, e);
-            url = event.getEvent(UploadBase.class).getUrl();
-
-            if (!StringUtils.isEmpty(url)) {
-                return UploadShardFileResult.result(url);
-            }
-            throw e;
         }
+
+//        uploadFilterChain.before(event);
+//        if (event.getCompleted()) {
+//            return UploadShardFileResult.existing(event.getEvent(UploadBase.class).getUrl());
+//        }
+
+        return uploadFilterChain.doFilter(event, () -> {
+            return UploadShardFileResult.result();
+        });
+
+
+//        String url = null;
+//        try {
+//            //TODO 执行保存操作
+//            url = null;
+//            uploadFilterChain.after(event, url);
+//            return UploadShardFileResult.result();
+//        } catch (Exception e) {
+//            if (!StringUtils.isEmpty(url)) {
+//                event.setCompleted(true);
+//            }
+//            uploadFilterChain.error(event, e);
+//            url = event.getEvent(UploadBase.class).getUrl();
+//
+//            if (!StringUtils.isEmpty(url)) {
+//                return UploadShardFileResult.result(url);
+//            }
+//            throw e;
+//        }
     }
 
 
