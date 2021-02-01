@@ -19,7 +19,7 @@ public interface ILock {
      * @param time     时间
      * @param timeUnit 时间单位
      */
-    void mutex(String key,long time, TimeUnit timeUnit) throws LockException;
+    void mutex(String key, long time, TimeUnit timeUnit) throws LockException;
 
 
     /**
@@ -29,14 +29,26 @@ public interface ILock {
      * @param time     时间
      * @param timeUnit 时间单位
      * @param callback 回调
-     * @return {@link Optional<T> }* @throws LockException 锁例外
+     *
+     * @return {@link Optional<T> }
+     *
+     * @throws LockException 锁例外
      */
-    <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws Throwable;
+    default <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws Throwable {
+        mutex(key, time, timeUnit);
+        try {
+            return Optional.ofNullable(callback.doInLock());
+        } finally {
+            //TODO 是否主动释放锁 ？
+            //release(key);
+        }
 
+    }
 
 
     /**
-     *  释放锁
+     * 释放锁
+     *
      * @param key
      */
     void release(String key);

@@ -50,7 +50,7 @@ public @interface Lock {
      *  锁的超时时间
      * @return
      */
-    long timeout() default 5;
+    long timeout() default 5L;
 
 
     /**
