@@ -10,19 +10,19 @@ public class Regular {
     /**
      * 数字偶然字母
      */
-    public static final String intAndStr = "^[A-Za-z0-9]+$";
+    public static final String INT_AND_STR = "^[A-Za-z0-9]+$";
 
-    public static final String intAndStrAnd_ = "^[0-9a-zA-Z_]{1,}$";
+    public static final String INT_AND_STR_AND = "^[0-9a-zA-Z_]{1,}$";
 
     /**
      * 中文
      */
-    public static final String cn = "[\\u4e00-\\u9fa5]";
+    public static final String CN = "[\\u4e00-\\u9fa5]";
 
     /**
      * a-z、A-Z、_、0-9
      */
-    public static final String word = "^/w+$";
+    public static final String WORD = "^/w+$";
 
     public static final String IP = "((2[0-4]\\d|25[0-5]|[01]?\\d\\d?)\\.){3}(2[0-4]\\d|25[0-5]|[01]?\\d\\d?)";
 
@@ -34,19 +34,19 @@ public class Regular {
     /**
      * 助记词正则匹配：首位与末位为字母，中间用“_”连接；eg:a_A_b
      */
-    public static final String mark_regular = "^[a-zA-Z]+(\\_?[a-zA-Z])*$";
+    public static final String MARK_REGULAR = "^[a-zA-Z]+(\\_?[a-zA-Z])*$";
 
 
     /**
      * 特殊字符正则
      */
-    public static final String special = "[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。， 、？]";
+    public static final String SPECIAL = "[\\n`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。， 、？]";
 
 
     /**
      * ip的cidr正则
      */
-    public static final String cidr = "^(?:(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\/([1-9]|[1-2]\\d|3[0-2])$";
+    public static final String CIDR = "^(?:(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\/([1-9]|[1-2]\\d|3[0-2])$";
 
 
     /**
@@ -58,5 +58,9 @@ public class Regular {
     /**
      * 匹配中文，英文字母和数字及_:
      */
-    public static final String product_name = "^[\\u4e00-\\u9fa5_a-zA-Z0-9]+$";
+    public static final String NAME = "^[\\u4e00-\\u9fa5_a-zA-Z0-9]+$";
+
+    public static final String SQL =  "('.+--)|(--)|(\\\\|)|(%7C)";
+
+    public static final String JS =  "<script>";
 }
