@@ -130,7 +130,7 @@ public class IPKit {
             }
             String ip = longToIP(start);
             pairs.add(ip + "/" + maxsize);
-            start += Math.pow(2, (32 - maxsize));
+            start += Math.pow(2, 32 - maxsize);
         }
         return pairs;
     }
