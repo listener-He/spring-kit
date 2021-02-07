@@ -15,12 +15,9 @@ public interface UploadFilterChain {
      *
      * @param event 事件
      *
-     *
      * @throws IOException ioexception
      */
-     void doFilter(UploadEvent event) throws IOException;
-
-
+    void doFilter(UploadEvent event) throws IOException;
 
 
 }

@@ -8,7 +8,7 @@ import com.qiniu.storage.model.FetchRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 import lombok.extern.slf4j.Slf4j;
-import org.hehh.file.upload.event.AbstractUploadFileStorage;
+import org.hehh.file.upload.AbstractUploadFileStorage;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
