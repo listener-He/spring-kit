@@ -3,7 +3,6 @@ package org.hehh.file.upload;
 import org.hehh.file.upload.req.UploadShardFile;
 import org.hehh.file.upload.res.UploadShardFileResult;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -12,6 +11,10 @@ import java.io.IOException;
  * @description: 上传分片文件存储
  */
 public interface UploadShardFileStorage {
+
+
+
+
 
 
     /**

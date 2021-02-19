@@ -65,6 +65,7 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      * @param inputStreamSize 输入流大小
      * @param chunks          块
      * @param chunk           块
+     *
      * @throws IOException ioexception
      */
     public static void writeWithBlock(String target, long targetSize, InputStream inputStream, long inputStreamSize, int chunks, int chunk) {
@@ -103,6 +104,7 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      * 获取md5摘要
      *
      * @param inputStream
+     *
      * @return
      */
     public static String md5(InputStream inputStream) {
@@ -126,6 +128,7 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      * 获取md5摘要
      *
      * @param file
+     *
      * @return
      */
     public static String md5(File file) {
@@ -137,6 +140,68 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         return null;
     }
 
+
+    /**
+     * 创建目录 and 临时文件
+     *
+     * @param file   文件
+     * @param hasTmp 是否创建临时文件
+     *
+     * @return {@link File}
+     */
+    public static File createDirectoryTemp(String file, boolean hasTmp) {
+
+        java.io.File directory = new java.io.File(file);
+        if (!directory.exists()) {
+            try {
+                directory.mkdirs();
+            } catch (SecurityException ex) {
+                ex.printStackTrace();
+                return null;
+            }
+        }
+
+        if (directory != null && hasTmp) {
+            tempLastModified(file);
+        }
+        return directory;
+    }
+
+    /**
+     * 临时最后修改
+     *
+     * @param file 文件夹路径
+     *
+     * @return {@link File}
+     */
+    public static boolean tempLastModified(String file) {
+
+        /**
+         * 创建一个临时文件
+         */
+        File tmpFile = new java.io.File(file + ".tmp");
+        if (tmpFile.exists()) {
+            return tmpFile.setLastModified(System.currentTimeMillis());
+        } else {
+            try {
+                return tmpFile.createNewFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+        }
+    }
+
+    /**
+     * 临时最后修改
+     *
+     * @param file 文件
+     *
+     * @return boolean
+     */
+    public static boolean tempLastModified(File file) {
+        return tempLastModified(FileUtil.getCanonicalPath(file));
+    }
 
 //    /**
 //     * 加密文件流
@@ -208,7 +273,9 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      * 生成指定字符串的密钥
      *
      * @param secret 要生成密钥的字符串
+     *
      * @return secretKey    生成后的密钥
+     *
      * @throws GeneralSecurityException
      */
     private static Key getKey(String secret) throws GeneralSecurityException {
@@ -224,6 +291,7 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      * @param in     加密解密前的流
      * @param out    加密解密后的流
      * @param cipher 加密解密
+     *
      * @throws IOException
      * @throws GeneralSecurityException
      */
