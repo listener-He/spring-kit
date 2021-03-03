@@ -28,11 +28,6 @@ import java.util.stream.Collectors;
 public class RequestFormDecryptAdapter extends IDecryptAdapter {
 
 
-
-
-
-
-
     public RequestFormDecryptAdapter(DecryptManager decryptManager) {
         super(decryptManager, false, true, Decrypt.class);
     }
@@ -41,13 +36,6 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
     public RequestFormDecryptAdapter(DecryptManager decryptManager, DecryptParameter decryptParameter) {
         super(decryptManager, decryptParameter.isValueModel(), decryptParameter.isScanAnnotation(), decryptParameter.getAnnotation());
     }
-
-
-
-
-
-
-
 
 
     /**
@@ -77,7 +65,7 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
          */
         if (!super.isValueModel()) {
             String param = request.getQueryString();
-            if(StrUtil.isBlank(param)){
+            if (StrUtil.isBlank(param)) {
                 log.warn("解密表提交失败,提交数据为空");
                 return request;
             }
@@ -87,50 +75,49 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
             /**
              *  不支持非json格式
              */
-            if(!StrKit.isJson(decryptStr)){
+            if (!StrKit.isJson(decryptStr)) {
                 throw new DecryptException("Unsupported non-json format");
             }
             /**
              *  提交的数据不应该是一个数组
              */
-            if(StrKit.isJsonArray(decryptStr)){
+            if (StrKit.isJsonArray(decryptStr)) {
                 throw new DecryptException("Submitted data should be key-value, not an array");
             }
 
-            return new ReplaceParamHttpServletRequest(request,decryptStr,true);
+            return new ReplaceParamHttpServletRequest(request, decryptStr, true);
 
 
         }
 
 
         Map<String, String[]> parameterMap = request.getParameterMap();
-        if(parameterMap != null){
+        if (parameterMap != null) {
             parameterMap = parameterMap.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         }
 
         for (MethodParameter parameter : handlerMethod.getMethodParameters()) {
             Decrypt annotation = parameter.getParameterAnnotation(super.getAnnotation());
 
-            if(annotation != null){
-                String k = StringUtils.hasText(annotation.value()) ? annotation.value() : (StringUtils.hasText(parameter.getParameterName()) ? parameter.getParameterName() :  parameter.getParameter().getName());
+            if (annotation != null) {
+                String k = StringUtils.hasText(annotation.value()) ? annotation.value() : (StringUtils.hasText(parameter.getParameterName()) ? parameter.getParameterName() : parameter.getParameter().getName());
                 String[] v = parameterMap.get(k);
 
 
-                if(null != v){
+                if (null != v) {
                     for (int i = 0; i < v.length; i++) {
-                        if(StringUtils.hasText(v[i])){
+                        if (StringUtils.hasText(v[i])) {
                             v[i] = decrypt.decryptStr(v[i]);
                         }
 
                     }
-                  parameterMap.put(k,v);
+                    parameterMap.put(k, v);
                 }
             }
         }
 
-      return   new ReplaceParamHttpServletRequest(request,parameterMap,false);
+        return new ReplaceParamHttpServletRequest(request, parameterMap, false);
     }
-
 
 
 //    /**
@@ -203,11 +190,6 @@ public class RequestFormDecryptAdapter extends IDecryptAdapter {
 //
 //        return request;
 //    }
-
-
-
-
-
 
 
 }

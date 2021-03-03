@@ -18,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 public interface IDecrypt {
 
 
-
     /**
      * 解密
      *
@@ -28,22 +27,15 @@ public interface IDecrypt {
     byte[] decrypt(byte[] data);
 
 
-
-
-
-
     /**
      * 解密Hex（16进制）或Base64表示的字符串
      *
      * @param data 被解密的字符串
      * @return
      */
-    default byte[] decrypt(String data){
+    default byte[] decrypt(String data) {
         return decrypt(Validator.isHex(data) ? HexUtil.decodeHex(data) : Base64.decode(data));
     }
-
-
-
 
 
     /**
@@ -52,11 +44,9 @@ public interface IDecrypt {
      * @param data 被解密的数据刘
      * @return
      */
-    default byte[] decrypt(InputStream data){
-        return decrypt(IoUtil.read(data,StandardCharsets.UTF_8));
+    default byte[] decrypt(InputStream data) {
+        return decrypt(IoUtil.read(data, StandardCharsets.UTF_8));
     }
-
-
 
 
     /**
@@ -65,11 +55,9 @@ public interface IDecrypt {
      * @param data 被解密的数据
      * @return
      */
-    default String decryptStr(byte[] data){
-       return decryptStr(data, StandardCharsets.UTF_8);
+    default String decryptStr(byte[] data) {
+        return decryptStr(data, StandardCharsets.UTF_8);
     }
-
-
 
 
     /**
@@ -79,11 +67,9 @@ public interface IDecrypt {
      * @param charset 编码
      * @return
      */
-    default String decryptStr(byte[] data, Charset charset){
+    default String decryptStr(byte[] data, Charset charset) {
         return StrUtil.str(decrypt(data), charset);
     }
-
-
 
 
     /**
@@ -92,7 +78,7 @@ public interface IDecrypt {
      * @param data 被解密的数据
      * @return
      */
-    default String decryptStr(String data){
+    default String decryptStr(String data) {
         return decryptStr(data, StandardCharsets.UTF_8);
     }
 
@@ -104,19 +90,19 @@ public interface IDecrypt {
      * @param charset 编码
      * @return
      */
-    default String decryptStr(String data, Charset charset){
-       return StrUtil.str(decrypt(data), charset);
+    default String decryptStr(String data, Charset charset) {
+        return StrUtil.str(decrypt(data), charset);
     }
 
 
     /**
      * 解密Hex为字符串
      *
-     * @param data    被解密的数据流
+     * @param data 被解密的数据流
      * @return
      */
-    default String decryptStr(InputStream data){
-        return decryptStr(data,StandardCharsets.UTF_8);
+    default String decryptStr(InputStream data) {
+        return decryptStr(data, StandardCharsets.UTF_8);
     }
 
 
@@ -127,7 +113,7 @@ public interface IDecrypt {
      * @param charset 编码
      * @return
      */
-    default String decryptStr(InputStream data, Charset charset){
+    default String decryptStr(InputStream data, Charset charset) {
         return StrUtil.str(decrypt(data), charset);
     }
 

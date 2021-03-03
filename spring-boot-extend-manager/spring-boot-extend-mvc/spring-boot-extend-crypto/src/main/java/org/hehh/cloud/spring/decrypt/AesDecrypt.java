@@ -10,22 +10,18 @@ import cn.hutool.crypto.symmetric.AES;
 public class AesDecrypt implements IDecrypt {
 
     /**
-     *  aes解密
+     * aes解密
      */
     private final AES aes;
 
-    public AesDecrypt(AES aes){
+    public AesDecrypt(AES aes) {
         this.aes = aes;
     }
 
 
-    public AesDecrypt(String key){
+    public AesDecrypt(String key) {
         this(new AES(key.trim().getBytes()));
     }
-
-
-
-
 
 
     /**
