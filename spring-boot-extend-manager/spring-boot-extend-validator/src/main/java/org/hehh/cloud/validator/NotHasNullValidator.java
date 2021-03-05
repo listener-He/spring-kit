@@ -15,28 +15,18 @@ import java.util.Collection;
 public class NotHasNullValidator implements ConstraintValidator<NotHasNull, Collection<?>> {
 
 
-
     @Override
     public boolean isValid(Collection<?> objects, ConstraintValidatorContext constraintValidatorContext) {
         /**
          *  null不验证
          */
-        if(null == objects){
+        if (null == objects) {
             return true;
         }
 
-        if(CollectionUtils.isEmpty(objects)){
+        if (CollectionUtils.isEmpty(objects)) {
             return false;
         }
-
-
-        for (Object v : objects) {
-            if(v == null){
-                return false;
-            }
-        }
-
-
-        return true;
+        return objects.parallelStream().allMatch(v -> v != null);
     }
 }

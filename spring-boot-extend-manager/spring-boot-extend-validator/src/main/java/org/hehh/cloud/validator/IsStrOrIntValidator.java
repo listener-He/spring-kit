@@ -10,13 +10,12 @@ import javax.validation.ConstraintValidatorContext;
  * @author : HeHui
  * @date : 2019-04-21 01:33
  * @describe : 是否数字or字母验证实现
- *
  */
-public class IsStrOrIntValidator implements ConstraintValidator<StrOrInt,String> {
+public class IsStrOrIntValidator implements ConstraintValidator<StrOrInt, String> {
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        if(null == s){
+        if (null == s) {
             return true;
         }
         return StrKit.isIntOrStr(s);

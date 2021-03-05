@@ -12,20 +12,25 @@ import javax.validation.Validator;
 import java.util.*;
 
 /**
- *  Validator 验证器 验证类
+ * Validator 验证器 验证类
  *
  * @auther : HeHui
  * @date : 2020/7/26 12:49
  */
 public class ValidationActuator {
 
-    private  Validator validator;
+    private Validator validator;
 
     public ValidationActuator(Validator validator) {
-        if(validator == null){
-            validator = Validation.buildDefaultValidatorFactory().getValidator();
-        }
+        assert validator != null : "验证器不能为空";
         this.validator = validator;
+    }
+
+    /**
+     * 验证执行机构
+     */
+    public ValidationActuator() {
+        this(Validation.buildDefaultValidatorFactory().getValidator());
     }
 
 
@@ -35,16 +40,17 @@ public class ValidationActuator {
      * @return validator
      */
     @NonNull
-    public  Validator getValidator() {
+    public Validator getValidator() {
         return validator;
     }
 
 
     /**
-     *   验证bean返回原始结果
+     * 验证bean返回原始结果
      *
      * @param obj    bean to be validated
      * @param groups validation group
+     *
      * @throws ConstraintViolationException throw if validation failure
      */
     public Set<ConstraintViolation<Object>> validate(Object obj, Class<?>... groups) {
@@ -60,10 +66,11 @@ public class ValidationActuator {
 
 
     /**
+     * 执行一次验证bean
      *
-     *  执行一次验证bean
      * @param obj    bean to be validated
      * @param groups validation group
+     *
      * @throws ConstraintViolationException throw if validation failure
      */
     public void validateOf(Object obj, Class<?>... groups) {
@@ -71,7 +78,7 @@ public class ValidationActuator {
         /**
          *  验证
          */
-        Set<ConstraintViolation<Object>> constraintViolations = validate(obj,groups);
+        Set<ConstraintViolation<Object>> constraintViolations = validate(obj, groups);
         if (!CollectionUtils.isEmpty(constraintViolations)) {
             /**
              * 如果包含一些错误，则抛出约束违反异常
@@ -82,15 +89,16 @@ public class ValidationActuator {
 
 
     /**
-     *  验证bean返回Map信息
-     *  key:value = field:message
+     * 验证bean返回Map信息
+     * key:value = field:message
      *
      * @param obj    bean to be validated
      * @param groups validation group
+     *
      * @throws ConstraintViolationException throw if validation failure
      */
     public Map<String, String> tryValidate(Object obj, Class<?>... groups) {
-        return mapWithValidError(validate(obj,groups));
+        return mapWithValidError(validate(obj, groups));
     }
 
 
@@ -98,10 +106,11 @@ public class ValidationActuator {
      * 将字段验证错误转换为标准的map型，key:value = field:message
      *
      * @param constraintViolations constraint violations(contain error information)
+     *
      * @return error detail map
      */
     @NonNull
-    public  Map<String, String> mapWithValidError(Set<ConstraintViolation<Object>> constraintViolations) {
+    public Map<String, String> mapWithValidError(Set<ConstraintViolation<Object>> constraintViolations) {
         if (CollectionUtils.isEmpty(constraintViolations)) {
             return Collections.emptyMap();
         }
@@ -119,9 +128,10 @@ public class ValidationActuator {
      * 将字段验证错误转换为标准的map型，key:value = field:message
      *
      * @param fieldErrors 字段错误组
+     *
      * @return 如果返回null，则表示未出现错误
      */
-    public  Map<String, String> mapWithFieldError(@Nullable List<FieldError> fieldErrors) {
+    public Map<String, String> mapWithFieldError(@Nullable List<FieldError> fieldErrors) {
         if (CollectionUtils.isEmpty(fieldErrors)) {
             return Collections.emptyMap();
         }

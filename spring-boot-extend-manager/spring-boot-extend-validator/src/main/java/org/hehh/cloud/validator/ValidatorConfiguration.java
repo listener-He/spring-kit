@@ -15,21 +15,22 @@ import javax.validation.ValidatorFactory;
  * @description: 验证配置
  **/
 @Configuration
-@ConditionalOnProperty(name = "spring.validator.failFast",havingValue = "true")
+@ConditionalOnProperty(name = "spring.validator.failFast", havingValue = "true")
 public class ValidatorConfiguration {
 
 
     /**
-     *  配置快速失败
+     * 配置快速失败
+     *
      * @return
      */
     @Bean
-    public Validator validator(){
+    public Validator validator() {
         ValidatorFactory validatorFactory = Validation
-                .byProvider( HibernateValidator.class )
-                .configure()
-                .failFast( true )
-                .buildValidatorFactory();
+            .byProvider(HibernateValidator.class)
+            .configure()
+            .failFast(true)
+            .buildValidatorFactory();
         return validatorFactory.getValidator();
     }
 }

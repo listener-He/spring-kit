@@ -14,7 +14,7 @@ import java.lang.annotation.*;
 @Target({ElementType.ANNOTATION_TYPE, ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy=NotHasNullValidator.class)
+@Constraint(validatedBy = NotHasNullValidator.class)
 public @interface NotHasNull {
 
     String message() default "集合中不能含有null元素";
@@ -27,7 +27,7 @@ public @interface NotHasNull {
     /**
      * 定义List，为了让Bean的一个属性上可以添加多套规则
      */
-    @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE,ElementType. CONSTRUCTOR, ElementType.PARAMETER})
+    @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
     @Retention(RetentionPolicy.RUNTIME)
     @Documented
     @interface List {
