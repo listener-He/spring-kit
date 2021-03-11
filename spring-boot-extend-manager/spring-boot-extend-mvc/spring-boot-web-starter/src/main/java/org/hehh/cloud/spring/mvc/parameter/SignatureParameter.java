@@ -24,7 +24,7 @@ public class SignatureParameter {
     /**
      * 过期时间
      */
-    private long overdueTime = 1000 * 60 * 10;
+    private long overdueTime = 1000L * 60L * 10L;
 
     /**
      * 签名的名字
