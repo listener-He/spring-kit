@@ -73,8 +73,33 @@ public class LocalReadLock implements ILock  {
                 ReentrantReadWriteLock reentrantReadWriteLock = lockMap.get(key);
                 if(reentrantReadWriteLock == null){
                     reentrantReadWriteLock = new ReentrantReadWriteLock();
+                    lockMap.put(key,reentrantReadWriteLock);
                 }
                 return reentrantReadWriteLock.readLock();
+            }finally {
+                thisLock.unlock();
+            }
+        }
+        return null;
+    }
+
+    private <T> T getLock(String key,long time, TimeUnit timeUnit,boolean isNew,LockCallback<T> callback) throws Throwable {
+        if(thisLock.tryLock(time,timeUnit)){
+            try {
+                ReentrantReadWriteLock reentrantReadWriteLock = lockMap.get(key);
+                if(reentrantReadWriteLock == null && isNew){
+                    reentrantReadWriteLock = new ReentrantReadWriteLock();
+                    lockMap.put(key,reentrantReadWriteLock);
+                }
+                if (reentrantReadWriteLock == null || !reentrantReadWriteLock.readLock().tryLock(time,timeUnit)) {
+                    throw new LockException("未能获取到锁:"+key);
+                }
+                reentrantReadWriteLock.readLock().lock();
+                if ( callback != null ){
+                    callback.doInLock();
+                    reentrantReadWriteLock.readLock().unlock();
+                    lockMap.remove(key);
+                }
             }finally {
                 thisLock.unlock();
             }
@@ -118,11 +143,11 @@ public class LocalReadLock implements ILock  {
     public <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws Throwable {
 
         try {
-            Lock lock = getLock(key, time, timeUnit);
-            if(lock == null || !lock.tryLock(time,timeUnit)){
-                throw new LockException("未能获取到锁:"+key);
-            }
-            return Optional.ofNullable(callback.doInLock());
+            return Optional.ofNullable(getLock(key, time, timeUnit,true,callback));
+//            if(lock == null || !lock.tryLock(time,timeUnit)){
+//                throw new LockException("未能获取到锁:"+key);
+//            }
+           // return Optional.ofNullable(callback.doInLock());
         } catch (InterruptedException e) {
             throw new LockException("未能获取到锁:"+key,e);
         }
@@ -140,8 +165,12 @@ public class LocalReadLock implements ILock  {
     @Override
     public void release(String key) {
         try {
-            getLock(key,10,TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
+            Lock lock = getLock(key, 10, TimeUnit.MILLISECONDS,false,null);
+            if (lock != null) {
+                lock.unlock();
+                lockMap.remove(key);
+            }
+        } catch (Throwable t) {
         }
     }
 
