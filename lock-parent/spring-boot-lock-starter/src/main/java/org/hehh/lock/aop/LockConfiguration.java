@@ -31,21 +31,18 @@ public class LockConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(name = "localReadLock")
-    public ILock localReadLock(){
+    public ILock localReadLock() {
         return new LocalReadLock();
     }
 
 
-
-
-
     /**
-     *  redis lock 配置
+     * redis lock 配置
      */
     @Configuration
-    @ConditionalOnProperty(prefix = "spring.lock.model",havingValue = "redis")
+    @ConditionalOnProperty(prefix = "spring.lock.model", havingValue = "redis")
     @ConditionalOnClass(RedisConnectionFactory.class)
-    static class RedisLockConfiguration{
+    static class RedisLockConfiguration {
 
         @Value("${spring.application.name:null}")
         private String serviceName;
@@ -53,8 +50,8 @@ public class LockConfiguration {
 
         @Bean
         @Primary
-        public ILock redisLock(RedisOperations<String, String> redisOperations){
-            return new RedisLock(redisOperations,serviceName);
+        public ILock redisLock(RedisOperations<String, String> redisOperations) {
+            return new RedisLock(redisOperations, serviceName);
         }
 
 
@@ -62,7 +59,7 @@ public class LockConfiguration {
 
 
     /**
-     *  aop配置
+     * aop配置
      */
     @Configuration
     @ConditionalOnBean(ILock.class)
@@ -70,8 +67,8 @@ public class LockConfiguration {
 
 
         @Bean
-        public LockAop lockAop(ILock defaultLock, ApplicationContext applicationContext){
-            return new LockAop(defaultLock,applicationContext);
+        public LockAop lockAop(ILock defaultLock, ApplicationContext applicationContext) {
+            return new LockAop(defaultLock, applicationContext);
         }
 
     }

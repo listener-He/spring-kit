@@ -11,7 +11,6 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.nio.charset.Charset;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,34 +23,34 @@ public class RedisLock implements ILock {
 
 
     /**
-     *  redis操作类
+     * redis操作类
      */
-    private final RedisOperations<String,String> redisOperations;
+    private final RedisOperations<String, String> redisOperations;
 
     /**
-     *  前缀
+     * 前缀
      */
     private String prefix;
 
-    private  final String value = "0";
+    private final String value = "0";
 
     private final String script;
 
     public RedisLock(RedisOperations<String, String> redisOperations) {
-        this(redisOperations,null);
+        this(redisOperations, null);
     }
 
 
-    public RedisLock(RedisOperations<String, String> redisOperations,String prefix) {
-        this(redisOperations,prefix,"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end");
+    public RedisLock(RedisOperations<String, String> redisOperations, String prefix) {
+        this(redisOperations, prefix, "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end");
     }
 
 
-    public RedisLock(RedisOperations<String, String> redisOperations,String prefix,String script) {
+    public RedisLock(RedisOperations<String, String> redisOperations, String prefix, String script) {
         assert redisOperations != null : "redis-lock 操作类不能为空";
         this.redisOperations = redisOperations;
         this.prefix = prefix;
-        Assert.hasText(script,"redis-lock 脚本不能为空");
+        Assert.hasText(script, "redis-lock 脚本不能为空");
         this.script = script;
     }
 
@@ -60,20 +59,20 @@ public class RedisLock implements ILock {
      * 最终的路径
      *
      * @param path 路径
+     *
      * @return {@link String}
      */
-    private String finalPath(String path){
-        Assert.hasText(path,"分布式锁路径不能为空");
+    private String finalPath(String path) {
+        Assert.hasText(path, "分布式锁路径不能为空");
 
-        if(StringUtils.isEmpty(prefix)){
+        if (StringUtils.isEmpty(prefix)) {
             return path;
         }
         if (!path.startsWith(":")) {
-            path = ":"+path;
+            path = ":" + path;
         }
         return prefix + path;
     }
-
 
 
     /**
@@ -89,20 +88,6 @@ public class RedisLock implements ILock {
     }
 
 
-    /**
-     * 互斥锁
-     *
-     * @param key      关键
-     * @param time     时间
-     * @param timeUnit 时间单位
-     * @param callback 回调
-     * @return {@link Optional <T> }* @throws LockException 锁例外
-     */
-    @Override
-    public <T> Optional<T> mutex(String key, long time, TimeUnit timeUnit, LockCallback<T> callback) throws Throwable {
-        getLock(finalPath(key), time, timeUnit);
-        return Optional.ofNullable(callback.doInLock());
-    }
 
 
     /**
@@ -116,29 +101,30 @@ public class RedisLock implements ILock {
     }
 
 
-
     /**
-     *  获取锁
+     * 获取锁
+     *
      * @param key
      * @param timeout
      * @param timeUnit
+     *
      * @return
      */
     private void getLock(String key, long timeout, TimeUnit timeUnit) throws LockException {
         try {
 
-            redisOperations.execute((RedisCallback< Boolean>) connection ->
+            redisOperations.execute((RedisCallback<Boolean>) connection ->
                 connection.set(key.getBytes(Charset.forName("UTF-8")), value.getBytes(Charset.forName("UTF-8")),
                     Expiration.from(timeout, timeUnit), RedisStringCommands.SetOption.SET_IF_ABSENT));
         } catch (Exception e) {
-            throw new LockException("获取分布式锁失败，key="+key,e);
+            throw new LockException("获取分布式锁失败，key=" + key, e);
         }
     }
 
 
-
     /**
-     *  释放锁
+     * 释放锁
+     *
      * @param key
      */
     private void unLock(String key) {
