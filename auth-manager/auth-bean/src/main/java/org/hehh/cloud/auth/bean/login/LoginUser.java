@@ -56,6 +56,10 @@ public class LoginUser implements java.io.Serializable {
     private Long createTime;
 
 
+    /**
+     * 上下文
+     */
+    private Map<String,String> context;
 
     public Long longUserId(){
         if(null != userId){
