@@ -5,9 +5,9 @@ import org.ehcache.event.EventType;
 import org.ehcache.impl.events.CacheEventAdapter;
 
 /**
- * @author: HeHui
+ * @author  HeHui
  * @create: 2019-09-29 15:10
- * @description: ehcache 3.0及以上 缓存监听器
+ * @description ehcache 3.0及以上 缓存监听器
  **/
 public class EhCacheEventListenerImpl<K,V> extends CacheEventAdapter<K,V> {
 

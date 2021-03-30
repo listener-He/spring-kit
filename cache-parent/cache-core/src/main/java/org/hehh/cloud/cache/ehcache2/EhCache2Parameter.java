@@ -1,6 +1,7 @@
 package org.hehh.cloud.cache.ehcache2;
 
 import lombok.Data;
+import net.sf.ehcache.config.CacheConfiguration;
 import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import net.sf.ehcache.store.Policy;
 import net.sf.ehcache.store.disk.DiskStore;
@@ -10,23 +11,23 @@ import javax.xml.bind.annotation.XmlAttribute;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 00:17
- * @description: ehcache2.0 缓存参数
+ * @author  HeHui
+ * @date  2020-07-31 00:17
+ * @description ehcache2.0 缓存参数
  */
 @Data
 public class EhCache2Parameter extends CacheParameter {
 
 
     /**
-     * 缓存最大数目
+     * 磁盘最大缓存
      */
-    private int maxElementsInMemory;
+    private int maxEntriesLocalDisk;
 
     /**
-     * 硬盘最大缓存个数。
+     * 内存最大缓存。
      */
-    private int maxElementsOnDisk;
+    private int maxEntriesLocalHeap;
 
     /**
      * 对象是否永久有效，一但设置了，timeout将不起作用。
@@ -35,7 +36,10 @@ public class EhCache2Parameter extends CacheParameter {
 
     /**
      * 是否保存到磁盘，当系统当机时
+     *  请配置
+     *  @see #setMemoryStoreEvictionPolicy(MemoryStoreEvictionPolicy) ();
      */
+    @Deprecated
     private boolean overflowToDisk = false;
 
     /**
@@ -51,6 +55,8 @@ public class EhCache2Parameter extends CacheParameter {
      *  仅当eternal=false对象不是永久有效时使用，
      *  默认是0.，也就是对象存活时间无穷大。
      *  private int timeToLiveSeconds = 0;
+     *  父类上
+     * @see #setTtl(Long)
      */
 
 
@@ -85,5 +91,15 @@ public class EhCache2Parameter extends CacheParameter {
      *   LRU，缓存的元素有一个时间戳，当缓存容量满了，而又需要腾出地方来缓存新的元素的时候，那么现有缓存元素中时间戳离当前时间最远的元素将被清出缓存。
      */
     private MemoryStoreEvictionPolicy memoryStoreEvictionPolicy;
+
+    /**
+     * 本地最大字节堆
+     */
+    private Long localMaxBytesLocalHeap = CacheConfiguration.DEFAULT_MAX_BYTES_OFF_HEAP;
+
+    /**
+     * 本地最大字节本地磁盘
+     */
+    private Long localMaxBytesLocalDisk = CacheConfiguration.DEFAULT_MAX_BYTES_ON_DISK;
 
 }

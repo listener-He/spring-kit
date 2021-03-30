@@ -7,9 +7,9 @@ import net.rubyeye.xmemcached.utils.AddrUtil;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * @author: HeHui
- * @date: 2020-08-06 12:03
- * @description: memcached bean 工厂
+ * @author  HeHui
+ * @date  2020-08-06 12:03
+ * @description memcached bean 工厂
  */
 public class MemcachedClientBeanFactory implements InitializingBean {
 
@@ -27,6 +27,6 @@ public class MemcachedClientBeanFactory implements InitializingBean {
 
         MemcachedClientBuilder builder = new XMemcachedClientBuilder(AddrUtil.getAddresses(parameter.getService()));
 
-
+        //TODO memcached 待完善
     }
 }

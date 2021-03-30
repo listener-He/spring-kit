@@ -1,9 +1,9 @@
 package org.hehh.cloud.cache.topic;
 
 /**
- * @author: HeHui
+ * @author  HeHui
  * @create: 2019-09-27 10:51
- * @description: 通知类型
+ * @description 通知类型
  **/
 public enum NoticeType implements java.io.Serializable {
 

@@ -11,6 +11,7 @@ import org.hehh.cloud.cache.CacheConfigurationParameter;
 import org.hehh.cloud.cache.CacheParameter;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
@@ -21,9 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 10:24
- * @description: redis-cahce 管理器构建器
+ * @author  HeHui
+ * @date  2020-07-31 10:24
+ * @description redis-cahce 管理器构建器
  */
 public class RedisCacheManagerBuilders {
 
@@ -37,8 +38,8 @@ public class RedisCacheManagerBuilders {
      * @return {@link RedisCacheManager}
      */
     public static RedisCacheManager builder(RedisConnectionFactory connectionFactory, List<CacheParameter> caches){
-       return RedisCacheManager.builder(connectionFactory).withInitialCacheConfigurations(getRedisCacheConfigurationMap(caches))
-            .cacheWriter(new DefaultRedisCacheWriter(connectionFactory))
+        return RedisCacheManager.builder(RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory))
+            .withInitialCacheConfigurations(getRedisCacheConfigurationMap(caches))
             .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig())
             .build();
     }
@@ -55,7 +56,6 @@ public class RedisCacheManagerBuilders {
      */
     private static Map<String, RedisCacheConfiguration> getRedisCacheConfigurationMap(List<CacheParameter> caches) {
         Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>(caches.size());
-
         if(null != caches){
             Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
             ObjectMapper om = new ObjectMapper();
@@ -69,8 +69,7 @@ public class RedisCacheManagerBuilders {
              * 忽略 在json字符串中存在，但是在java对象中不存在对应属性的情况。防止错误
              */
             om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
-            om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
-
+            om.activateDefaultTyping(om.getPolymorphicTypeValidator(),ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
             jackson2JsonRedisSerializer.setObjectMapper(om);
 
             caches.forEach(v -> {
@@ -86,7 +85,7 @@ public class RedisCacheManagerBuilders {
      * @param seconds
      * @return
      */
-    private static RedisCacheConfiguration getRedisCacheConfigurationWithTtl(Long seconds,Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer) {
+    private static RedisCacheConfiguration getRedisCacheConfigurationWithTtl(Long seconds, Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer) {
 
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
         redisCacheConfiguration = redisCacheConfiguration.serializeValuesWith(

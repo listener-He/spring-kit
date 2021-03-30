@@ -3,9 +3,9 @@ package org.hehh.cloud.cache.topic;
 import lombok.Data;
 
 /**
- * @author: HeHui
+ * @author  HeHui
  * @create: 2019-09-27 10:49
- * @description: 缓存通知
+ * @description 缓存通知
  **/
 @Data
 public class CacheNotice implements java.io.Serializable {

@@ -8,9 +8,9 @@ import org.hehh.cloud.cache.CacheParameter;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 01:10
- * @description: ehcache3.0 缓存参数
+ * @author  HeHui
+ * @date  2020-07-31 01:10
+ * @description ehcache3.0 缓存参数
  */
 @Data
 public class EhCache3Parameter extends CacheParameter {

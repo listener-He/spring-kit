@@ -25,9 +25,9 @@ import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.util.StringUtils;
 
 /**
- * @author: HeHui
- * @date: 2020-08-01 16:26
- * @description: 缓存配置
+ * @author  HeHui
+ * @date  2020-08-01 16:26
+ * @description 缓存配置
  */
 @Configuration(proxyBeanMethods = false)
 @EnableCaching
@@ -111,7 +111,7 @@ public class CacheConfiguration {
          */
         @Bean
         @ConfigurationProperties(prefix = "spring.cache.ehcache2")
-        @ConditionalOnMissingBean(EhCache3ConfigurationParameter.class)
+        @ConditionalOnMissingBean(EhCache2ConfigurationParameter.class)
         public EhCache2ConfigurationParameter ehCache2ConfigurationParameter(){
             return new EhCache2ConfigurationParameter();
         }

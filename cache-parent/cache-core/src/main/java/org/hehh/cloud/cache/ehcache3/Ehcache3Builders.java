@@ -21,9 +21,9 @@ import java.net.URL;
 import java.time.Duration;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 01:26
- * @description: ehcache3配置构造器
+ * @author  HeHui
+ * @date  2020-07-31 01:26
+ * @description ehcache3配置构造器
  */
 @Slf4j
 public class Ehcache3Builders {

@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 15:53
- * @description: redis 二级缓存管理
+ * @author  HeHui
+ * @date  2020-07-31 15:53
+ * @description redis 二级缓存管理
  */
 public class RedisTwoCacheManager extends AbstractTransactionSupportingCacheManager implements MoreCacheManager {
 

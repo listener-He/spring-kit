@@ -5,9 +5,9 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 01:23
- * @description: 缓存配置参数
+ * @author  HeHui
+ * @date  2020-07-31 01:23
+ * @description 缓存配置参数
  */
 @Data
 public class CacheConfigurationParameter<T extends CacheParameter> {

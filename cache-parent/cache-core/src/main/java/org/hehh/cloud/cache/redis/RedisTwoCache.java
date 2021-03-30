@@ -7,9 +7,9 @@ import org.springframework.cache.Cache;
 import org.springframework.data.redis.cache.RedisCache;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 11:06
- * @description: redis 二级缓存
+ * @author  HeHui
+ * @date  2020-07-31 11:06
+ * @description redis 二级缓存
  */
 public class RedisTwoCache extends TwoCache {
 

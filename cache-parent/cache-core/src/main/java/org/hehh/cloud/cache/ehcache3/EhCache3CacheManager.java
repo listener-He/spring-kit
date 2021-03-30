@@ -13,9 +13,9 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 01:57
- * @description: ehcache3.0 缓存
+ * @author  HeHui
+ * @date  2020-07-31 01:57
+ * @description ehcache3.0 缓存
  */
 public class EhCache3CacheManager extends AbstractTransactionSupportingCacheManager {
 
