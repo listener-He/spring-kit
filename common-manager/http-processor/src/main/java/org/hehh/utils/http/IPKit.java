@@ -16,26 +16,25 @@ import java.util.List;
 public class IPKit {
 
 
-
-    private static final int[] CIDR2MASK = new int[]{0x00000000, 0x80000000,
-            0xC0000000, 0xE0000000, 0xF0000000, 0xF8000000, 0xFC000000,
-            0xFE000000, 0xFF000000, 0xFF800000, 0xFFC00000, 0xFFE00000,
-            0xFFF00000, 0xFFF80000, 0xFFFC0000, 0xFFFE0000, 0xFFFF0000,
-            0xFFFF8000, 0xFFFFC000, 0xFFFFE000, 0xFFFFF000, 0xFFFFF800,
-            0xFFFFFC00, 0xFFFFFE00, 0xFFFFFF00, 0xFFFFFF80, 0xFFFFFFC0,
-            0xFFFFFFE0, 0xFFFFFFF0, 0xFFFFFFF8, 0xFFFFFFFC, 0xFFFFFFFE,
-            0xFFFFFFFF};
-
+    private static final int[] CIDR2MASK = new int[] {0x00000000, 0x80000000,
+        0xC0000000, 0xE0000000, 0xF0000000, 0xF8000000, 0xFC000000,
+        0xFE000000, 0xFF000000, 0xFF800000, 0xFFC00000, 0xFFE00000,
+        0xFFF00000, 0xFFF80000, 0xFFFC0000, 0xFFFE0000, 0xFFFF0000,
+        0xFFFF8000, 0xFFFFC000, 0xFFFFE000, 0xFFFFF000, 0xFFFFF800,
+        0xFFFFFC00, 0xFFFFFE00, 0xFFFFFF00, 0xFFFFFF80, 0xFFFFFFC0,
+        0xFFFFFFE0, 0xFFFFFFF0, 0xFFFFFFF8, 0xFFFFFFFC, 0xFFFFFFFE,
+        0xFFFFFFFF};
 
 
     /**
      * 是否cidr表达
      *
      * @param cidr
+     *
      * @return
      */
     public static boolean isCidr(String cidr) {
-        return StrKit.isRegular(cidr, Regular.cidr);
+        return StrKit.isRegular(cidr, Regular.CIDR);
     }
 
 
@@ -43,6 +42,7 @@ public class IPKit {
      * ipv4转4字节 int
      *
      * @param ip
+     *
      * @return
      */
     public static int ipv4ToByte4Int(String ip) {
@@ -69,8 +69,10 @@ public class IPKit {
 
 
     /**
-     *  ipInt 转 ip字符串
+     * ipInt 转 ip字符串
+     *
      * @param ipInt
+     *
      * @return
      */
     public static String intToIp(int ipInt) {
@@ -101,6 +103,7 @@ public class IPKit {
      *
      * @param startIp
      * @param endIp
+     *
      * @return
      */
     public static List<String> ipv4ToCidr(String startIp, String endIp) {
@@ -127,7 +130,7 @@ public class IPKit {
             }
             String ip = longToIP(start);
             pairs.add(ip + "/" + maxsize);
-            start += Math.pow(2, (32 - maxsize));
+            start += Math.pow(2, 32 - maxsize);
         }
         return pairs;
     }
@@ -137,6 +140,7 @@ public class IPKit {
      * 字符串ip 转码
      *
      * @param strIP
+     *
      * @return
      */
     private static long ipToLong(String strIP) {
@@ -150,11 +154,11 @@ public class IPKit {
     }
 
 
-
     /**
      * longIp转码
      *
      * @param longIP
+     *
      * @return
      */
     private static String longToIP(long longIP) {
@@ -168,15 +172,6 @@ public class IPKit {
         sb.append(longIP & 0x000000FF);
         return sb.toString();
     }
-
-
-
-
-
-
-
-
-
 
 
 }

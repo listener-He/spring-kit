@@ -22,6 +22,10 @@
         <module>ffmpeg-processor</module>
         <module>file-processor</module>
         <module>smooth-read</module>
+        <module>spring-boot-http-starter</module>
+        <module>sitemap-parent</module>
+        <module>spring-boot-file-tool-starter</module>
+        <module>spring-boot-file-upload-starter</module>
     </modules>
 
 

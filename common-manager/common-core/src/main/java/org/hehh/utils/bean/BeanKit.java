@@ -9,6 +9,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 
 import javax.xml.crypto.Data;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.*;
@@ -205,7 +206,7 @@ public class BeanKit {
 
 
     /**
-     *   copy对象
+     *   copy对象 浅复制（地址值不变）
      * @param object 原对象
      * @param clazz 目标类型
      * @param <T>
@@ -219,7 +220,7 @@ public class BeanKit {
     }
 
     /**
-     *   根据class字符串转copy
+     *   根据class字符串转copy 浅复制（地址值不变）
      * @param object 原类
      * @param classStr 目录类型字符串
      * @return
@@ -229,6 +230,41 @@ public class BeanKit {
     }
 
 
+    /**
+     * 深拷贝
+     *
+     * @param object 对象
+     * @param tClass t类
+     * @return {@link T}
+     */
+    public static <T> T deepCopy(Object object,Class<T> tClass){
+        if(object == null){
+            return null;
+        }
+        assert tClass != null : "class not null";
+
+        try {
+            /**
+             * 序列化
+             */
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+
+            oos.writeObject(object);
+
+            /**
+             *  反序列化
+             */
+            ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            return copy(ois.readObject(),tClass);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
+    }
 
 
 }

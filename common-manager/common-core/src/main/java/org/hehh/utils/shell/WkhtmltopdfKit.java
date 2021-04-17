@@ -11,13 +11,13 @@ import cn.hutool.core.util.StrUtil;
  */
 public class WkhtmltopdfKit {
 
-    private static String wkhtmltopdf;
+    private static String WKHTMLTOPDF;
 
-    private static String shell = " {} {}";
+    private static String SHELL = " {} {}";
 
     public static String getWkhtmltopdfPath() {
-        if (StrUtil.isNotBlank(wkhtmltopdf)) {
-            return wkhtmltopdf;
+        if (StrUtil.isNotBlank(WKHTMLTOPDF)) {
+            return WKHTMLTOPDF;
         } else {
 
             return "wkhtmltopdf";
@@ -48,9 +48,8 @@ public class WkhtmltopdfKit {
 
         try {
 
-            Process exec = RuntimeUtil.exec(getWkhtmltopdfPath() + StrUtil.format(shell, htmlFile, pdfFile));
+            Process exec = RuntimeUtil.exec(getWkhtmltopdfPath() + StrUtil.format(SHELL, htmlFile, pdfFile));
             String result = RuntimeUtil.getResult(exec);
-            System.out.println(result);
         } catch (Exception e) {
             e.printStackTrace();
         }
