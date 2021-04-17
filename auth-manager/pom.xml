@@ -17,6 +17,10 @@
         <module>auth-bean</module>
         <module>auth-token</module>
         <module>security-limiter</module>
+        <module>spring-boot-security-oauth2</module>
+        <module>spring-boot-auth-service</module>
+        <module>spring-boot-auth-core</module>
+
     </modules>
 
 
