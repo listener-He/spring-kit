@@ -10,26 +10,22 @@ import cn.hutool.crypto.symmetric.DES;
 public class DesDecrypt implements IDecrypt {
 
     /**
-     *  des解密
+     * des解密
      */
     private final DES des;
 
 
-
-    public DesDecrypt(DES des){
+    public DesDecrypt(DES des) {
         this.des = des;
     }
 
 
     /**
-     *
      * @param key 密钥
      */
-    public DesDecrypt(String key){
+    public DesDecrypt(String key) {
         this(new DES(key.getBytes()));
     }
-
-
 
 
     /**

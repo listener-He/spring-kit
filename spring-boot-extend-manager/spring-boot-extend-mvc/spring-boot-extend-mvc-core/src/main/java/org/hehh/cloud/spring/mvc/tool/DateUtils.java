@@ -1,4 +1,4 @@
-package org.hehh.cloud.spring.mvc.util;
+package org.hehh.cloud.spring.mvc.tool;
 
 import java.text.ParseException;
 import java.text.ParsePosition;

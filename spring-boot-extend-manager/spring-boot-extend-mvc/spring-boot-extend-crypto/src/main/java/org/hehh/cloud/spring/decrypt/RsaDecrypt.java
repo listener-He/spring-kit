@@ -13,7 +13,7 @@ import java.security.PrivateKey;
 public class RsaDecrypt implements IDecrypt {
 
     /**
-     *  aes解密
+     * aes解密
      */
     private final RSA rsa;
 
@@ -21,14 +21,13 @@ public class RsaDecrypt implements IDecrypt {
     private final KeyType keyType;
 
 
-
-    public RsaDecrypt(RSA rsa){
+    public RsaDecrypt(RSA rsa) {
 
 
         PrivateKey key = rsa.getPrivateKey();
-        if(key != null){
+        if (key != null) {
             keyType = KeyType.PrivateKey;
-        }else{
+        } else {
             keyType = KeyType.PublicKey;
         }
 
@@ -38,16 +37,15 @@ public class RsaDecrypt implements IDecrypt {
 
 
     /**
-     *  构造器
+     * 构造器
+     *
      * @param privateKey 私钥
-     * @param publicKey 公钥
+     * @param publicKey  公钥
      */
-    public RsaDecrypt(String privateKey,String publicKey){
+    public RsaDecrypt(String privateKey, String publicKey) {
 
-        this(new RSA(privateKey,publicKey));
+        this(new RSA(privateKey, publicKey));
     }
-
-
 
 
     /**
@@ -58,7 +56,7 @@ public class RsaDecrypt implements IDecrypt {
      */
     @Override
     public byte[] decrypt(byte[] data) {
-        return rsa.decrypt(data,keyType);
+        return rsa.decrypt(data, keyType);
     }
 
 

@@ -8,14 +8,19 @@
         <version>2.3.2.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <properties>
+        <common-core.version>2.3.2.RELEASE</common-core.version>
+    </properties>
 
     <artifactId>spring-boot-extend-core</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
+            <groupId>org.hehh.cloud.util</groupId>
+            <artifactId>common-core</artifactId>
+            <version>${common-core.version}</version>
         </dependency>
+
     </dependencies>
 
 

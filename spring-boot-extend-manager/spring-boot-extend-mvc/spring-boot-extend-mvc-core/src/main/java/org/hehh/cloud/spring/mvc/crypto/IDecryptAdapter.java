@@ -23,14 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
 
 
-
-
-
-
-
-
-
-
     /**
      * 解密对象
      */
@@ -52,14 +44,13 @@ public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
     private final boolean scanAnnotation;
 
     /**
-     *  被扫描的注解
+     * 被扫描的注解
      */
     @Getter
     private final Class<? extends Decrypt> annotation;
 
 
-
-    public IDecryptAdapter(DecryptManager decryptManager,boolean valueModel,boolean scanAnnotation,Class<? extends Decrypt> annotation){
+    public IDecryptAdapter(DecryptManager decryptManager, boolean valueModel, boolean scanAnnotation, Class<? extends Decrypt> annotation) {
         this.decryptManager = decryptManager;
         this.valueModel = valueModel;
         this.scanAnnotation = scanAnnotation;
@@ -67,14 +58,9 @@ public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
     }
 
 
-
-
-
-
-
-
     /**
-     *  是否支持解密
+     * 是否支持解密
+     *
      * @param mediaType 请求内容类型
      * @return
      */
@@ -94,27 +80,25 @@ public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
         ChooseDecrypt chooseDecrypt = handlerMethod.getMethodAnnotation(ChooseDecrypt.class);
 
         try {
-            return decode(((null == chooseDecrypt || !StringUtils.hasText(chooseDecrypt.value())) ? decryptManager.get() : decryptManager.get(chooseDecrypt.value())), request, handlerMethod);
-        }catch (Exception e){
-            if( e instanceof DecryptException){
+            return decode((null == chooseDecrypt || !StringUtils.hasText(chooseDecrypt.value())) ? decryptManager.get() : decryptManager.get(chooseDecrypt.value()), request, handlerMethod);
+        } catch (Exception e) {
+            if (e instanceof DecryptException) {
                 throw e;
             }
-            throw new DecryptException("Decrypted form submission count exception",e);
+            throw new DecryptException("Decrypted form submission count exception", e);
         }
     }
 
 
     /**
-     *  解密
-     * @param decrypt 解密器
-     * @param request 原始请求
+     * 解密
+     *
+     * @param decrypt       解密器
+     * @param request       原始请求
      * @param handlerMethod 绑定方法
      * @return
      */
     protected abstract HttpServletRequest decode(IDecrypt decrypt, HttpServletRequest request, HandlerMethod handlerMethod);
-
-
-
 
 
     /**
@@ -126,7 +110,7 @@ public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
      * {@code false} otherwise
      */
     @Override
-    public boolean supportsMethod(HandlerMethod handlerMethod, MediaType mediaType){
+    public boolean supportsMethod(HandlerMethod handlerMethod, MediaType mediaType) {
         boolean supportsDecrypt = supportsDecrypt(mediaType);
         if (!isScanAnnotation() && supportsDecrypt) {
             return true;
@@ -138,7 +122,7 @@ public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
          */
         if (supportsDecrypt) {
             MethodParameter[] methodParameters = handlerMethod.getMethodParameters();
-            if(methodParameters != null){
+            if (methodParameters != null) {
                 for (MethodParameter parameter : methodParameters) {
                     return parameter.hasParameterAnnotation(annotation);
                 }
@@ -148,9 +132,6 @@ public abstract class IDecryptAdapter implements IHandlerMethodAdapter {
 
         return false;
     }
-
-
-
 
 
 }

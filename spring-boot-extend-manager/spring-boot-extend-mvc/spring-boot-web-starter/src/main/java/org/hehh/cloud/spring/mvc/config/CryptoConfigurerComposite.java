@@ -6,10 +6,8 @@ import org.hehh.cloud.spring.decrypt.adapter.RequestFormDecryptAdapter;
 import org.hehh.cloud.spring.decrypt.param.DecryptParameter;
 import org.hehh.cloud.spring.mvc.crypto.CryptoConfiguration;
 import org.hehh.cloud.spring.mvc.crypto.IDecryptAdapter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,17 +17,24 @@ import java.util.List;
  * @create: 2020-03-23 01:18
  * @description: 加解密配置
  **/
-@Configuration
 @AutoConfigureAfter(RequestAutoConfiguration.class)
 public class CryptoConfigurerComposite implements CryptoConfiguration {
 
-    @Autowired
-    private DecryptParameter decryptParameter;
+    private final DecryptParameter decryptParameter;
 
 
-    @Autowired
-    private DecryptManager decryptManager;
+    private final DecryptManager decryptManager;
 
+    /**
+     * 加密配置组合
+     *
+     * @param decryptParameter 解密参数
+     * @param decryptManager   解密经理
+     */
+    public CryptoConfigurerComposite(DecryptParameter decryptParameter, DecryptManager decryptManager) {
+        this.decryptParameter = decryptParameter;
+        this.decryptManager = decryptManager;
+    }
 
 
     /**

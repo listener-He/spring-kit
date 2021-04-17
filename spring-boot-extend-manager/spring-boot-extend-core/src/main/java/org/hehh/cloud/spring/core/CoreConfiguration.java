@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+
 /**
  * @author: HeHui
  * @create: 2020-03-21 03:13
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.Primary;
  **/
 @Configuration
 public class CoreConfiguration {
+
+
 
 
     /**
@@ -37,4 +40,8 @@ public class CoreConfiguration {
     public DecryptManager decryptManager(SpringContextKit springContextKit){
         return new DecryptManager(springContextKit);
     }
+
+
+
+
 }
