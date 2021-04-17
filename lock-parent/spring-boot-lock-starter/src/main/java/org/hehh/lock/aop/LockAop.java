@@ -1,6 +1,5 @@
 package org.hehh.lock.aop;
 
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -38,32 +37,31 @@ public class LockAop {
 
     private final ILock defaultLock;
 
-    @Setter
     private final ExpressionParser parser;
 
-    private final Map<String,ILock> lockMap;
+    private final Map<String, ILock> lockMap;
 
-    @Setter
     private final ParameterNameDiscoverer parameterNameDiscoverer;
 
-    @Setter
     private final ParserContext parserContext;
+
     /**
      * 锁aop
      *
      * @param defaultLock        默认的锁
      * @param applicationContext 应用程序上下文
      */
-    public LockAop(ILock defaultLock, ApplicationContext applicationContext){
-        this(defaultLock,new SpelExpressionParser(),applicationContext, new LocalVariableTableParameterNameDiscoverer(), new TemplateParserContext());
+    public LockAop(ILock defaultLock, ApplicationContext applicationContext) {
+        this(defaultLock, new SpelExpressionParser(), applicationContext, new LocalVariableTableParameterNameDiscoverer(), new TemplateParserContext());
     }
 
 
     /**
      * 锁aop
-     * @param defaultLock        默认的锁
-     * @param parser             解析器
-     * @param applicationContext 应用程序上下文
+     *
+     * @param defaultLock             默认的锁
+     * @param parser                  解析器
+     * @param applicationContext      应用程序上下文
      * @param parameterNameDiscoverer
      * @param parserContext
      */
@@ -81,25 +79,32 @@ public class LockAop {
     }
 
 
-
-
     /**
      * 得到锁
      *
      * @param name 的名字
+     *
      * @return {@link ILock}
      */
-    private ILock getLock(String name){
-        if(lockMap == null){
+    private ILock getLock(String name) {
+        if (lockMap == null) {
             return defaultLock;
         }
-        return lockMap.getOrDefault(name,defaultLock);
+        return lockMap.getOrDefault(name, defaultLock);
     }
 
 
-    private String getKey(ProceedingJoinPoint joinPoint, Lock lockParameter){
+    /**
+     * 得到关键
+     *
+     * @param joinPoint     连接点
+     * @param lockParameter 锁参数
+     *
+     * @return {@link String}
+     */
+    private String getKey(ProceedingJoinPoint joinPoint, Lock lockParameter) {
 
-        if(StringUtils.hasText(lockParameter.key())){
+        if (StringUtils.hasText(lockParameter.key())) {
             Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
             String[] params = parameterNameDiscoverer.getParameterNames(method);
 
@@ -107,13 +112,13 @@ public class LockAop {
 
             EvaluationContext context = new StandardEvaluationContext();
 
-            if(params != null){
+            if (params != null) {
                 for (int len = 0; len < params.length; len++) {
                     context.setVariable(params[len], args[len]);
                 }
             }
 
-           return lockParameter.prefix() + parser.parseExpression(lockParameter.key(), parserContext).getValue(context, String.class);
+            return lockParameter.prefix() + parser.parseExpression(lockParameter.key(), parserContext).getValue(context, String.class);
         }
 
         return lockParameter.prefix();
@@ -121,16 +126,30 @@ public class LockAop {
 
 
     /**
-     *  环绕切面
+     * 环绕切面
+     *
      * @param joinPoint
      * @param lockParameter
+     *
      * @return
+     *
      * @throws Exception
      */
     @Around(value = "@annotation(lockParameter)")
     public Object doAround(ProceedingJoinPoint joinPoint, Lock lockParameter) throws Throwable {
 
         ILock lock = getLock(lockParameter.lock());
+        if (lock == null) {
+            if (log.isWarnEnabled()) {
+                log.warn("未找到beanName为{}的ILock实例", lockParameter.lock());
+            }
+            Object[] args = joinPoint.getArgs();
+            if (null != args) {
+                return joinPoint.proceed(args);
+            }
+            return joinPoint.proceed();
+        }
+
         String key = getKey(joinPoint, lockParameter);
 
         try {
@@ -141,9 +160,9 @@ public class LockAop {
                 }
                 return joinPoint.proceed();
             });
-        return optional.orElseThrow(() -> null);
-        }finally {
-            if(lockParameter.releaseLock()){
+            return optional.orElse(null);
+        } finally {
+            if (lockParameter.releaseLock()) {
                 lock.release(key);
             }
         }
