@@ -13,9 +13,9 @@ import org.springframework.util.StringUtils;
 
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 17:14
- * @description: redis cache topic 实现
+ * @author  HeHui
+ * @date  2020-07-31 17:14
+ * @description redis cache topic 实现
  */
 public  class RedisCacheTopicAdapter extends RedisMessageListenerContainer implements CacheTopicAdapter {
 

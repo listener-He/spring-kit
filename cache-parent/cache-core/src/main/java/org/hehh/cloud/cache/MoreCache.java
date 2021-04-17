@@ -5,9 +5,9 @@ import org.springframework.cache.Cache;
 import java.util.Optional;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 11:47
- * @description: 多级缓存
+ * @author  HeHui
+ * @date  2020-07-31 11:47
+ * @description 多级缓存
  */
 public interface MoreCache extends Cache {
 

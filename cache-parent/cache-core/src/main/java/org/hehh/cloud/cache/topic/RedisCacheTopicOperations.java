@@ -4,9 +4,9 @@ import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.util.StringUtils;
 
 /**
- * @author: HeHui
- * @date: 2020-08-01 14:55
- * @description: redis 实现 缓存 topic 操作
+ * @author  HeHui
+ * @date  2020-08-01 14:55
+ * @description redis 实现 缓存 topic 操作
  */
 public class RedisCacheTopicOperations implements CacheTopicOperations<CacheNotice> {
 

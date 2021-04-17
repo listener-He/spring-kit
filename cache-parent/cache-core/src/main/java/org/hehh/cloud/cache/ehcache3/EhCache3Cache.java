@@ -9,9 +9,9 @@ import org.springframework.util.Assert;
 import java.util.concurrent.Callable;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 01:53
- * @description: ehcache3.0 spring-cache
+ * @author  HeHui
+ * @date  2020-07-31 01:53
+ * @description ehcache3.0 spring-cache
  */
 public class EhCache3Cache<K,V> implements Cache {
 

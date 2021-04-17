@@ -4,9 +4,9 @@ import lombok.Data;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 00:17
- * @description: 缓存参数
+ * @author  HeHui
+ * @date  2020-07-31 00:17
+ * @description 缓存参数
  */
 @Data
 public class CacheParameter implements java.io.Serializable {

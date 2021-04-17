@@ -5,9 +5,9 @@ import org.springframework.cache.CacheManager;
 import java.util.Optional;
 
 /**
- * @author: HeHui
- * @date: 2020-07-31 16:20
- * @description: 多层缓存管理
+ * @author  HeHui
+ * @date  2020-07-31 16:20
+ * @description 多层缓存管理
  */
 public interface MoreCacheManager extends CacheManager {
 
